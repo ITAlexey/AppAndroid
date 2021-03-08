@@ -30,18 +30,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switch1" />
 
-    <EditText
-        android:id="@+id/editTextNumberPassword"
+    <LinearLayout
+        android:id="@+id/activity_main__field_of_dots"
         android:layout_width="200dp"
+        android:layout_height="50dp"
         android:layout_marginTop="20dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:layout_height="wrap_content"
-        android:ems="5"
-        android:inputType="numberPassword"
+        android:paddingLeft="25dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <TextView
+            android:id="@+id/activity_main__dot1"
+            style="@style/DotsInCheckField"
+            android:background="@drawable/pincode_dot" />
+
+        <TextView
+            android:id="@+id/activity_main__dot2"
+            style="@style/DotsInCheckField"
+            android:background="@drawable/pincode_dot"/>
+
+        <TextView
+            android:id="@+id/activity_main__dot3"
+            style="@style/DotsInCheckField"
+            android:background="@drawable/pincode_dot"/>
+
+        <TextView
+            android:id="@+id/activity_main__dot4"
+            style="@style/DotsInCheckField"
+            android:background="@drawable/pincode_dot"/>
+    </LinearLayout>
+
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -51,7 +71,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberPassword">
+        app:layout_constraintTop_toBottomOf="@+id/activity_main__field_of_dots">
 
         <TextView
             android:id="@+id/activity_main__number1"
