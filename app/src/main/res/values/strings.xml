@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Pin Code</string>
+    <string name="info_msg">Input pin code</string>
 </resources>

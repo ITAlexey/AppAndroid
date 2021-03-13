@@ -6,62 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:padding="5dp"
-        android:text="RU"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:padding="10dp"
-        android:text="Input pin code"
+        android:layout_marginTop="30dp"
+        android:text="@string/info_msg"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch1" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/activity_main__field_of_dots"
-        android:layout_width="200dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_pinCode"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:paddingLeft="25dp"
-        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
-        <TextView
-            android:id="@+id/activity_main__dot1"
-            style="@style/DotsInCheckField"
-            android:background="@drawable/pincode_dot" />
-
-        <TextView
-            android:id="@+id/activity_main__dot2"
-            style="@style/DotsInCheckField"
-            android:background="@drawable/pincode_dot"/>
-
-        <TextView
-            android:id="@+id/activity_main__dot3"
-            style="@style/DotsInCheckField"
-            android:background="@drawable/pincode_dot"/>
-
-        <TextView
-            android:id="@+id/activity_main__dot4"
-            style="@style/DotsInCheckField"
-            android:background="@drawable/pincode_dot"/>
-    </LinearLayout>
-
+    </androidx.recyclerview.widget.RecyclerView>
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -71,74 +38,84 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_main__field_of_dots">
+        app:layout_constraintTop_toBottomOf="@+id/rv_pinCode">
 
         <TextView
-            android:id="@+id/activity_main__number1"
+            android:id="@+id/number1"
             style="@style/NumbersForPinCode"
             android:layout_alignParentLeft="true"
             android:text="1" />
 
         <TextView
-            android:id="@+id/activity_main__number2"
+            android:id="@+id/number2"
             style="@style/NumbersForPinCode"
             android:layout_centerHorizontal="true"
             android:text="2" />
 
         <TextView
-            android:id="@+id/activity_main__number3"
+            android:id="@+id/number3"
             style="@style/NumbersForPinCode"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:text="3" />
 
         <TextView
-            android:id="@+id/activity_main__number4"
+            android:id="@+id/number4"
             style="@style/NumbersForPinCode"
-            android:layout_below="@id/activity_main__number1"
-            android:layout_alignParentLeft="true"
+            android:layout_below="@id/number1"
+            android:layout_alignParentStart="true"
             android:text="4" />
 
         <TextView
-            android:id="@+id/activity_main__number5"
+            android:id="@+id/number5"
             style="@style/NumbersForPinCode"
-            android:layout_below="@id/activity_main__number1"
+            android:layout_below="@id/number1"
             android:layout_centerHorizontal="true"
             android:text="5" />
 
         <TextView
-            android:id="@+id/activity_main__number6"
+            android:id="@+id/number6"
             style="@style/NumbersForPinCode"
-            android:layout_below="@id/activity_main__number1"
-            android:layout_alignParentRight="true"
+            android:layout_below="@id/number1"
+            android:layout_alignParentEnd="true"
             android:text="6" />
 
         <TextView
-            android:id="@+id/activity_main__number7"
+            android:id="@+id/number7"
             style="@style/NumbersForPinCode"
-            android:layout_below="@id/activity_main__number4"
-            android:layout_alignParentLeft="true"
+            android:layout_below="@id/number4"
+            android:layout_alignParentStart="true"
             android:text="7" />
 
         <TextView
-            android:id="@+id/activity_main__number8"
+            android:id="@+id/number8"
             style="@style/NumbersForPinCode"
-            android:layout_below="@id/activity_main__number4"
+            android:layout_below="@id/number4"
             android:layout_centerHorizontal="true"
             android:text="8" />
 
         <TextView
-            android:id="@+id/activity_main__number9"
+            android:id="@+id/number9"
             style="@style/NumbersForPinCode"
-            android:layout_below="@id/activity_main__number4"
-            android:layout_alignParentRight="true"
+            android:layout_below="@id/number4"
+            android:layout_alignParentEnd="true"
             android:text="9" />
 
         <TextView
-            android:id="@+id/activity_main__number0"
+            android:id="@+id/number0"
             style="@style/NumbersForPinCode"
-            android:layout_below="@id/activity_main__number8"
+            android:layout_below="@id/number8"
             android:layout_centerHorizontal="true"
             android:text="0" />
+
+        <ImageView
+            android:id="@+id/backspace_img"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:src="@drawable/backspace"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/number9"
+            android:layout_margin="11dp"
+            android:padding="5dp" />
 
     </RelativeLayout>
 
