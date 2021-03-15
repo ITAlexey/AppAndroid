@@ -7,13 +7,14 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/info_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:layout_marginTop="30dp"
         android:text="@string/info_msg"
         android:textSize="15sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,18 +24,20 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/info_msg">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <RelativeLayout
-        android:id="@+id/relativeLayout"
+        android:id="@+id/numbers"
         android:layout_width="300dp"
         android:layout_height="400dp"
         android:paddingTop="30dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -116,15 +119,28 @@
             android:layout_below="@id/number9"
             android:layout_margin="11dp"
             android:padding="5dp" />
+        
+        <ImageView
+            android:id="@+id/accept_arrow"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:src="@drawable/accept_arrow"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/number7"
+            android:visibility="invisible"
+            android:padding="5dp"
+            android:layout_margin="11dp" />
+
 
     </RelativeLayout>
 
-    <TextView
+    <Button
+        android:id="@+id/setup_btn"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:padding="5dp"
         android:textSize="15sp"
-        android:text="Set up pin code"
+        android:text="@string/setUpBtn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

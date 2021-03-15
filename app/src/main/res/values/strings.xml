@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Pin Code</string>
-    <string name="info_msg">Input pin code</string>
+    <string name="info_msg" translatable="false">Create pin code</string>
+    <string name="setUpBtn" translatable="false">Set up pin code</string>
 </resources>
