@@ -10,11 +10,10 @@
         android:id="@+id/info_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_marginTop="30dp"
+        android:padding="10dp"
         android:text="@string/info_msg"
         android:textSize="15sp"
-        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,7 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
-        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +35,6 @@
         android:layout_width="300dp"
         android:layout_height="400dp"
         android:paddingTop="30dp"
-        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +43,7 @@
         <TextView
             android:id="@+id/number1"
             style="@style/NumbersForPinCode"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:text="1" />
 
         <TextView
@@ -114,37 +111,49 @@
             android:id="@+id/backspace_img"
             android:layout_width="54dp"
             android:layout_height="54dp"
-            android:src="@drawable/backspace"
-            android:layout_alignParentEnd="true"
             android:layout_below="@id/number9"
+            android:layout_alignParentEnd="true"
             android:layout_margin="11dp"
-            android:padding="5dp" />
-        
+            android:padding="5dp"
+            android:src="@drawable/backspace" />
+
         <ImageView
             android:id="@+id/accept_arrow"
             android:layout_width="54dp"
             android:layout_height="54dp"
-            android:src="@drawable/accept_arrow"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/number7"
-            android:visibility="invisible"
+            android:layout_alignParentStart="true"
+            android:layout_margin="11dp"
             android:padding="5dp"
-            android:layout_margin="11dp" />
+            android:src="@drawable/accept_arrow"
+            android:visibility="invisible" />
 
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/setup_btn"
+    <LinearLayout
+        android:layout_marginBottom="15dp"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:padding="5dp"
-        android:textSize="15sp"
-        android:text="@string/setUpBtn"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
-        android:layout_marginBottom="5dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/numbers">
+
+
+        <Button
+            android:id="@+id/reset_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/resetBtn" />
+
+        <Button
+            android:id="@+id/setup_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setUpBtn" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

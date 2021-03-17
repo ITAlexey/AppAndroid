@@ -30,4 +30,8 @@ class PinCodeAdapter(private val pinCodeSize: Int, private var currentPinCodeLen
 
     override fun getItemCount(): Int = pinCodeSize
 
+    fun getOriginState() {
+
+    }
+
 }
