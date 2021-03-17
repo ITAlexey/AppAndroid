@@ -13,6 +13,7 @@
         android:layout_marginTop="30dp"
         android:padding="10dp"
         android:text="@string/info_msg"
+        android:textStyle="bold"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -153,6 +154,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/setUpBtn" />
+
 
     </LinearLayout>
 

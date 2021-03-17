@@ -3,4 +3,5 @@
     <string name="info_msg" translatable="false">Enter pin code</string>
     <string name="setUpBtn" translatable="false">Set up\npin code</string>
     <string name="resetBtn" translatable="false">Reset\npin Code</string>
+    <string name="confirm_btn" translatable="false">Confirm\nreset</string>
 </resources>

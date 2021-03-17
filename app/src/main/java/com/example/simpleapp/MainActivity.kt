@@ -17,8 +17,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var setUppedPin: String
     private var pinSetUpState = false
     private var isSetUpBtnClicked = false
+    private var isResetBtnClicked = false
     private var isConfirmationPinCodeState = false
-    private lateinit var intermediatePin: String
+    private lateinit var confirmationPin: String
     private var temporaryPin = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,11 +31,12 @@ class MainActivity : AppCompatActivity() {
         pinSetUpState = setUppedPin.isNotEmpty()
         initRv()
         if (pinSetUpState)
-            binding.setupBtn.visibility = View.INVISIBLE
+            binding.setupBtn.visibility = View.GONE
         trackButtons()
     }
 
     private fun trackButtons() {
+        binding.resetBtn.setOnClickListener { resetPinCode(it) }
         binding.setupBtn.setOnClickListener { setUpPinCode(it) }
         binding.number0.setOnClickListener { applyActions("0", it) }
         binding.number1.setOnClickListener { applyActions("1", it) }
@@ -50,6 +52,21 @@ class MainActivity : AppCompatActivity() {
         binding.backspaceImg.setOnClickListener { removeNumber() }
     }
 
+    private fun clearPinCodeField() {
+        temporaryPin = ""
+        adapter.updateState(temporaryPin.length)
+    }
+
+    private fun resetPinCode(btn: View) {
+       if (pinSetUpState) {
+           btn.visibility = View.GONE
+           binding.infoMsg.text = "Confirm previous pin code"
+           clearPinCodeField()
+           isResetBtnClicked = true
+       } else
+           showMessage("Pin code hasn't been set upped")
+    }
+
     private fun applyActions(number: String, item: View?) {
         item?.startAnimation(
             AnimationUtils.loadAnimation(item.context, R.anim.btn_clicked)
@@ -57,8 +74,8 @@ class MainActivity : AppCompatActivity() {
         addNumber(number)
     }
 
-    private fun setUpPinCode(view: View?) {
-        view?.visibility = View.GONE
+    private fun setUpPinCode(btn: View) {
+        btn.visibility = View.GONE
         binding.infoMsg.text = "Create pin code"
         isSetUpBtnClicked = true
     }
@@ -67,22 +84,35 @@ class MainActivity : AppCompatActivity() {
     private fun checkPinCode() {
         binding.acceptArrow.visibility = View.INVISIBLE
         when {
-            pinSetUpState -> comparePinCodes()
+            isResetBtnClicked -> if (temporaryPin == setUppedPin) removeSetUppedPin()
+                                else showMessage("Incorrect")
+            pinSetUpState -> if (temporaryPin == setUppedPin) showMessage("You are logged in!")
+                            else showMessage("Incorrect pin code, try again")
             isConfirmationPinCodeState -> recordPermanentPinCode()
             isSetUpBtnClicked -> confirmEnteredPinCode()
             else -> showMessage("Set up pin code first")
         }
-        temporaryPin = ""
-        adapter.updateState(temporaryPin.length)
+        clearPinCodeField()
+    }
+
+    private fun removeSetUppedPin() {
+        appState.edit().remove("PINCODE").apply()
+        showMessage("Pin code has been resetted")
+        refreshActivity()
+    }
+
+    private fun refreshActivity() {
+        pinSetUpState = false
+        binding.setupBtn.visibility = View.VISIBLE
+        binding.resetBtn.visibility = View.VISIBLE
+        binding.infoMsg.text = "Enter pin code"
     }
 
     private fun recordPermanentPinCode() {
-        if (intermediatePin == temporaryPin) {
+        if (confirmationPin == temporaryPin) {
             binding.infoMsg.text = "Enter pin code"
-            val editor = appState.edit()
-            editor.putString("PINCODE", intermediatePin)
-            editor.apply()
-            setUppedPin = intermediatePin
+            appState.edit().putString("PINCODE", confirmationPin).apply()
+            setUppedPin = confirmationPin
             pinSetUpState = true
             showMessage("Pin code has been recorded!")
         } else {
@@ -91,20 +121,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun confirmEnteredPinCode() {
-        intermediatePin = temporaryPin
+        confirmationPin = temporaryPin
         isConfirmationPinCodeState = true
         binding.infoMsg.text = "Repeat pin code"
     }
 
     private fun showMessage(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
-    }
-
-    private fun comparePinCodes() {
-        if (temporaryPin == setUppedPin)
-            showMessage("You are logged in!")
-        else
-            showMessage("Incorrect pin code, try again")
     }
 
     private fun addNumber(number: String) {
