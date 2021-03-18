@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun clearPinCodeField() {
+        binding.acceptArrow.visibility = View.INVISIBLE
         temporaryPin = ""
         adapter.updateState(temporaryPin.length)
     }
@@ -60,11 +61,11 @@ class MainActivity : AppCompatActivity() {
     private fun resetPinCode(btn: View) {
        if (pinSetUpState) {
            btn.visibility = View.GONE
-           binding.infoMsg.text = "Confirm previous pin code"
+           binding.infoMsg.text = changeTextField(R.string.info_msg_confirm)
            clearPinCodeField()
            isResetBtnClicked = true
        } else
-           showMessage("Pin code hasn't been set upped")
+           showMessage(changeTextField(R.string.popup_never_setup))
     }
 
     private fun applyActions(number: String, item: View?) {
@@ -75,8 +76,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpPinCode(btn: View) {
+        clearPinCodeField()
         btn.visibility = View.GONE
-        binding.infoMsg.text = "Create pin code"
+        binding.resetBtn.visibility = View.INVISIBLE
+        binding.infoMsg.text = changeTextField(R.string.info_msg_create)
         isSetUpBtnClicked = true
     }
 
@@ -85,50 +88,56 @@ class MainActivity : AppCompatActivity() {
         binding.acceptArrow.visibility = View.INVISIBLE
         when {
             isResetBtnClicked -> if (temporaryPin == setUppedPin) removeSetUppedPin()
-                                else showMessage("Incorrect")
-            pinSetUpState -> if (temporaryPin == setUppedPin) showMessage("You are logged in!")
-                            else showMessage("Incorrect pin code, try again")
+                                else showMessage(changeTextField(R.string.popup_different))
+            pinSetUpState -> if (temporaryPin == setUppedPin) showMessage(changeTextField(R.string.popup_success_enter))
+                            else showMessage(changeTextField(R.string.popup_fail_enter))
             isConfirmationPinCodeState -> recordPermanentPinCode()
             isSetUpBtnClicked -> confirmEnteredPinCode()
-            else -> showMessage("Set up pin code first")
+            else -> showMessage(changeTextField(R.string.popup_miss_setup))
         }
         clearPinCodeField()
     }
 
     private fun removeSetUppedPin() {
         appState.edit().remove("PINCODE").apply()
-        showMessage("Pin code has been resetted")
+        showMessage(changeTextField(R.string.popup_reset))
         refreshActivity()
     }
 
     private fun refreshActivity() {
         pinSetUpState = false
+        isResetBtnClicked = false
+        isConfirmationPinCodeState = false
+        isSetUpBtnClicked = false
         binding.setupBtn.visibility = View.VISIBLE
         binding.resetBtn.visibility = View.VISIBLE
-        binding.infoMsg.text = "Enter pin code"
+        binding.infoMsg.text = changeTextField(R.string.info_msg)
     }
 
     private fun recordPermanentPinCode() {
         if (confirmationPin == temporaryPin) {
-            binding.infoMsg.text = "Enter pin code"
+            binding.infoMsg.text = changeTextField(R.string.info_msg)
             appState.edit().putString("PINCODE", confirmationPin).apply()
             setUppedPin = confirmationPin
             pinSetUpState = true
-            showMessage("Pin code has been recorded!")
+            binding.resetBtn.visibility = View.VISIBLE
+            showMessage(changeTextField(R.string.popup_record))
         } else {
-            showMessage("Pin codes are different, try again")
+            showMessage(changeTextField(R.string.popup_different))
         }
     }
 
     private fun confirmEnteredPinCode() {
         confirmationPin = temporaryPin
         isConfirmationPinCodeState = true
-        binding.infoMsg.text = "Repeat pin code"
+        binding.infoMsg.text = changeTextField(R.string.info_msg_repeat)
     }
 
     private fun showMessage(message: String) {
-        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     }
+
+    private fun changeTextField(id: Int) = applicationContext.resources.getString(id)
 
     private fun addNumber(number: String) {
         if (temporaryPin.length == adapter.itemCount - 1)

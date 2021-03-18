@@ -1,4 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Пин код</string>
+    <string name="setUpBtn">Установить\nпин код</string>
+    <string name="resetBtn">Сбросить\nпин код</string>
+
+    <string name="info_msg">Введите пин код</string>
+    <string name="info_msg_confirm">Введите старый пин код</string>
+    <string name="info_msg_create">Создайте пин код</string>
+    <string name="info_msg_repeat">Повторите пин код</string>
+
+    <!--    Pop-up messages-->
+    <string name="popup_never_setup">Пин код не установлен</string>
+    <string name="popup_success_enter">Добро пожаловать</string>
+    <string name="popup_fail_enter">Неверный пин код, попробуйте снова</string>
+    <string name="popup_miss_setup">В начале установите пин код</string>
+    <string name="popup_different">Пин коды отличны, попробуйте снова</string>
+    <string name="popup_record">Пин код сохранен</string>
+    <string name="popup_reset">Пин код сброшен</string>
 </resources>
