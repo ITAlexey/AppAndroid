@@ -1,6 +1,5 @@
 package com.example.simpleapp
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,12 +7,15 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 import com.example.simpleapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private val adapter: PinCodeAdapter = PinCodeAdapter(4, 0)
     private lateinit var binding: ActivityMainBinding
-    private lateinit var appState: SharedPreferences
+    private lateinit var masterKeyAlias: String
+    private lateinit var appStore: SharedPreferences
     private lateinit var setUppedPin: String
     private var pinSetUpState = false
     private var isSetUpBtnClicked = false
@@ -26,28 +28,41 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        appState = getSharedPreferences("PinCode", Context.MODE_PRIVATE)
-        setUppedPin = appState.getString("PINCODE", "").toString()
-        pinSetUpState = setUppedPin.isNotEmpty()
+        initEncryptedSharedPref()
+        initStateOfApp()
         initRv()
-        if (pinSetUpState)
-            binding.setupBtn.visibility = View.GONE
-        trackButtons()
+        initListeners()
     }
 
-    private fun trackButtons() {
+    private fun initEncryptedSharedPref() {
+        masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+        appStore = EncryptedSharedPreferences.create("PinCode",
+            masterKeyAlias,
+            applicationContext,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM)
+    }
+
+    private fun initStateOfApp() {
+        setUppedPin = appStore.getString("PINCODE", "").toString()
+        pinSetUpState = setUppedPin.isNotEmpty()
+        if (pinSetUpState)
+            binding.setupBtn.visibility = View.GONE
+    }
+
+    private fun initListeners() {
         binding.resetBtn.setOnClickListener { resetPinCode(it) }
         binding.setupBtn.setOnClickListener { setUpPinCode(it) }
-        binding.number0.setOnClickListener { applyActions("0", it) }
-        binding.number1.setOnClickListener { applyActions("1", it) }
-        binding.number2.setOnClickListener { applyActions("2", it) }
-        binding.number3.setOnClickListener { applyActions("3", it) }
-        binding.number4.setOnClickListener { applyActions("4", it) }
-        binding.number5.setOnClickListener { applyActions("5", it) }
-        binding.number6.setOnClickListener { applyActions("6", it) }
-        binding.number7.setOnClickListener { applyActions("7", it) }
-        binding.number8.setOnClickListener { applyActions("8", it) }
-        binding.number9.setOnClickListener { applyActions("9", it) }
+        binding.number0.setOnClickListener { applyActions(0, it) }
+        binding.number1.setOnClickListener { applyActions(1, it) }
+        binding.number2.setOnClickListener { applyActions(2, it) }
+        binding.number3.setOnClickListener { applyActions(3, it) }
+        binding.number4.setOnClickListener { applyActions(4, it) }
+        binding.number5.setOnClickListener { applyActions(5, it) }
+        binding.number6.setOnClickListener { applyActions(6, it) }
+        binding.number7.setOnClickListener { applyActions(7, it) }
+        binding.number8.setOnClickListener { applyActions(8, it) }
+        binding.number9.setOnClickListener { applyActions(9, it) }
         binding.acceptArrow.setOnClickListener { checkPinCode() }
         binding.backspaceImg.setOnClickListener { removeNumber() }
     }
@@ -68,7 +83,7 @@ class MainActivity : AppCompatActivity() {
            showMessage(changeTextField(R.string.popup_never_setup))
     }
 
-    private fun applyActions(number: String, item: View?) {
+    private fun applyActions(number: Int, item: View?) {
         item?.startAnimation(
             AnimationUtils.loadAnimation(item.context, R.anim.btn_clicked)
         )
@@ -99,7 +114,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun removeSetUppedPin() {
-        appState.edit().remove("PINCODE").apply()
+        appStore.edit().remove("PINCODE").apply()
         showMessage(changeTextField(R.string.popup_reset))
         refreshActivity()
     }
@@ -117,7 +132,10 @@ class MainActivity : AppCompatActivity() {
     private fun recordPermanentPinCode() {
         if (confirmationPin == temporaryPin) {
             binding.infoMsg.text = changeTextField(R.string.info_msg)
-            appState.edit().putString("PINCODE", confirmationPin).apply()
+            appStore
+                .edit()
+                .putString("PINCODE", confirmationPin)
+                .apply()
             setUppedPin = confirmationPin
             pinSetUpState = true
             binding.resetBtn.visibility = View.VISIBLE
@@ -139,11 +157,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun changeTextField(id: Int) = applicationContext.resources.getString(id)
 
-    private fun addNumber(number: String) {
+    private fun addNumber(number: Int) {
         if (temporaryPin.length == adapter.itemCount - 1)
             binding.acceptArrow.visibility = View.VISIBLE
         if (temporaryPin.length < adapter.itemCount) {
-            temporaryPin += number
+            temporaryPin += number.toString()
             adapter.updateState(temporaryPin.length)
         }
     }
