@@ -24,6 +24,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var confirmationPin: String
     private var temporaryPin = ""
 
+    companion object {
+        const val SHARED_PREF_FILE = "PINCODE"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -44,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initStateOfApp() {
-        setUppedPin = appStore.getString("PINCODE", "").toString()
+        setUppedPin = appStore.getString(SHARED_PREF_FILE, "").toString()
         pinSetUpState = setUppedPin.isNotEmpty()
         if (pinSetUpState)
             binding.setupBtn.visibility = View.GONE
@@ -64,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         binding.number8.setOnClickListener { applyActions(8, it) }
         binding.number9.setOnClickListener { applyActions(9, it) }
         binding.acceptArrow.setOnClickListener { checkPinCode() }
-        binding.backspaceImg.setOnClickListener { removeNumber() }
+        binding.backspaceImg.setOnClickListener { removeNumber(it) }
     }
 
     private fun clearPinCodeField() {
@@ -76,15 +80,15 @@ class MainActivity : AppCompatActivity() {
     private fun resetPinCode(btn: View) {
        if (pinSetUpState) {
            btn.visibility = View.GONE
-           binding.infoMsg.text = changeTextField(R.string.info_msg_confirm)
+           binding.infoMsg.text = resources.getString(R.string.info_msg_confirm)
            clearPinCodeField()
            isResetBtnClicked = true
        } else
-           showMessage(changeTextField(R.string.popup_never_setup))
+           showMessage(R.string.popup_never_setup)
     }
 
-    private fun applyActions(number: Int, item: View?) {
-        item?.startAnimation(
+    private fun applyActions(number: Int, item: View) {
+        item.startAnimation(
             AnimationUtils.loadAnimation(item.context, R.anim.btn_clicked)
         )
         addNumber(number)
@@ -94,7 +98,7 @@ class MainActivity : AppCompatActivity() {
         clearPinCodeField()
         btn.visibility = View.GONE
         binding.resetBtn.visibility = View.INVISIBLE
-        binding.infoMsg.text = changeTextField(R.string.info_msg_create)
+        binding.infoMsg.text = resources.getString(R.string.info_msg_create)
         isSetUpBtnClicked = true
     }
 
@@ -103,19 +107,19 @@ class MainActivity : AppCompatActivity() {
         binding.acceptArrow.visibility = View.INVISIBLE
         when {
             isResetBtnClicked -> if (temporaryPin == setUppedPin) removeSetUppedPin()
-                                else showMessage(changeTextField(R.string.popup_different))
-            pinSetUpState -> if (temporaryPin == setUppedPin) showMessage(changeTextField(R.string.popup_success_enter))
-                            else showMessage(changeTextField(R.string.popup_fail_enter))
+                                else showMessage(R.string.popup_different)
+            pinSetUpState -> if (temporaryPin == setUppedPin) showMessage(R.string.popup_success_enter)
+                            else showMessage(R.string.popup_fail_enter)
             isConfirmationPinCodeState -> recordPermanentPinCode()
             isSetUpBtnClicked -> confirmEnteredPinCode()
-            else -> showMessage(changeTextField(R.string.popup_miss_setup))
+            else -> showMessage(R.string.popup_miss_setup)
         }
         clearPinCodeField()
     }
 
     private fun removeSetUppedPin() {
-        appStore.edit().remove("PINCODE").apply()
-        showMessage(changeTextField(R.string.popup_reset))
+        appStore.edit().remove(SHARED_PREF_FILE).apply()
+        showMessage(R.string.popup_reset)
         refreshActivity()
     }
 
@@ -126,36 +130,34 @@ class MainActivity : AppCompatActivity() {
         isSetUpBtnClicked = false
         binding.setupBtn.visibility = View.VISIBLE
         binding.resetBtn.visibility = View.VISIBLE
-        binding.infoMsg.text = changeTextField(R.string.info_msg)
+        binding.infoMsg.text = resources.getString(R.string.info_msg)
     }
 
     private fun recordPermanentPinCode() {
         if (confirmationPin == temporaryPin) {
-            binding.infoMsg.text = changeTextField(R.string.info_msg)
+            binding.infoMsg.text = resources.getString(R.string.info_msg)
             appStore
                 .edit()
-                .putString("PINCODE", confirmationPin)
+                .putString(SHARED_PREF_FILE, confirmationPin)
                 .apply()
             setUppedPin = confirmationPin
             pinSetUpState = true
             binding.resetBtn.visibility = View.VISIBLE
-            showMessage(changeTextField(R.string.popup_record))
+            showMessage(R.string.popup_record)
         } else {
-            showMessage(changeTextField(R.string.popup_different))
+            showMessage(R.string.popup_different)
         }
     }
 
     private fun confirmEnteredPinCode() {
         confirmationPin = temporaryPin
         isConfirmationPinCodeState = true
-        binding.infoMsg.text = changeTextField(R.string.info_msg_repeat)
+        binding.infoMsg.text = resources.getString(R.string.info_msg_repeat)
     }
 
-    private fun showMessage(message: String) {
-        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+    private fun showMessage(id: Int) {
+        Toast.makeText(this, getString(id), Toast.LENGTH_SHORT).show()
     }
-
-    private fun changeTextField(id: Int) = applicationContext.resources.getString(id)
 
     private fun addNumber(number: Int) {
         if (temporaryPin.length == adapter.itemCount - 1)
@@ -166,8 +168,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun removeNumber() {
+    private fun removeNumber(item: View) {
         binding.acceptArrow.visibility = View.INVISIBLE
+        item.startAnimation(
+            AnimationUtils.loadAnimation(item.context, R.anim.btn_clicked)
+        )
         if (temporaryPin.isNotEmpty()) {
             temporaryPin = temporaryPin.substring(0, temporaryPin.length - 1)
             adapter.updateState(temporaryPin.length)
