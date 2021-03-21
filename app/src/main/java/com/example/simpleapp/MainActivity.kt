@@ -9,14 +9,21 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import com.example.simpleapp.Constants.PIN_CODE_KEY
+import com.example.simpleapp.Constants.SHARED_PREF_FILE
+import com.example.simpleapp.adapter.PinCodeAdapter
 import com.example.simpleapp.databinding.ActivityMainBinding
+import com.example.simpleapp.helpers.PinState
 
 class MainActivity : AppCompatActivity() {
-    private val adapter: PinCodeAdapter = PinCodeAdapter(4, 0)
     private lateinit var binding: ActivityMainBinding
+    private lateinit var pinCodeAdapter: PinCodeAdapter
     private lateinit var masterKeyAlias: String
     private lateinit var appStore: SharedPreferences
     private lateinit var setUppedPin: String
+    private lateinit var currentPinState: PinState
+
+
     private var pinSetUpState = false
     private var isSetUpBtnClicked = false
     private var isResetBtnClicked = false
@@ -25,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     private var temporaryPin = ""
 
     companion object {
-        const val SHARED_PREF_FILE = "PINCODE"
+        const val PIN_SIZE = 4
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,61 +40,64 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initEncryptedSharedPref()
-        initStateOfApp()
-        initRv()
+        initAppState()
+        initAdapter()
         initListeners()
     }
 
     private fun initEncryptedSharedPref() {
         masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-        appStore = EncryptedSharedPreferences.create("PinCode",
+        appStore = EncryptedSharedPreferences.create(
+            SHARED_PREF_FILE,
             masterKeyAlias,
             applicationContext,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM)
     }
 
-    private fun initStateOfApp() {
-        setUppedPin = appStore.getString(SHARED_PREF_FILE, "").toString()
+    private fun initAppState() {
+        setUppedPin = appStore.getString(PIN_CODE_KEY, "").toString()
         pinSetUpState = setUppedPin.isNotEmpty()
         if (pinSetUpState)
-            binding.setupBtn.visibility = View.GONE
+            binding.btnSetup.visibility = View.GONE
     }
 
     private fun initListeners() {
-        binding.resetBtn.setOnClickListener { resetPinCode(it) }
-        binding.setupBtn.setOnClickListener { setUpPinCode(it) }
-        binding.number0.setOnClickListener { applyActions(0, it) }
-        binding.number1.setOnClickListener { applyActions(1, it) }
-        binding.number2.setOnClickListener { applyActions(2, it) }
-        binding.number3.setOnClickListener { applyActions(3, it) }
-        binding.number4.setOnClickListener { applyActions(4, it) }
-        binding.number5.setOnClickListener { applyActions(5, it) }
-        binding.number6.setOnClickListener { applyActions(6, it) }
-        binding.number7.setOnClickListener { applyActions(7, it) }
-        binding.number8.setOnClickListener { applyActions(8, it) }
-        binding.number9.setOnClickListener { applyActions(9, it) }
-        binding.acceptArrow.setOnClickListener { checkPinCode() }
-        binding.backspaceImg.setOnClickListener { removeNumber(it) }
+        binding.apply {
+            btnReset.setOnClickListener { resetPinCode(it) }
+            btnSetup.setOnClickListener { setUpPinCode(it) }
+            tvNbr0.setOnClickListener { configureNbrView(0, it) }
+            tvNbr1.setOnClickListener { configureNbrView(1, it) }
+            tvNbr2.setOnClickListener { configureNbrView(2, it) }
+            tvNbr3.setOnClickListener { configureNbrView(3, it) }
+            tvNbr4.setOnClickListener { configureNbrView(4, it) }
+            tvNbr5.setOnClickListener { configureNbrView(5, it) }
+            tvNbr6.setOnClickListener { configureNbrView(6, it) }
+            tvNbr7.setOnClickListener { configureNbrView(7, it) }
+            tvNbr8.setOnClickListener { configureNbrView(8, it) }
+            tvNbr9.setOnClickListener { configureNbrView(9, it) }
+            acceptArrow.setOnClickListener { checkPinCode() }
+            backspaceImg.setOnClickListener { removeNumber(it) }
+        }
     }
 
     private fun clearPinCodeField() {
         binding.acceptArrow.visibility = View.INVISIBLE
         temporaryPin = ""
-        adapter.updateState(temporaryPin.length)
+        pinCodeAdapter.updateState(temporaryPin.length)
     }
 
     private fun resetPinCode(btn: View) {
        if (pinSetUpState) {
            btn.visibility = View.GONE
-           binding.infoMsg.text = resources.getString(R.string.info_msg_confirm)
+           binding.tvTitle.text = resources.getString(R.string.info_msg_confirm)
            clearPinCodeField()
            isResetBtnClicked = true
        } else
            showMessage(R.string.popup_never_setup)
     }
 
-    private fun applyActions(number: Int, item: View) {
+    private fun configureNbrView(number: Int, item: View) {
         item.startAnimation(
             AnimationUtils.loadAnimation(item.context, R.anim.btn_clicked)
         )
@@ -97,8 +107,8 @@ class MainActivity : AppCompatActivity() {
     private fun setUpPinCode(btn: View) {
         clearPinCodeField()
         btn.visibility = View.GONE
-        binding.resetBtn.visibility = View.INVISIBLE
-        binding.infoMsg.text = resources.getString(R.string.info_msg_create)
+        binding.btnReset.visibility = View.INVISIBLE
+        binding.tvTitle.text = resources.getString(R.string.info_msg_create)
         isSetUpBtnClicked = true
     }
 
@@ -128,21 +138,21 @@ class MainActivity : AppCompatActivity() {
         isResetBtnClicked = false
         isConfirmationPinCodeState = false
         isSetUpBtnClicked = false
-        binding.setupBtn.visibility = View.VISIBLE
-        binding.resetBtn.visibility = View.VISIBLE
-        binding.infoMsg.text = resources.getString(R.string.info_msg)
+        binding.btnSetup.visibility = View.VISIBLE
+        binding.btnReset.visibility = View.VISIBLE
+        binding.tvTitle.text = resources.getString(R.string.info_msg)
     }
 
     private fun recordPermanentPinCode() {
         if (confirmationPin == temporaryPin) {
-            binding.infoMsg.text = resources.getString(R.string.info_msg)
+            binding.tvTitle.text = resources.getString(R.string.info_msg)
             appStore
                 .edit()
-                .putString(SHARED_PREF_FILE, confirmationPin)
+                .putString(PIN_CODE_KEY, confirmationPin)
                 .apply()
             setUppedPin = confirmationPin
             pinSetUpState = true
-            binding.resetBtn.visibility = View.VISIBLE
+            binding.btnReset.visibility = View.VISIBLE
             showMessage(R.string.popup_record)
         } else {
             showMessage(R.string.popup_different)
@@ -152,7 +162,7 @@ class MainActivity : AppCompatActivity() {
     private fun confirmEnteredPinCode() {
         confirmationPin = temporaryPin
         isConfirmationPinCodeState = true
-        binding.infoMsg.text = resources.getString(R.string.info_msg_repeat)
+        binding.tvTitle.text = resources.getString(R.string.info_msg_repeat)
     }
 
     private fun showMessage(id: Int) {
@@ -160,11 +170,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addNumber(number: Int) {
-        if (temporaryPin.length == adapter.itemCount - 1)
+        if (temporaryPin.length == pinCodeAdapter.itemCount - 1)
             binding.acceptArrow.visibility = View.VISIBLE
-        if (temporaryPin.length < adapter.itemCount) {
+        if (temporaryPin.length < pinCodeAdapter.itemCount) {
             temporaryPin += number.toString()
-            adapter.updateState(temporaryPin.length)
+            pinCodeAdapter.updateState(temporaryPin.length)
         }
     }
 
@@ -175,16 +185,18 @@ class MainActivity : AppCompatActivity() {
         )
         if (temporaryPin.isNotEmpty()) {
             temporaryPin = temporaryPin.substring(0, temporaryPin.length - 1)
-            adapter.updateState(temporaryPin.length)
+            pinCodeAdapter.updateState(temporaryPin.length)
         }
     }
 
-    private fun initRv() {
+    private fun initAdapter() {
+        pinCodeAdapter  = PinCodeAdapter(temporaryPin.length)
         val recyclerView = binding.rvPinCode
-        recyclerView.addOnItemTouchListener(RecyclerVIewDisabler())
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.setHasFixedSize(true)
+        recyclerView.apply {
+            adapter = pinCodeAdapter
+            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+        }
     }
 
 }

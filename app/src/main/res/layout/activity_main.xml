@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/info_msg"
+        android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:padding="10dp"
+        android:layout_marginTop="32dp"
+        android:padding="12dp"
         android:text="@string/info_msg"
         android:textStyle="bold"
         android:textSize="15sp"
@@ -20,91 +18,89 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_pinCode"
+        android:id="@+id/rvPinCode"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/info_msg">
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"/>
 
-    </androidx.recyclerview.widget.RecyclerView>
 
     <RelativeLayout
-        android:id="@+id/numbers"
+        android:id="@+id/rlNbrs"
         android:layout_width="300dp"
         android:layout_height="400dp"
         android:paddingTop="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_pinCode">
+        app:layout_constraintTop_toBottomOf="@+id/rvPinCode">
 
         <TextView
-            android:id="@+id/number1"
+            android:id="@+id/tvNbr1"
             style="@style/NumbersForPinCode"
             android:layout_alignParentStart="true"
             android:text="1" />
 
         <TextView
-            android:id="@+id/number2"
+            android:id="@+id/tvNbr2"
             style="@style/NumbersForPinCode"
             android:layout_centerHorizontal="true"
             android:text="2" />
 
         <TextView
-            android:id="@+id/number3"
+            android:id="@+id/tvNbr3"
             style="@style/NumbersForPinCode"
             android:layout_alignParentEnd="true"
             android:text="3" />
 
         <TextView
-            android:id="@+id/number4"
+            android:id="@+id/tvNbr4"
             style="@style/NumbersForPinCode"
-            android:layout_below="@id/number1"
+            android:layout_below="@id/tvNbr1"
             android:layout_alignParentStart="true"
             android:text="4" />
 
         <TextView
-            android:id="@+id/number5"
+            android:id="@+id/tvNbr5"
             style="@style/NumbersForPinCode"
-            android:layout_below="@id/number1"
+            android:layout_below="@id/tvNbr1"
             android:layout_centerHorizontal="true"
             android:text="5" />
 
         <TextView
-            android:id="@+id/number6"
+            android:id="@+id/tvNbr6"
             style="@style/NumbersForPinCode"
-            android:layout_below="@id/number1"
+            android:layout_below="@id/tvNbr1"
             android:layout_alignParentEnd="true"
             android:text="6" />
 
         <TextView
-            android:id="@+id/number7"
+            android:id="@+id/tvNbr7"
             style="@style/NumbersForPinCode"
-            android:layout_below="@id/number4"
+            android:layout_below="@id/tvNbr4"
             android:layout_alignParentStart="true"
             android:text="7" />
 
         <TextView
-            android:id="@+id/number8"
+            android:id="@+id/tvNbr8"
             style="@style/NumbersForPinCode"
-            android:layout_below="@id/number4"
+            android:layout_below="@id/tvNbr4"
             android:layout_centerHorizontal="true"
             android:text="8" />
 
         <TextView
-            android:id="@+id/number9"
+            android:id="@+id/tvNbr9"
             style="@style/NumbersForPinCode"
-            android:layout_below="@id/number4"
+            android:layout_below="@id/tvNbr4"
             android:layout_alignParentEnd="true"
             android:text="9" />
 
         <TextView
-            android:id="@+id/number0"
+            android:id="@+id/tvNbr0"
             style="@style/NumbersForPinCode"
-            android:layout_below="@id/number8"
+            android:layout_below="@id/tvNbr8"
             android:layout_centerHorizontal="true"
             android:text="0" />
 
@@ -112,20 +108,20 @@
             android:id="@+id/backspace_img"
             android:layout_width="54dp"
             android:layout_height="54dp"
-            android:layout_below="@id/number9"
+            android:layout_below="@id/tvNbr9"
             android:layout_alignParentEnd="true"
-            android:layout_margin="11dp"
-            android:padding="5dp"
+            android:layout_margin="12dp"
+            android:padding="4dp"
             android:src="@drawable/backspace" />
 
         <ImageView
             android:id="@+id/accept_arrow"
             android:layout_width="54dp"
             android:layout_height="54dp"
-            android:layout_below="@+id/number7"
+            android:layout_below="@+id/tvNbr7"
             android:layout_alignParentStart="true"
-            android:layout_margin="11dp"
-            android:padding="5dp"
+            android:layout_margin="12dp"
+            android:padding="4dp"
             android:src="@drawable/accept_arrow"
             android:visibility="invisible" />
 
@@ -144,13 +140,13 @@
 
 
         <Button
-            android:id="@+id/reset_btn"
+            android:id="@+id/btnReset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/resetBtn" />
 
         <Button
-            android:id="@+id/setup_btn"
+            android:id="@+id/btnSetup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/setUpBtn" />

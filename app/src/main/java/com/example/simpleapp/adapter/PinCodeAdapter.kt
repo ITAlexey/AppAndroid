@@ -1,11 +1,13 @@
-package com.example.simpleapp
+package com.example.simpleapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.simpleapp.MainActivity.Companion.PIN_SIZE
+import com.example.simpleapp.R
 import com.example.simpleapp.databinding.ItemRvPincodeBinding
 
-class PinCodeAdapter(private val pinCodeSize: Int, private var currentPinCodeLen: Int)
+class PinCodeAdapter(private var currentPinCodeLen: Int)
     : RecyclerView.Adapter<PinCodeAdapter.PinCodeHolder>() {
 
     class PinCodeHolder(val binding: ItemRvPincodeBinding) : RecyclerView.ViewHolder(binding.root)
@@ -17,9 +19,9 @@ class PinCodeAdapter(private val pinCodeSize: Int, private var currentPinCodeLen
 
     override fun onBindViewHolder(holder: PinCodeHolder, position: Int) {
         if (position < currentPinCodeLen) {
-            holder.binding.dotImg.setBackgroundResource(R.drawable.black_dot)
+            holder.binding.imgPinDot.setBackgroundResource(R.drawable.black_dot)
         } else {
-            holder.binding.dotImg.setBackgroundResource(R.drawable.gray_dot)
+            holder.binding.imgPinDot.setBackgroundResource(R.drawable.gray_dot)
         }
     }
 
@@ -28,6 +30,6 @@ class PinCodeAdapter(private val pinCodeSize: Int, private var currentPinCodeLen
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = pinCodeSize
+    override fun getItemCount(): Int = PIN_SIZE
 
 }
