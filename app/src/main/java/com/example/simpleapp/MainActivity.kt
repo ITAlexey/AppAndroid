@@ -20,15 +20,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var pinCodeAdapter: PinCodeAdapter
     private lateinit var masterKeyAlias: String
     private lateinit var appStore: SharedPreferences
-    private lateinit var setUppedPin: String
+    private lateinit var permanentPin: String
     private lateinit var currentPinState: PinState
-
-
-    private var pinSetUpState = false
-    private var isSetUpBtnClicked = false
-    private var isResetBtnClicked = false
-    private var isConfirmationPinCodeState = false
     private lateinit var confirmationPin: String
+
     private var temporaryPin = ""
 
     companion object {
@@ -56,10 +51,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initAppState() {
-        setUppedPin = appStore.getString(PIN_CODE_KEY, "").toString()
-        pinSetUpState = setUppedPin.isNotEmpty()
-        if (pinSetUpState)
+        permanentPin = appStore.getString(PIN_CODE_KEY, "").toString()
+        currentPinState = if (permanentPin.isNotEmpty()) {
             binding.btnSetup.visibility = View.GONE
+            PinState.SETUP
+        } else {
+           PinState.NONE
+        }
     }
 
     private fun initListeners() {
@@ -88,11 +86,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetPinCode(btn: View) {
-       if (pinSetUpState) {
+       if (currentPinState == PinState.SETUP || currentPinState == PinState.LOGIN) {
            btn.visibility = View.GONE
            binding.tvTitle.text = resources.getString(R.string.info_msg_confirm)
+           currentPinState = PinState.RESET
            clearPinCodeField()
-           isResetBtnClicked = true
        } else
            showMessage(R.string.popup_never_setup)
     }
@@ -109,19 +107,27 @@ class MainActivity : AppCompatActivity() {
         btn.visibility = View.GONE
         binding.btnReset.visibility = View.INVISIBLE
         binding.tvTitle.text = resources.getString(R.string.info_msg_create)
-        isSetUpBtnClicked = true
+        currentPinState = PinState.CREATE
     }
 
 
     private fun checkPinCode() {
         binding.acceptArrow.visibility = View.INVISIBLE
-        when {
-            isResetBtnClicked -> if (temporaryPin == setUppedPin) removeSetUppedPin()
-                                else showMessage(R.string.popup_different)
-            pinSetUpState -> if (temporaryPin == setUppedPin) showMessage(R.string.popup_success_enter)
-                            else showMessage(R.string.popup_fail_enter)
-            isConfirmationPinCodeState -> recordPermanentPinCode()
-            isSetUpBtnClicked -> confirmEnteredPinCode()
+        when (currentPinState) {
+            PinState.LOGIN -> showMessage(R.string.popup_logged_in)
+            PinState.RESET ->
+                if (temporaryPin == permanentPin) {
+                    removeSetUppedPin()
+                } else
+                    showMessage(R.string.popup_different)
+            PinState.SETUP ->
+                if (temporaryPin == permanentPin) {
+                    currentPinState = PinState.LOGIN
+                    showMessage(R.string.popup_success_enter)
+                } else
+                    showMessage(R.string.popup_fail_enter)
+            PinState.CONFIRM -> recordPermanentPin()
+            PinState.CREATE -> createPin()
             else -> showMessage(R.string.popup_miss_setup)
         }
         clearPinCodeField()
@@ -130,39 +136,36 @@ class MainActivity : AppCompatActivity() {
     private fun removeSetUppedPin() {
         appStore.edit().remove(SHARED_PREF_FILE).apply()
         showMessage(R.string.popup_reset)
-        refreshActivity()
+        currentPinState = PinState.NONE
+        updateView()
     }
 
-    private fun refreshActivity() {
-        pinSetUpState = false
-        isResetBtnClicked = false
-        isConfirmationPinCodeState = false
-        isSetUpBtnClicked = false
+    private fun updateView() {
         binding.btnSetup.visibility = View.VISIBLE
         binding.btnReset.visibility = View.VISIBLE
         binding.tvTitle.text = resources.getString(R.string.info_msg)
     }
 
-    private fun recordPermanentPinCode() {
+    private fun recordPermanentPin() {
         if (confirmationPin == temporaryPin) {
             binding.tvTitle.text = resources.getString(R.string.info_msg)
             appStore
                 .edit()
                 .putString(PIN_CODE_KEY, confirmationPin)
                 .apply()
-            setUppedPin = confirmationPin
-            pinSetUpState = true
+            permanentPin = confirmationPin
             binding.btnReset.visibility = View.VISIBLE
+            currentPinState = PinState.SETUP
             showMessage(R.string.popup_record)
         } else {
             showMessage(R.string.popup_different)
         }
     }
 
-    private fun confirmEnteredPinCode() {
+    private fun createPin() {
         confirmationPin = temporaryPin
-        isConfirmationPinCodeState = true
         binding.tvTitle.text = resources.getString(R.string.info_msg_repeat)
+        currentPinState = PinState.CONFIRM
     }
 
     private fun showMessage(id: Int) {

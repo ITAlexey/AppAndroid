@@ -16,4 +16,5 @@
     <string name="popup_different">Пин коды отличны, попробуйте снова</string>
     <string name="popup_record">Пин код сохранен</string>
     <string name="popup_reset">Пин код сброшен</string>
+    <string name="popup_logged_in">Вы уже вошли</string>
 </resources>

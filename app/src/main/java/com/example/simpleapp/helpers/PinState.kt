@@ -2,7 +2,9 @@ package com.example.simpleapp.helpers
 
 enum class PinState {
     NONE,
-    CREATED,
+    SETUP,
+    CREATE,
     CONFIRM,
-
+    LOGIN,
+    RESET
 }
