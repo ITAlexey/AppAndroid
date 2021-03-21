@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun removeSetUppedPin() {
-        appStore.edit().remove(SHARED_PREF_FILE).apply()
+        appStore.edit().remove(PIN_CODE_KEY).apply()
         showMessage(R.string.popup_reset)
         currentPinState = PinState.NONE
         updateView()

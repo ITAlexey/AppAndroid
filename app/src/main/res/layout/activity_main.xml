@@ -31,12 +31,14 @@
     <RelativeLayout
         android:id="@+id/rlNbrs"
         android:layout_width="300dp"
-        android:layout_height="400dp"
+        android:layout_height="350dp"
         android:paddingTop="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvPinCode">
+        app:layout_constraintTop_toBottomOf="@+id/rvPinCode"
+        app:layout_constraintVertical_bias="0.31">
 
         <TextView
             android:id="@+id/tvNbr1"
@@ -130,26 +132,31 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="32dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rlNbrs">
+        app:layout_constraintStart_toStartOf="parent">
 
 
         <Button
             android:id="@+id/btnReset"
+            android:background="@drawable/btn_tune"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            style="?android:attr/borderlessButtonStyle"
             android:text="@string/resetBtn" />
 
         <Button
             android:id="@+id/btnSetup"
+            android:background="@drawable/btn_tune"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_marginLeft="8dp"
             android:text="@string/setUpBtn" />
 
 
