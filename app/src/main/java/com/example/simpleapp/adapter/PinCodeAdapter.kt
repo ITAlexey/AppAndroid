@@ -19,9 +19,9 @@ class PinCodeAdapter(private var currentPinCodeLen: Int)
 
     override fun onBindViewHolder(holder: PinCodeHolder, position: Int) {
         if (position < currentPinCodeLen) {
-            holder.binding.imgPinDot.setBackgroundResource(R.drawable.black_dot)
+            holder.binding.imgPinDot.setBackgroundResource(R.drawable.ic_filled_dot)
         } else {
-            holder.binding.imgPinDot.setBackgroundResource(R.drawable.gray_dot)
+            holder.binding.imgPinDot.setBackgroundResource(R.drawable.ic_empty_dot)
         }
     }
 
