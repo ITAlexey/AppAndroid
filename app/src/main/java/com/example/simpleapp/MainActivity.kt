@@ -53,109 +53,112 @@ class MainActivity : AppCompatActivity() {
     private fun initAppState() {
         permanentPin = appStore.getString(PIN_CODE_KEY, "").toString()
         currentPinState = if (permanentPin.isNotEmpty()) {
-            binding.btnSetup.visibility = View.GONE
-            PinState.SETUP
+            binding.btnReset.visibility = View.VISIBLE
+            PinState.ENTER
         } else {
-           PinState.NONE
+            binding.tvTitle.text = resources.getString(R.string.title_create)
+            PinState.CREATE
         }
     }
 
     private fun initListeners() {
         binding.apply {
-            btnReset.setOnClickListener { resetPinCode(it) }
-            btnSetup.setOnClickListener { setUpPinCode(it) }
-            tvNbr0.setOnClickListener { configureNbrView(0, it) }
-            tvNbr1.setOnClickListener { configureNbrView(1, it) }
-            tvNbr2.setOnClickListener { configureNbrView(2, it) }
-            tvNbr3.setOnClickListener { configureNbrView(3, it) }
-            tvNbr4.setOnClickListener { configureNbrView(4, it) }
-            tvNbr5.setOnClickListener { configureNbrView(5, it) }
-            tvNbr6.setOnClickListener { configureNbrView(6, it) }
-            tvNbr7.setOnClickListener { configureNbrView(7, it) }
-            tvNbr8.setOnClickListener { configureNbrView(8, it) }
-            tvNbr9.setOnClickListener { configureNbrView(9, it) }
-            acceptArrow.setOnClickListener { checkPinCode() }
-            backspaceImg.setOnClickListener { removeNumber(it) }
+            btnReset.setOnClickListener { resetPin(it) }
+            tvNbr0.setOnClickListener { configureNumberView(0, it) }
+            tvNbr1.setOnClickListener { configureNumberView(1, it) }
+            tvNbr2.setOnClickListener { configureNumberView(2, it) }
+            tvNbr3.setOnClickListener { configureNumberView(3, it) }
+            tvNbr4.setOnClickListener { configureNumberView(4, it) }
+            tvNbr5.setOnClickListener { configureNumberView(5, it) }
+            tvNbr6.setOnClickListener { configureNumberView(6, it) }
+            tvNbr7.setOnClickListener { configureNumberView(7, it) }
+            tvNbr8.setOnClickListener { configureNumberView(8, it) }
+            tvNbr9.setOnClickListener { configureNumberView(9, it) }
+            imgBackSpace.setOnClickListener { removeNumber(it) }
+            imgLogOut.setOnClickListener{ makeLogOut() }
         }
     }
 
+    private fun makeLogOut() {
+        updateViewAppearance(PinState.ENTER)
+        clearPinCodeField()
+    }
+
     private fun clearPinCodeField() {
-        binding.acceptArrow.visibility = View.INVISIBLE
         temporaryPin = ""
         pinCodeAdapter.updateState(temporaryPin.length)
     }
 
-    private fun resetPinCode(btn: View) {
-       if (currentPinState == PinState.SETUP || currentPinState == PinState.LOGIN) {
-           btn.visibility = View.GONE
-           binding.tvTitle.text = resources.getString(R.string.info_msg_confirm)
-           currentPinState = PinState.RESET
+    private fun resetPin(btn: View) {
+       if (currentPinState == PinState.ENTER) {
+           updateViewAppearance(PinState.RESET, View.GONE, View.GONE, resources.getString(R.string.title_confirm))
            clearPinCodeField()
-       } else
-           showMessage(R.string.popup_never_setup)
+       }
     }
 
-    private fun configureNbrView(number: Int, item: View) {
-        item.startAnimation(
-            AnimationUtils.loadAnimation(item.context, R.anim.btn_clicked)
-        )
-        addNumber(number)
+    private fun configureNumberView(number: Int, item: View) {
+        if (currentPinState != PinState.LOGIN)
+        {
+            item.startAnimation(
+                AnimationUtils.loadAnimation(item.context, R.anim.btn_clicked)
+            )
+            addNumber(number)
+        }
     }
 
-    private fun setUpPinCode(btn: View) {
-        clearPinCodeField()
-        btn.visibility = View.GONE
-        binding.btnReset.visibility = View.INVISIBLE
-        binding.tvTitle.text = resources.getString(R.string.info_msg_create)
-        currentPinState = PinState.CREATE
-    }
-
-
-    private fun checkPinCode() {
-        binding.acceptArrow.visibility = View.INVISIBLE
+    private fun checkPinState() {
         when (currentPinState) {
-            PinState.LOGIN -> showMessage(R.string.popup_logged_in)
-            PinState.RESET ->
-                if (temporaryPin == permanentPin) {
-                    removeSetUppedPin()
-                } else
-                    showMessage(R.string.popup_different)
-            PinState.SETUP ->
-                if (temporaryPin == permanentPin) {
-                    currentPinState = PinState.LOGIN
-                    showMessage(R.string.popup_success_enter)
-                } else
-                    showMessage(R.string.popup_fail_enter)
+            PinState.RESET -> deletePin()
+            PinState.ENTER -> checkPinField()
             PinState.CONFIRM -> recordPermanentPin()
             PinState.CREATE -> createPin()
-            else -> showMessage(R.string.popup_miss_setup)
         }
         clearPinCodeField()
+    }
+
+    private fun deletePin() {
+        if (temporaryPin == permanentPin) {
+            removeSetUppedPin()
+        } else
+            showMessage(R.string.popup_different)
+    }
+
+    private fun checkPinField() {
+        if (temporaryPin == permanentPin) {
+            updateViewAppearance(PinState.LOGIN, View.GONE, View.VISIBLE,
+                resources.getString(R.string.title_logged_in))
+            showMessage(R.string.popup_success_enter)
+        } else
+            showMessage(R.string.popup_fail_enter)
     }
 
     private fun removeSetUppedPin() {
         appStore.edit().remove(PIN_CODE_KEY).apply()
         showMessage(R.string.popup_reset)
-        currentPinState = PinState.NONE
-        updateView()
+        updateViewAppearance(PinState.CREATE, View.GONE)
     }
 
-    private fun updateView() {
-        binding.btnSetup.visibility = View.VISIBLE
-        binding.btnReset.visibility = View.VISIBLE
-        binding.tvTitle.text = resources.getString(R.string.info_msg)
+    private fun updateViewAppearance(
+        status: PinState,
+        resetVisibility: Int = View.VISIBLE,
+        logOutVisibility: Int = View.GONE,
+        message: String = resources.getString(R.string.title)) {
+        binding.apply {
+          btnReset.visibility = resetVisibility
+          imgLogOut.visibility = logOutVisibility
+          tvTitle.text = message
+        }
+        currentPinState = status
     }
 
     private fun recordPermanentPin() {
         if (confirmationPin == temporaryPin) {
-            binding.tvTitle.text = resources.getString(R.string.info_msg)
+            updateViewAppearance(PinState.ENTER)
             appStore
                 .edit()
                 .putString(PIN_CODE_KEY, confirmationPin)
                 .apply()
             permanentPin = confirmationPin
-            binding.btnReset.visibility = View.VISIBLE
-            currentPinState = PinState.SETUP
             showMessage(R.string.popup_record)
         } else {
             showMessage(R.string.popup_different)
@@ -164,8 +167,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun createPin() {
         confirmationPin = temporaryPin
-        binding.tvTitle.text = resources.getString(R.string.info_msg_repeat)
-        currentPinState = PinState.CONFIRM
+        updateViewAppearance(PinState.CONFIRM, View.GONE, View.GONE, resources.getString(R.string.title_repeat))
     }
 
     private fun showMessage(id: Int) {
@@ -173,16 +175,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addNumber(number: Int) {
-        if (temporaryPin.length == pinCodeAdapter.itemCount - 1)
-            binding.acceptArrow.visibility = View.VISIBLE
         if (temporaryPin.length < pinCodeAdapter.itemCount) {
             temporaryPin += number.toString()
             pinCodeAdapter.updateState(temporaryPin.length)
         }
+        if (temporaryPin.length == PIN_SIZE)
+            checkPinState()
     }
 
     private fun removeNumber(item: View) {
-        binding.acceptArrow.visibility = View.INVISIBLE
         item.startAnimation(
             AnimationUtils.loadAnimation(item.context, R.anim.btn_clicked)
         )

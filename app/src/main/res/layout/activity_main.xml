@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/main_margin"
         android:padding="12dp"
-        android:text="@string/info_msg"
+        android:text="@string/title"
         android:textStyle="bold"
         android:textSize="15sp"
         android:textColor="@color/black"
@@ -31,7 +31,7 @@
     <RelativeLayout
         android:id="@+id/rlNbrs"
         android:layout_width="300dp"
-        android:layout_height="350dp"
+        android:layout_height="wrap_content"
         android:paddingTop="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -138,7 +138,7 @@
             android:text="0" />
 
         <ImageView
-            android:id="@+id/backspace_img"
+            android:id="@+id/imgBackSpace"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
             android:layout_below="@id/tvNbr9"
@@ -148,24 +148,23 @@
             android:src="@drawable/ic_backspace" />
 
         <ImageView
-            android:id="@+id/accept_arrow"
+            android:id="@+id/imgFingerPrint"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_below="@+id/tvNbr7"
-            android:layout_alignParentStart="true"
+            android:layout_below="@id/tvNbr7"
             android:layout_margin="@dimen/img_pin_margin"
             android:padding="@dimen/img_pin_padding"
-            android:src="@drawable/ic_accept_arr"
-            android:visibility="invisible" />
+            android:src="@drawable/ic_finger_print" />
 
 
     </RelativeLayout>
 
     <LinearLayout
         android:layout_marginBottom="@dimen/main_margin"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -176,18 +175,17 @@
             android:background="@drawable/btn_tune"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/btn_state_margin"
+            android:visibility="invisible"
             style="?android:attr/borderlessButtonStyle"
             android:text="@string/resetBtn" />
 
-        <Button
-            android:id="@+id/btnSetup"
-            android:background="@drawable/btn_tune"
+        <ImageView
+            android:id="@+id/imgLogOut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_marginRight="@dimen/btn_state_margin"
-            android:text="@string/setUpBtn" />
+            android:src="@drawable/ic_logout"/>
 
 
     </LinearLayout>
