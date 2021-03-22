@@ -5,4 +5,5 @@
     <dimen name="img_pin_padding">4dp</dimen>
     <dimen name="btn_state_margin">8dp</dimen>
     <dimen name="main_margin">32dp</dimen>
+    <dimen name="view_default_size">54dp</dimen>
 </resources>
