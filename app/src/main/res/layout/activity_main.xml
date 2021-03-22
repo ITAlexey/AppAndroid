@@ -8,7 +8,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="@dimen/main_margin"
         android:padding="12dp"
         android:text="@string/info_msg"
         android:textStyle="bold"
@@ -22,7 +22,7 @@
         android:id="@+id/rvPinCode"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="@dimen/main_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle"/>
@@ -43,18 +43,21 @@
         <TextView
             android:id="@+id/tvNbr1"
             style="@style/NumbersForPinCode"
+            android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentStart="true"
             android:text="1" />
 
         <TextView
             android:id="@+id/tvNbr2"
             style="@style/NumbersForPinCode"
+            android:layout_margin="@dimen/tv_margin"
             android:layout_centerHorizontal="true"
             android:text="2" />
 
         <TextView
             android:id="@+id/tvNbr3"
             style="@style/NumbersForPinCode"
+            android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentEnd="true"
             android:text="3" />
 
@@ -62,6 +65,7 @@
             android:id="@+id/tvNbr4"
             style="@style/NumbersForPinCode"
             android:layout_below="@id/tvNbr1"
+            android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentStart="true"
             android:text="4" />
 
@@ -69,6 +73,7 @@
             android:id="@+id/tvNbr5"
             style="@style/NumbersForPinCode"
             android:layout_below="@id/tvNbr1"
+            android:layout_margin="@dimen/tv_margin"
             android:layout_centerHorizontal="true"
             android:text="5" />
 
@@ -76,6 +81,7 @@
             android:id="@+id/tvNbr6"
             style="@style/NumbersForPinCode"
             android:layout_below="@id/tvNbr1"
+            android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentEnd="true"
             android:text="6" />
 
@@ -83,6 +89,7 @@
             android:id="@+id/tvNbr7"
             style="@style/NumbersForPinCode"
             android:layout_below="@id/tvNbr4"
+            android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentStart="true"
             android:text="7" />
 
@@ -90,6 +97,7 @@
             android:id="@+id/tvNbr8"
             style="@style/NumbersForPinCode"
             android:layout_below="@id/tvNbr4"
+            android:layout_margin="@dimen/tv_margin"
             android:layout_centerHorizontal="true"
             android:text="8" />
 
@@ -97,6 +105,7 @@
             android:id="@+id/tvNbr9"
             style="@style/NumbersForPinCode"
             android:layout_below="@id/tvNbr4"
+            android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentEnd="true"
             android:text="9" />
 
@@ -104,6 +113,7 @@
             android:id="@+id/tvNbr0"
             style="@style/NumbersForPinCode"
             android:layout_below="@id/tvNbr8"
+            android:layout_margin="@dimen/tv_margin"
             android:layout_centerHorizontal="true"
             android:text="0" />
 
@@ -113,8 +123,8 @@
             android:layout_height="54dp"
             android:layout_below="@id/tvNbr9"
             android:layout_alignParentEnd="true"
-            android:layout_margin="12dp"
-            android:padding="4dp"
+            android:layout_margin="@dimen/img_pin_margin"
+            android:padding="@dimen/img_pin_padding"
             android:src="@drawable/ic_backspace" />
 
         <ImageView
@@ -123,8 +133,8 @@
             android:layout_height="54dp"
             android:layout_below="@+id/tvNbr7"
             android:layout_alignParentStart="true"
-            android:layout_margin="12dp"
-            android:padding="4dp"
+            android:layout_margin="@dimen/img_pin_margin"
+            android:padding="@dimen/img_pin_padding"
             android:src="@drawable/ic_accept_arr"
             android:visibility="invisible" />
 
@@ -132,7 +142,7 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="@dimen/main_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -146,7 +156,7 @@
             android:background="@drawable/btn_tune"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="@dimen/btn_state_margin"
             style="?android:attr/borderlessButtonStyle"
             android:text="@string/resetBtn" />
 
@@ -156,7 +166,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_marginLeft="8dp"
+            android:layout_marginRight="@dimen/btn_state_margin"
             android:text="@string/setUpBtn" />
 
 
