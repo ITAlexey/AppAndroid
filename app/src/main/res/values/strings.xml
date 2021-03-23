@@ -16,4 +16,21 @@
     <string name="popup_record">Pin code has been recorded</string>
     <string name="popup_reset">Pin code has been reset</string>
     <string name="popup_finger_warning">Finger print is currently unavailable</string>
+
+    <!--    TextViews-->
+    <string name="number_1" translatable="false">1</string>
+    <string name="number_2" translatable="false">2</string>
+    <string name="number_3" translatable="false">3</string>
+    <string name="number_4" translatable="false">4</string>
+    <string name="number_5" translatable="false">5</string>
+    <string name="number_6" translatable="false">6</string>
+    <string name="number_7" translatable="false">7</string>
+    <string name="number_8" translatable="false">8</string>
+    <string name="number_9" translatable="false">9</string>
+    <string name="number_0" translatable="false">0</string>
+
+    <!--    ImageViews-->
+    <string name="backspace_sign" translatable="false">backspace_sign</string>
+    <string name="finger_print" translatable="false">finger_print</string>
+    <string name="logout" translatable="false">logout</string>
 </resources>

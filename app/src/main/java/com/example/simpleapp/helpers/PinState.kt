@@ -5,5 +5,6 @@ enum class PinState {
     ENTER,
     CREATE,
     CONFIRM,
-    RESET
+    RESET,
+    UNDEFINED
 }
