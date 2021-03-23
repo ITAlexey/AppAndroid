@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initListeners() {
         binding.apply {
-            btnReset.setOnClickListener { resetPin() }
+            btnReset.setOnClickListener { onResetButtonClicked() }
             tvNumber0.setOnClickListener { onNumberClicked(0, it) }
             tvNumber1.setOnClickListener { onNumberClicked(1, it) }
             tvNumber2.setOnClickListener { onNumberClicked(2, it) }
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         pinCodeAdapter.updateState(temporaryPin.length)
     }
 
-    private fun resetPin() {
+    private fun onResetButtonClicked() {
         if (currentPinState == PinState.ENTER) {
             updateViewAppearance(
                 buttonResetVisibility = View.GONE,
