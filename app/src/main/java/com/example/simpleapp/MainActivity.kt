@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                 buttonLogOutVisibility = View.GONE,
                 id = R.string.title_confirm
             )
-            updatePinState(PinState.ENTER)
+            updatePinState(PinState.RESET)
             clearPinCodeField()
         }
     }
@@ -132,8 +132,8 @@ class MainActivity : AppCompatActivity() {
     private fun loginIfSuccess() {
         if (temporaryPin == permanentPin) {
             updateViewAppearance(
-                buttonLogOutVisibility = View.GONE,
-                buttonResetVisibility = View.VISIBLE,
+                buttonResetVisibility = View.GONE,
+                buttonLogOutVisibility = View.VISIBLE,
                 id = R.string.title_logged_in
             )
             updatePinState(PinState.LOGIN)
@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() {
     private fun removeSavedPin() {
         sharedPreferences.edit().remove(PIN_CODE_KEY).apply()
         showMessage(R.string.popup_reset)
-        updateViewAppearance(buttonLogOutVisibility = View.GONE)
+        updateViewAppearance(buttonResetVisibility = View.GONE)
         updatePinState(PinState.CREATE)
     }
 

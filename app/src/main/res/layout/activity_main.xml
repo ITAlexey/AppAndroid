@@ -11,9 +11,9 @@
         android:layout_marginTop="@dimen/main_margin"
         android:padding="12dp"
         android:text="@string/title"
-        android:textStyle="bold"
-        android:textSize="15sp"
         android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +25,7 @@
         android:layout_marginTop="@dimen/main_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle"/>
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
 
     <RelativeLayout
@@ -45,8 +45,8 @@
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentStart="true"
+            android:layout_margin="@dimen/tv_margin"
             android:text="@string/number_1" />
 
         <TextView
@@ -54,8 +54,8 @@
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/tv_margin"
             android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/tv_margin"
             android:text="@string/number_2" />
 
         <TextView
@@ -63,8 +63,8 @@
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/tv_margin"
             android:text="@string/number_3" />
 
         <TextView
@@ -73,8 +73,8 @@
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
             android:layout_below="@id/tvNumber1"
-            android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentStart="true"
+            android:layout_margin="@dimen/tv_margin"
             android:text="@string/number_4" />
 
         <TextView
@@ -83,8 +83,8 @@
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
             android:layout_below="@id/tvNumber1"
-            android:layout_margin="@dimen/tv_margin"
             android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/tv_margin"
             android:text="@string/number_5" />
 
         <TextView
@@ -93,8 +93,8 @@
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
             android:layout_below="@id/tvNumber1"
-            android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/tv_margin"
             android:text="@string/number_6" />
 
         <TextView
@@ -103,8 +103,8 @@
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
             android:layout_below="@id/tvNumber4"
-            android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentStart="true"
+            android:layout_margin="@dimen/tv_margin"
             android:text="@string/number_7" />
 
         <TextView
@@ -113,8 +113,8 @@
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
             android:layout_below="@id/tvNumber4"
-            android:layout_margin="@dimen/tv_margin"
             android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/tv_margin"
             android:text="@string/number_8" />
 
         <TextView
@@ -123,8 +123,8 @@
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
             android:layout_below="@id/tvNumber4"
-            android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/tv_margin"
             android:text="@string/number_9" />
 
         <TextView
@@ -133,8 +133,8 @@
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
             android:layout_below="@id/tvNumber8"
-            android:layout_margin="@dimen/tv_margin"
             android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/tv_margin"
             android:text="@string/number_0" />
 
         <ImageView
@@ -144,9 +144,9 @@
             android:layout_below="@id/tvNumber9"
             android:layout_alignParentEnd="true"
             android:layout_margin="@dimen/img_pin_margin"
+            android:contentDescription="@string/backspace_sign"
             android:padding="@dimen/img_pin_padding"
-            android:src="@drawable/ic_backspace"
-            android:contentDescription="@string/backspace_sign" />
+            android:src="@drawable/ic_backspace" />
 
         <ImageView
             android:id="@+id/imgFingerPrint"
@@ -154,43 +154,38 @@
             android:layout_height="@dimen/view_default_size"
             android:layout_below="@id/tvNumber7"
             android:layout_margin="@dimen/img_pin_margin"
+            android:contentDescription="@string/finger_print"
             android:padding="@dimen/img_pin_padding"
-            android:src="@drawable/ic_finger_print"
-            android:contentDescription="@string/finger_print" />
+            android:src="@drawable/ic_finger_print" />
 
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_marginBottom="@dimen/main_margin"
-        android:layout_width="match_parent"
+
+    <Button
+        android:id="@+id/btnReset"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
+        android:background="@drawable/btn_tune"
+        android:text="@string/resetBtn"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rlNumbers" />
 
+    <ImageView
+        android:id="@+id/imgLogOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/logout"
+        android:src="@drawable/ic_logout"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rlNumbers" />
 
-        <Button
-            android:id="@+id/btnReset"
-            android:background="@drawable/btn_tune"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            style="?android:attr/borderlessButtonStyle"
-            android:text="@string/resetBtn" />
-
-        <ImageView
-            android:id="@+id/imgLogOut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            style="?android:attr/borderlessButtonStyle"
-            android:src="@drawable/ic_logout"
-            android:contentDescription="@string/logout" />
-
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
