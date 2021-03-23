@@ -15,4 +15,5 @@
     <string name="popup_different">Pin codes are different, try again</string>
     <string name="popup_record">Pin code has been recorded</string>
     <string name="popup_reset">Pin code has been reset</string>
+    <string name="popup_finger_warning">Finger print is currently unavailable</string>
 </resources>

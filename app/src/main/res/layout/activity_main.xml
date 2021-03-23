@@ -29,7 +29,7 @@
 
 
     <RelativeLayout
-        android:id="@+id/rlNbrs"
+        android:id="@+id/rlNumbers"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:paddingTop="30dp"
@@ -41,7 +41,7 @@
         app:layout_constraintVertical_bias="0.31">
 
         <TextView
-            android:id="@+id/tvNbr1"
+            android:id="@+id/tvNumber1"
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
@@ -50,7 +50,7 @@
             android:text="1" />
 
         <TextView
-            android:id="@+id/tvNbr2"
+            android:id="@+id/tvNumber2"
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
@@ -59,7 +59,7 @@
             android:text="2" />
 
         <TextView
-            android:id="@+id/tvNbr3"
+            android:id="@+id/tvNumber3"
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
@@ -68,71 +68,71 @@
             android:text="3" />
 
         <TextView
-            android:id="@+id/tvNbr4"
+            android:id="@+id/tvNumber4"
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_below="@id/tvNbr1"
+            android:layout_below="@id/tvNumber1"
             android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentStart="true"
             android:text="4" />
 
         <TextView
-            android:id="@+id/tvNbr5"
+            android:id="@+id/tvNumber5"
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_below="@id/tvNbr1"
+            android:layout_below="@id/tvNumber1"
             android:layout_margin="@dimen/tv_margin"
             android:layout_centerHorizontal="true"
             android:text="5" />
 
         <TextView
-            android:id="@+id/tvNbr6"
+            android:id="@+id/tvNumber6"
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_below="@id/tvNbr1"
+            android:layout_below="@id/tvNumber1"
             android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentEnd="true"
             android:text="6" />
 
         <TextView
-            android:id="@+id/tvNbr7"
+            android:id="@+id/tvNumber7"
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_below="@id/tvNbr4"
+            android:layout_below="@id/tvNumber4"
             android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentStart="true"
             android:text="7" />
 
         <TextView
-            android:id="@+id/tvNbr8"
+            android:id="@+id/tvNumber8"
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_below="@id/tvNbr4"
+            android:layout_below="@id/tvNumber4"
             android:layout_margin="@dimen/tv_margin"
             android:layout_centerHorizontal="true"
             android:text="8" />
 
         <TextView
-            android:id="@+id/tvNbr9"
+            android:id="@+id/tvNumber9"
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_below="@id/tvNbr4"
+            android:layout_below="@id/tvNumber4"
             android:layout_margin="@dimen/tv_margin"
             android:layout_alignParentEnd="true"
             android:text="9" />
 
         <TextView
-            android:id="@+id/tvNbr0"
+            android:id="@+id/tvNumber0"
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_below="@id/tvNbr8"
+            android:layout_below="@id/tvNumber8"
             android:layout_margin="@dimen/tv_margin"
             android:layout_centerHorizontal="true"
             android:text="0" />
@@ -141,7 +141,7 @@
             android:id="@+id/imgBackSpace"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_below="@id/tvNbr9"
+            android:layout_below="@id/tvNumber9"
             android:layout_alignParentEnd="true"
             android:layout_margin="@dimen/img_pin_margin"
             android:padding="@dimen/img_pin_padding"
@@ -151,7 +151,7 @@
             android:id="@+id/imgFingerPrint"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_below="@id/tvNbr7"
+            android:layout_below="@id/tvNumber7"
             android:layout_margin="@dimen/img_pin_margin"
             android:padding="@dimen/img_pin_padding"
             android:src="@drawable/ic_finger_print" />

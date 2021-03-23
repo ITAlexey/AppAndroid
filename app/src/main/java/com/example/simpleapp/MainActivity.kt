@@ -63,19 +63,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun initListeners() {
         binding.apply {
-            btnReset.setOnClickListener { resetPin(it) }
-            tvNbr0.setOnClickListener { configureNumberView(0, it) }
-            tvNbr1.setOnClickListener { configureNumberView(1, it) }
-            tvNbr2.setOnClickListener { configureNumberView(2, it) }
-            tvNbr3.setOnClickListener { configureNumberView(3, it) }
-            tvNbr4.setOnClickListener { configureNumberView(4, it) }
-            tvNbr5.setOnClickListener { configureNumberView(5, it) }
-            tvNbr6.setOnClickListener { configureNumberView(6, it) }
-            tvNbr7.setOnClickListener { configureNumberView(7, it) }
-            tvNbr8.setOnClickListener { configureNumberView(8, it) }
-            tvNbr9.setOnClickListener { configureNumberView(9, it) }
+            btnReset.setOnClickListener { resetPin() }
+            tvNumber0.setOnClickListener { configureNumberView(0, it) }
+            tvNumber1.setOnClickListener { configureNumberView(1, it) }
+            tvNumber2.setOnClickListener { configureNumberView(2, it) }
+            tvNumber3.setOnClickListener { configureNumberView(3, it) }
+            tvNumber4.setOnClickListener { configureNumberView(4, it) }
+            tvNumber5.setOnClickListener { configureNumberView(5, it) }
+            tvNumber6.setOnClickListener { configureNumberView(6, it) }
+            tvNumber7.setOnClickListener { configureNumberView(7, it) }
+            tvNumber8.setOnClickListener { configureNumberView(8, it) }
+            tvNumber9.setOnClickListener { configureNumberView(9, it) }
             imgBackSpace.setOnClickListener { removeNumber(it) }
             imgLogOut.setOnClickListener{ makeLogOut() }
+            imgFingerPrint.setOnClickListener{ showMessage(R.string.popup_finger_warning) }
         }
     }
 
@@ -89,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         pinCodeAdapter.updateState(temporaryPin.length)
     }
 
-    private fun resetPin(btn: View) {
+    private fun resetPin() {
        if (currentPinState == PinState.ENTER) {
            updateViewAppearance(PinState.RESET, View.GONE, View.GONE, resources.getString(R.string.title_confirm))
            clearPinCodeField()
@@ -140,12 +141,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateViewAppearance(
         status: PinState,
-        resetVisibility: Int = View.VISIBLE,
-        logOutVisibility: Int = View.GONE,
+        buttonResetVisibility: Int = View.VISIBLE,
+        buttonLogOutVisibility: Int = View.GONE,
         message: String = resources.getString(R.string.title)) {
         binding.apply {
-          btnReset.visibility = resetVisibility
-          imgLogOut.visibility = logOutVisibility
+          btnReset.visibility = buttonResetVisibility
+          imgLogOut.visibility = buttonLogOutVisibility
           tvTitle.text = message
         }
         currentPinState = status
