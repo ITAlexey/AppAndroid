@@ -120,8 +120,12 @@ class MainActivity : AppCompatActivity() {
         clearPinCodeField()
     }
 
-    private fun deletePinIfPossible() =
-        if (temporaryPin == permanentPin) removeSavedPin() else showMessage(R.string.popup_different)
+    private fun deletePinIfPossible() {
+        if (temporaryPin == permanentPin) {
+            removeSavedPin()
+        } else
+            showMessage(R.string.popup_different)
+    }
 
 
     private fun loginIfSuccess() {
@@ -140,7 +144,10 @@ class MainActivity : AppCompatActivity() {
     private fun removeSavedPin() {
         sharedPreferences.edit().remove(PIN_CODE_KEY).apply()
         showMessage(R.string.popup_reset)
-        updateViewAppearance(buttonResetVisibility = View.GONE, titleTextResId = R.string.title_create)
+        updateViewAppearance(
+            buttonResetVisibility = View.GONE,
+            titleTextResId = R.string.title_create
+        )
         updatePinState(PinState.CREATE)
     }
 
@@ -178,7 +185,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun createPin() {
         confirmationPin = temporaryPin
-        updateViewAppearance(buttonResetVisibility = View.GONE, titleTextResId = R.string.title_repeat)
+        updateViewAppearance(
+            buttonResetVisibility = View.GONE,
+            titleTextResId = R.string.title_repeat
+        )
         updatePinState(PinState.CONFIRM)
     }
 
