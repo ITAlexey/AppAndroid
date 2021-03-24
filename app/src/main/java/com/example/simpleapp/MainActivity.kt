@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() {
     private fun removeSavedPin() {
         sharedPreferences.edit().remove(PIN_CODE_KEY).apply()
         showMessage(R.string.popup_reset)
-        updateViewAppearance(buttonResetVisibility = View.GONE)
+        updateViewAppearance(buttonResetVisibility = View.GONE, id = R.string.title_create)
         updatePinState(PinState.CREATE)
     }
 
