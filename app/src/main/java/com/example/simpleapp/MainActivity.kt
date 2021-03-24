@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
@@ -91,18 +92,15 @@ class MainActivity : AppCompatActivity() {
             updateViewAppearance(
                 buttonResetVisibility = View.GONE,
                 buttonLogOutVisibility = View.GONE,
-                id = R.string.title_confirm
+                titleTextResId = R.string.title_confirm
             )
             updatePinState(PinState.RESET)
             clearPinCodeField()
         }
     }
 
-    private fun applyAnimation(item: View) {
-        item.startAnimation(
-            AnimationUtils.loadAnimation(item.context, R.anim.btn_clicked)
-        )
-    }
+    private fun applyAnimation(item: View) =
+        item.startAnimation(AnimationUtils.loadAnimation(item.context, R.anim.btn_clicked))
 
     private fun onNumberClicked(number: Int, item: View) {
         if (currentPinState != PinState.LOGIN) {
@@ -122,19 +120,16 @@ class MainActivity : AppCompatActivity() {
         clearPinCodeField()
     }
 
-    private fun deletePinIfPossible() {
-        if (temporaryPin == permanentPin) {
-            removeSavedPin()
-        } else
-            showMessage(R.string.popup_different)
-    }
+    private fun deletePinIfPossible() =
+        if (temporaryPin == permanentPin) removeSavedPin() else showMessage(R.string.popup_different)
+
 
     private fun loginIfSuccess() {
         if (temporaryPin == permanentPin) {
             updateViewAppearance(
                 buttonResetVisibility = View.GONE,
                 buttonLogOutVisibility = View.VISIBLE,
-                id = R.string.title_logged_in
+                titleTextResId = R.string.title_logged_in
             )
             updatePinState(PinState.LOGIN)
             showMessage(R.string.popup_success_enter)
@@ -145,19 +140,20 @@ class MainActivity : AppCompatActivity() {
     private fun removeSavedPin() {
         sharedPreferences.edit().remove(PIN_CODE_KEY).apply()
         showMessage(R.string.popup_reset)
-        updateViewAppearance(buttonResetVisibility = View.GONE, id = R.string.title_create)
+        updateViewAppearance(buttonResetVisibility = View.GONE, titleTextResId = R.string.title_create)
         updatePinState(PinState.CREATE)
     }
 
     private fun updateViewAppearance(
         buttonResetVisibility: Int = View.VISIBLE,
         buttonLogOutVisibility: Int = View.GONE,
-        id: Int = R.string.title
+        @StringRes
+        titleTextResId: Int = R.string.title
     ) {
         binding.apply {
             btnReset.visibility = buttonResetVisibility
             imgLogOut.visibility = buttonLogOutVisibility
-            tvTitle.text = resources.getString(id)
+            tvTitle.text = resources.getString(titleTextResId)
         }
     }
 
@@ -182,12 +178,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun createPin() {
         confirmationPin = temporaryPin
-        updateViewAppearance(buttonResetVisibility = View.GONE, id = R.string.title_repeat)
+        updateViewAppearance(buttonResetVisibility = View.GONE, titleTextResId = R.string.title_repeat)
         updatePinState(PinState.CONFIRM)
     }
 
-    private fun showMessage(id: Int) =
-        Toast.makeText(this, getString(id), Toast.LENGTH_SHORT).show()
+    private fun showMessage(@StringRes popupTextResId: Int) =
+        Toast.makeText(this, getString(popupTextResId), Toast.LENGTH_SHORT).show()
 
     private fun addNumber(number: Int) {
         if (temporaryPin.length < pinCodeAdapter.itemCount) {
