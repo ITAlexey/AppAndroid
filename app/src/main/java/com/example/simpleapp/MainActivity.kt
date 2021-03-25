@@ -224,7 +224,6 @@ class MainActivity : AppCompatActivity() {
         val recyclerView = binding.rvPinCode
         recyclerView.apply {
             adapter = pinCodeAdapter
-            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
         }
     }
