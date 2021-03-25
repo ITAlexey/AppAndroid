@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.annotation.IntRange
 import androidx.recyclerview.widget.RecyclerView
 import com.example.simpleapp.R
-import com.example.simpleapp.databinding.ItemRvPincodeBinding
+import com.example.simpleapp.databinding.ItemRvPinBinding
 
 class PinCodeAdapter(
     @IntRange(from = 0) private var currentPinLen: Int,
@@ -13,8 +13,7 @@ class PinCodeAdapter(
 ) : RecyclerView.Adapter<PinCodeAdapter.PinCodeHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PinCodeHolder {
-        val itemView =
-            ItemRvPincodeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val itemView = ItemRvPinBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PinCodeHolder(itemView)
     }
 
@@ -33,6 +32,6 @@ class PinCodeAdapter(
 
     override fun getItemCount(): Int = pinSize
 
-    class PinCodeHolder(val binding: ItemRvPincodeBinding) : RecyclerView.ViewHolder(binding.root)
+    class PinCodeHolder(val binding: ItemRvPinBinding) : RecyclerView.ViewHolder(binding.root)
 
 }

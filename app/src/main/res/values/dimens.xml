@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="tv_margin">44dp</dimen>
-    <dimen name="img_pin_margin">44dp</dimen>
-    <dimen name="img_pin_padding">4dp</dimen>
-    <dimen name="main_margin">32dp</dimen>
+    <dimen name="rv_elem_keyboard_margin">16dp</dimen>
+    <dimen name="rv_elem_keyboard_padding">4dp</dimen>
+    <dimen name="main_margin">64dp</dimen>
     <dimen name="view_default_size">54dp</dimen>
 </resources>

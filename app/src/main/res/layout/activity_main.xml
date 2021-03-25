@@ -34,9 +34,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/conLNumbers"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="32dp"
+        android:layout_marginTop="@dimen/main_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rvPinCode">
@@ -46,9 +46,12 @@
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/tv_margin"
+            android:layout_marginTop="@dimen/rv_elem_keyboard_margin"
+            android:layout_marginBottom="@dimen/rv_elem_keyboard_margin"
             android:text="@string/number_1"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tvNumber4"
+            app:layout_constraintEnd_toStartOf="@+id/tvNumber2"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -56,8 +59,10 @@
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/tv_margin"
+            android:layout_marginTop="@dimen/rv_elem_keyboard_margin"
+            android:layout_marginBottom="@dimen/rv_elem_keyboard_margin"
             android:text="@string/number_2"
+            app:layout_constraintBottom_toTopOf="@+id/tvNumber5"
             app:layout_constraintEnd_toStartOf="@+id/tvNumber3"
             app:layout_constraintStart_toEndOf="@+id/tvNumber1"
             app:layout_constraintTop_toTopOf="parent" />
@@ -67,9 +72,12 @@
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/tv_margin"
+            android:layout_marginTop="@dimen/rv_elem_keyboard_margin"
+            android:layout_marginBottom="@dimen/rv_elem_keyboard_margin"
             android:text="@string/number_3"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tvNumber6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvNumber2"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -77,9 +85,12 @@
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/tv_margin"
+            android:layout_marginTop="@dimen/rv_elem_keyboard_margin"
+            android:layout_marginBottom="@dimen/rv_elem_keyboard_margin"
             android:text="@string/number_4"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tvNumber7"
+            app:layout_constraintEnd_toStartOf="@+id/tvNumber5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvNumber1" />
 
         <TextView
@@ -87,8 +98,10 @@
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/tv_margin"
+            android:layout_marginTop="@dimen/rv_elem_keyboard_margin"
+            android:layout_marginBottom="@dimen/rv_elem_keyboard_margin"
             android:text="@string/number_5"
+            app:layout_constraintBottom_toTopOf="@+id/tvNumber8"
             app:layout_constraintEnd_toStartOf="@+id/tvNumber6"
             app:layout_constraintStart_toEndOf="@+id/tvNumber4"
             app:layout_constraintTop_toBottomOf="@+id/tvNumber2" />
@@ -98,9 +111,12 @@
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/tv_margin"
+            android:layout_marginTop="@dimen/rv_elem_keyboard_margin"
+            android:layout_marginBottom="@dimen/rv_elem_keyboard_margin"
             android:text="@string/number_6"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tvNumber9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvNumber5"
             app:layout_constraintTop_toBottomOf="@+id/tvNumber3" />
 
         <TextView
@@ -108,9 +124,12 @@
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/tv_margin"
+            android:layout_marginTop="@dimen/rv_elem_keyboard_margin"
+            android:layout_marginBottom="@dimen/rv_elem_keyboard_margin"
             android:text="@string/number_7"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/imgFingerprint"
+            app:layout_constraintEnd_toStartOf="@+id/tvNumber8"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvNumber4" />
 
         <TextView
@@ -118,8 +137,10 @@
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/tv_margin"
+            android:layout_marginTop="@dimen/rv_elem_keyboard_margin"
+            android:layout_marginBottom="@dimen/rv_elem_keyboard_margin"
             android:text="@string/number_8"
+            app:layout_constraintBottom_toTopOf="@+id/tvNumber0"
             app:layout_constraintEnd_toStartOf="@+id/tvNumber9"
             app:layout_constraintStart_toEndOf="@+id/tvNumber7"
             app:layout_constraintTop_toBottomOf="@+id/tvNumber5" />
@@ -129,9 +150,12 @@
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/tv_margin"
+            android:layout_marginTop="@dimen/rv_elem_keyboard_margin"
+            android:layout_marginBottom="@dimen/rv_elem_keyboard_margin"
             android:text="@string/number_9"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/imgBackSpace"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvNumber8"
             app:layout_constraintTop_toBottomOf="@+id/tvNumber6" />
 
         <TextView
@@ -139,7 +163,8 @@
             style="@style/NumbersForPinCode"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/tv_margin"
+            android:layout_marginTop="@dimen/rv_elem_keyboard_margin"
+            android:layout_marginBottom="@dimen/rv_elem_keyboard_margin"
             android:text="@string/number_0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imgBackSpace"
@@ -150,24 +175,28 @@
             android:id="@+id/imgFingerprint"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/img_pin_margin"
+            android:layout_marginTop="@dimen/rv_elem_keyboard_margin"
+            android:layout_marginBottom="@dimen/rv_elem_keyboard_margin"
             android:contentDescription="@string/img_fingerprint"
-            android:padding="@dimen/img_pin_padding"
+            android:padding="@dimen/rv_elem_keyboard_padding"
             android:src="@drawable/ic_fingerprint"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvNumber0"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvNumber7" />
 
         <ImageView
             android:id="@+id/imgBackSpace"
             android:layout_width="@dimen/view_default_size"
             android:layout_height="@dimen/view_default_size"
-            android:layout_margin="@dimen/img_pin_margin"
+            android:layout_marginTop="@dimen/rv_elem_keyboard_margin"
+            android:layout_marginBottom="@dimen/rv_elem_keyboard_margin"
             android:contentDescription="@string/img_backspace_sign"
-            android:padding="@dimen/img_pin_padding"
+            android:padding="@dimen/rv_elem_keyboard_padding"
             android:src="@drawable/ic_backspace"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvNumber0"
             app:layout_constraintTop_toBottomOf="@+id/tvNumber9" />
 
 
@@ -181,11 +210,11 @@
         android:background="@drawable/btn_main_background"
         android:text="@string/resetBtn"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/conLNumbers" />
+        app:layout_constraintTop_toBottomOf="@+id/conLNumbers"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/imgLogOut"
