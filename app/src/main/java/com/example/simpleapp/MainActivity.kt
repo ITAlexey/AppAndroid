@@ -9,18 +9,17 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
+import androidx.security.crypto.MasterKey
 import com.example.simpleapp.adapter.PinCodeAdapter
 import com.example.simpleapp.databinding.ActivityMainBinding
 import com.example.simpleapp.helpers.PinState
-import java.io.Serializable
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var pinCodeAdapter: PinCodeAdapter
     private lateinit var sharedPreferences: SharedPreferences
 
-    private var currentPinState = PinState.UNDEFINED
+    private var currentPinState = PinState.WAITED
     private var permanentPin = ""
     private var confirmationPin = ""
     private var temporaryPin = ""
@@ -37,11 +36,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initEncryptedSharedPref() {
-        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+        val masterKey = MasterKey.Builder(this, MasterKey.DEFAULT_MASTER_KEY_ALIAS)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
         sharedPreferences = EncryptedSharedPreferences.create(
+            this,
             SHARED_PREF_FILE,
-            masterKeyAlias,
-            applicationContext,
+            masterKey,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
@@ -100,12 +100,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun applyAnimation(item: View) =
+    private fun applyAnimationOnPinView(item: View) =
         item.startAnimation(AnimationUtils.loadAnimation(item.context, R.anim.btn_clicked))
 
     private fun onNumberClicked(number: Int, item: View) {
         if (currentPinState != PinState.LOGIN) {
-            applyAnimation(item)
+            applyAnimationOnPinView(item)
             addNumber(number)
         }
     }
@@ -124,8 +124,9 @@ class MainActivity : AppCompatActivity() {
     private fun deletePinIfPossible() {
         if (temporaryPin == permanentPin) {
             removeSavedPin()
-        } else
+        } else {
             showMessage(R.string.popup_different)
+        }
     }
 
 
@@ -138,8 +139,9 @@ class MainActivity : AppCompatActivity() {
             )
             updatePinState(PinState.LOGIN)
             showMessage(R.string.popup_success_enter)
-        } else
+        } else {
             showMessage(R.string.popup_fail_enter)
+        }
     }
 
     private fun removeSavedPin() {
@@ -173,16 +175,19 @@ class MainActivity : AppCompatActivity() {
         if (confirmationPin == temporaryPin) {
             updateViewAppearance()
             updatePinState(PinState.ENTER)
-            sharedPreferences
-                .edit()
-                .putString(PIN_CODE_KEY, confirmationPin)
-                .apply()
+            saveToSharedPref()
             permanentPin = confirmationPin
             showMessage(R.string.popup_record)
         } else {
             showMessage(R.string.popup_different)
         }
     }
+
+    private fun saveToSharedPref() =
+        sharedPreferences
+            .edit()
+            .putString(PIN_CODE_KEY, confirmationPin)
+            .apply()
 
     private fun createPin() {
         confirmationPin = temporaryPin
@@ -194,19 +199,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showMessage(@StringRes popupTextResId: Int) =
-        Toast.makeText(this, getString(popupTextResId), Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, popupTextResId, Toast.LENGTH_SHORT).show()
 
     private fun addNumber(number: Int) {
         if (temporaryPin.length < pinCodeAdapter.itemCount) {
             temporaryPin += number.toString()
             pinCodeAdapter.updateState(temporaryPin.length)
         }
-        if (temporaryPin.length == PIN_SIZE)
+        if (temporaryPin.length == PIN_SIZE) {
             processEnterPin()
+        }
     }
 
     private fun removeNumber(item: View) {
-        applyAnimation(item)
+        applyAnimationOnPinView(item)
         if (temporaryPin.isNotEmpty()) {
             temporaryPin = temporaryPin.substring(0, temporaryPin.length - 1)
             pinCodeAdapter.updateState(temporaryPin.length)
@@ -214,7 +220,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initAdapter() {
-        pinCodeAdapter = PinCodeAdapter(temporaryPin.length)
+        pinCodeAdapter = PinCodeAdapter(temporaryPin.length, PIN_SIZE)
         val recyclerView = binding.rvPinCode
         recyclerView.apply {
             adapter = pinCodeAdapter
@@ -226,7 +232,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val SHARED_PREF_FILE = "PINCODE"
         private const val PIN_CODE_KEY = "pincode"
-        const val PIN_SIZE = 4
+        private const val PIN_SIZE = 4
     }
 
 }

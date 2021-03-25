@@ -6,5 +6,5 @@ enum class PinState {
     CREATE,
     CONFIRM,
     RESET,
-    UNDEFINED
+    WAITED
 }
