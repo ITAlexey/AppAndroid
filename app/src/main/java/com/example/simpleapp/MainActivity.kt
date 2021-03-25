@@ -13,6 +13,7 @@ import androidx.security.crypto.MasterKeys
 import com.example.simpleapp.adapter.PinCodeAdapter
 import com.example.simpleapp.databinding.ActivityMainBinding
 import com.example.simpleapp.helpers.PinState
+import java.io.Serializable
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
