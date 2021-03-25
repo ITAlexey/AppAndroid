@@ -4,4 +4,5 @@
     android:id="@+id/imgPinDot"
     android:layout_width="24dp"
     android:layout_height="24dp"
-    android:layout_margin="4dp" />
+    android:layout_margin="4dp"
+    android:contentDescription="@string/img_pin_dot" />

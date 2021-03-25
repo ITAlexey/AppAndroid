@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             tvNumber9.setOnClickListener { onNumberClicked(9, it) }
             imgBackSpace.setOnClickListener { removeNumber(it) }
             imgLogOut.setOnClickListener { onLogOutButtonClicked() }
-            imgFingerPrint.setOnClickListener { showMessage(R.string.popup_finger_warning) }
+            imgFingerprint.setOnClickListener { showMessage(R.string.popup_finger_warning) }
         }
     }
 

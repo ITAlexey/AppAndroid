@@ -9,7 +9,6 @@
     <string name="title_repeat">Repeat pin code</string>
     <string name="title_logged_in">You are logged in</string>
 
-    <!--    Pop-up messages-->
     <string name="popup_success_enter">You are logged in</string>
     <string name="popup_fail_enter">Incorrect pin code, try again</string>
     <string name="popup_different">Pin codes are different, try again</string>
@@ -17,7 +16,6 @@
     <string name="popup_reset">Pin code has been reset</string>
     <string name="popup_finger_warning">Finger print is currently unavailable</string>
 
-    <!--    TextViews-->
     <string name="number_1" translatable="false">1</string>
     <string name="number_2" translatable="false">2</string>
     <string name="number_3" translatable="false">3</string>
@@ -29,8 +27,8 @@
     <string name="number_9" translatable="false">9</string>
     <string name="number_0" translatable="false">0</string>
 
-    <!--    ImageViews-->
-    <string name="backspace_sign" translatable="false">backspace_sign</string>
-    <string name="finger_print" translatable="false">finger_print</string>
-    <string name="logout" translatable="false">logout</string>
+    <string name="img_backspace_sign">Remove entered digit in the pin code field</string>
+    <string name="img_fingerprint">Enter using fingerprint</string>
+    <string name="img_logout">Buttons which returns to entry pin code window</string>
+    <string name="img_pin_dot">Status of fullness of the pin code field</string>
 </resources>

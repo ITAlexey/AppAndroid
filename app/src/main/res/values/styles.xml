@@ -7,7 +7,7 @@
         <item name="android:background">@drawable/tv_pin_nbr</item>
         <item name="android:textColor">@color/black</item>
     </style>
-    <style name="stateBtns" parent="Widget.AppCompat.Button">
+    <style name="ButtonMain" parent="Widget.AppCompat.Button">
         <item name="textAllCaps">false</item>
     </style>
 </resources>
