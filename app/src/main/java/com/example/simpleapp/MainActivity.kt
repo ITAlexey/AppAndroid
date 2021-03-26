@@ -7,7 +7,6 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.example.simpleapp.adapter.PinCodeAdapter
@@ -71,19 +70,18 @@ class MainActivity : AppCompatActivity() {
             tvNumber7.setOnClickListener { onNumberClicked(7, it) }
             tvNumber8.setOnClickListener { onNumberClicked(8, it) }
             tvNumber9.setOnClickListener { onNumberClicked(9, it) }
-            imgBackSpace.setOnClickListener { removeNumber(it) }
+            imgBackSpace.setOnClickListener { onBackSpaceButtonClicked(it) }
             imgLogOut.setOnClickListener { onLogOutButtonClicked() }
-            imgFingerprint.setOnClickListener { showMessage(R.string.popup_finger_warning) }
         }
     }
 
     private fun onLogOutButtonClicked() {
         updateViewAppearance()
         updatePinState(PinState.ENTER)
-        clearPinCodeField()
+        updatePinField()
     }
 
-    private fun clearPinCodeField() {
+    private fun updatePinField() {
         temporaryPin = ""
         pinCodeAdapter.updateState(temporaryPin.length)
     }
@@ -96,7 +94,7 @@ class MainActivity : AppCompatActivity() {
                 titleTextResId = R.string.title_confirm
             )
             updatePinState(PinState.RESET)
-            clearPinCodeField()
+            updatePinField()
         }
     }
 
@@ -107,6 +105,15 @@ class MainActivity : AppCompatActivity() {
         if (currentPinState != PinState.LOGIN) {
             applyAnimationOnPinView(item)
             addNumber(number)
+            updateBackSpaceButtonAppearance()
+        }
+    }
+
+    private fun updateBackSpaceButtonAppearance() {
+        binding.imgBackSpace.visibility = if (temporaryPin.isNotEmpty()) {
+            View.VISIBLE
+        } else {
+            View.INVISIBLE
         }
     }
 
@@ -118,7 +125,7 @@ class MainActivity : AppCompatActivity() {
             PinState.CREATE -> createPin()
             else -> Unit
         }
-        clearPinCodeField()
+        updatePinField()
     }
 
     private fun deletePinIfPossible() {
@@ -211,8 +218,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun removeNumber(item: View) {
+    private fun onBackSpaceButtonClicked(item: View) {
         applyAnimationOnPinView(item)
+        removeNumber()
+        updateBackSpaceButtonAppearance()
+    }
+
+    private fun removeNumber() {
         if (temporaryPin.isNotEmpty()) {
             temporaryPin = temporaryPin.substring(0, temporaryPin.length - 1)
             pinCodeAdapter.updateState(temporaryPin.length)

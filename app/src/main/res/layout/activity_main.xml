@@ -21,7 +21,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPinCode"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/main_margin"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -180,10 +180,12 @@
             android:contentDescription="@string/img_fingerprint"
             android:padding="@dimen/rv_elem_keyboard_padding"
             android:src="@drawable/ic_fingerprint"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tvNumber0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvNumber7" />
+            app:layout_constraintTop_toBottomOf="@+id/tvNumber7"
+            tools:visibility="visible" />
 
         <ImageView
             android:id="@+id/imgBackSpace"
@@ -194,10 +196,12 @@
             android:contentDescription="@string/img_backspace_sign"
             android:padding="@dimen/rv_elem_keyboard_padding"
             android:src="@drawable/ic_backspace"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvNumber0"
-            app:layout_constraintTop_toBottomOf="@+id/tvNumber9" />
+            app:layout_constraintTop_toBottomOf="@+id/tvNumber9"
+            tools:visibility="visible" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
