@@ -2,6 +2,6 @@
 <resources>
     <dimen name="rv_elem_keyboard_margin">16dp</dimen>
     <dimen name="rv_elem_keyboard_padding">4dp</dimen>
-    <dimen name="main_margin">64dp</dimen>
+    <dimen name="main_margin">48dp</dimen>
     <dimen name="view_default_size">54dp</dimen>
 </resources>

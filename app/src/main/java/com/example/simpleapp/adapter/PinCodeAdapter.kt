@@ -3,6 +3,7 @@ package com.example.simpleapp.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.IntRange
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.simpleapp.R
 import com.example.simpleapp.databinding.ItemRvPinBinding
@@ -19,9 +20,19 @@ class PinCodeAdapter(
 
     override fun onBindViewHolder(holder: PinCodeHolder, position: Int) {
         if (position < currentPinLen) {
-            holder.binding.imgPinDot.setBackgroundResource(R.drawable.ic_filled_dot)
+            holder.imgPinDot.setColorFilter(
+                ContextCompat.getColor(
+                    holder.imgPinDot.context,
+                    R.color.blue
+                )
+            )
         } else {
-            holder.binding.imgPinDot.setBackgroundResource(R.drawable.ic_empty_dot)
+            holder.imgPinDot.setColorFilter(
+                ContextCompat.getColor(
+                    holder.imgPinDot.context,
+                    R.color.gray
+                )
+            )
         }
     }
 
@@ -32,6 +43,9 @@ class PinCodeAdapter(
 
     override fun getItemCount(): Int = pinSize
 
-    class PinCodeHolder(val binding: ItemRvPinBinding) : RecyclerView.ViewHolder(binding.root)
+    class PinCodeHolder(binding: ItemRvPinBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        val imgPinDot = binding.imgPinDot
+    }
 
 }
