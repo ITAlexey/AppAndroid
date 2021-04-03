@@ -3,7 +3,7 @@
     <string name="setUpBtn">Set up\npin code</string>
     <string name="resetBtn">Reset\npin Code</string>
 
-    <string name="title">Enter pin code</string>
+    <string name="title_main">Enter pin code</string>
     <string name="title_confirm">Confirm previous pin code</string>
     <string name="title_create">Create pin code</string>
     <string name="title_repeat">Repeat pin code</string>
