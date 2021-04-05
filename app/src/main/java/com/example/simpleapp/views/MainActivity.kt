@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         initAdapter()
         val model = (applicationContext as BaseApp).pinModel
         presenter = MainActivityPresenter(this, model)
+        presenter.onViewCreated()
         setContentView(binding.root)
         initListeners()
     }

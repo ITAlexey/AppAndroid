@@ -27,6 +27,7 @@ class MainActivityPresenter(
             if (pinModel.temporaryPin.length == PIN_SIZE) {
                 pinModel.processPinField()
                 selectTitleText(pinModel.currentPinState)
+                view.hideBackspaceButton()
             }
             view.updatePinField(pinModel.temporaryPin.length)
         }

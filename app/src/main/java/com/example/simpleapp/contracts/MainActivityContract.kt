@@ -1,7 +1,6 @@
 package com.example.simpleapp.contracts
 
 import androidx.annotation.StringRes
-import com.example.simpleapp.models.PinState
 
 interface MainActivityContract {
     interface Presenter : BasePresenter {
