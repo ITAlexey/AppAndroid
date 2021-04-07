@@ -18,6 +18,11 @@ class LogInActivity : AppCompatActivity(), LogInActivityContract.View {
         val model = (application as BaseApp).pinModel
         presenter = LogInActivityPresenter(this, model)
         presenter.onViewCreated()
+        initListeners()
+    }
+
+    private fun initListeners() {
+       binding.imgLogOut.setOnClickListener{presenter.onLogOutButtonClicked(this)}
     }
 
     override fun showSumResult(sumResult: String) {

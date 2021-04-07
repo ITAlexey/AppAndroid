@@ -1,7 +1,9 @@
 package com.example.simpleapp.presenters
 
+import androidx.appcompat.app.AppCompatActivity
 import com.example.simpleapp.contracts.LogInActivityContract
 import com.example.simpleapp.models.PinModel
+import com.example.simpleapp.models.PinState
 
 class LogInActivityPresenter(
     private val view: LogInActivityContract.View,
@@ -9,8 +11,9 @@ class LogInActivityPresenter(
 ) :
     LogInActivityContract.Presenter {
 
-    override fun onLogOutButtonClicked() {
-
+    override fun onLogOutButtonClicked(activity: AppCompatActivity) {
+        pinModel.updatePinState(PinState.LOGOUT)
+        activity.finish()
     }
 
     override fun onViewCreated() {
