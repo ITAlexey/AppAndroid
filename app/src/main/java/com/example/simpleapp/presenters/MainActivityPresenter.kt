@@ -41,7 +41,8 @@ class MainActivityPresenter(
                 modifyTitleText(R.string.title_main)
                 showResetButton()
             }
-            PinState.RESET, PinState.LOGIN -> Unit
+            PinState.RESET -> Unit
+            PinState.LOGIN -> view.showLogInActivity()
         }
     }
 

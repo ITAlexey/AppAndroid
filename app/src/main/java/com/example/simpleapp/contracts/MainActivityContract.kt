@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 
 interface MainActivityContract {
     interface Presenter : BasePresenter {
-        fun onViewCreated()
         fun onNumberButtonClicked(number: Int)
         fun onResetButtonClicked()
         fun onBackspaceButtonClicked()
@@ -16,6 +15,7 @@ interface MainActivityContract {
        fun hideBackspaceButton()
        fun showResetButton()
        fun hideResetButton()
+       fun showLogInActivity()
        fun modifyTitleText(@StringRes titleTextResId: Int)
        fun showMessage(@StringRes popupTextResId: Int)
     }

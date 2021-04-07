@@ -31,4 +31,6 @@
     <string name="img_fingerprint">Enter using fingerprint</string>
     <string name="img_logout">Buttons which returns to entry pin code window</string>
     <string name="img_pin_dot">Status of fullness of the pin code field</string>
+    <string name="second_title">Welcome</string>
+    <string name="message_sum">The sum of numbers pin code is</string>
 </resources>

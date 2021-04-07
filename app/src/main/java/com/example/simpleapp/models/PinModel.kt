@@ -47,7 +47,6 @@ class PinModel(
         }
     }
 
-
     private fun loginIfSuccess() {
         if (temporaryPin == permanentPin) {
             updatePinState(PinState.LOGIN)
