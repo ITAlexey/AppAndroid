@@ -20,7 +20,7 @@ class PinModel(
 
     fun processPinField() {
         when (currentPinState) {
-            PinState.CREATE -> createPin()
+            PinState.CREATE -> createPinIfNotSimple()
             PinState.CONFIRM -> savePinIfSuccess()
             PinState.LOGOUT -> loginIfSuccess()
             PinState.RESET -> deletePinIfSuccess()
@@ -36,9 +36,11 @@ class PinModel(
         currentPinState = state
     }
 
-    private fun createPin() {
-        confirmationPin = temporaryPin
-        updatePinState(PinState.CONFIRM)
+    private fun createPinIfNotSimple() {
+        if (!isPinSimple()) {
+            confirmationPin = temporaryPin
+            updatePinState(PinState.CONFIRM)
+        }
     }
 
     private fun deletePinIfSuccess() {
@@ -65,6 +67,29 @@ class PinModel(
             permanentPin = confirmationPin
         }
     }
+
+    private fun isPinSimple(): Boolean =
+        isPinConsistsOfSameNumbers() || isPinConsistsOfNumbersIncreasedByOne() || isPinConsistsOfNumbersDecreasedByOne()
+
+    private fun isPinConsistsOfNumbersDecreasedByOne(): Boolean {
+        for (i in temporaryPin.length - 1 downTo 1) {
+            if (temporaryPin[i].toInt() - temporaryPin[i - 1].toInt() != 1) {
+                return false
+            }
+        }
+        return true
+    }
+
+    private fun isPinConsistsOfNumbersIncreasedByOne(): Boolean {
+        for (i in 0 until temporaryPin.length - 1) {
+           if (temporaryPin[i].toInt() - temporaryPin[i + 1].toInt() != 1) {
+              return false
+           }
+        }
+        return true
+    }
+
+    private fun isPinConsistsOfSameNumbers(): Boolean = temporaryPin.toSet().size == 1
 
     private fun saveToSharedPref() =
         sharedPreferences
