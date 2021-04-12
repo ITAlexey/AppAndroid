@@ -2,21 +2,24 @@ package com.example.simpleapp
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.example.simpleapp.Constants.SHARED_PREF_FILE
+import com.example.simpleapp.Constants.TAG
 import com.example.simpleapp.models.PinModel
+import com.example.simpleapp.models.SharedPrefRepo
 
 class BaseApp : Application() {
     lateinit var pinModel: PinModel
         private set
 
-
     override fun onCreate() {
         super.onCreate()
+        Log.d(TAG, "baseApp inside")
         val sharedPreferences = getEncryptedSharedPref()
-        pinModel = PinModel(sharedPreferences)
-
+        val sharedPrefRepo = SharedPrefRepo(sharedPreferences)
+        pinModel = PinModel(sharedPrefRepo)
     }
 
     private fun getEncryptedSharedPref(): SharedPreferences {

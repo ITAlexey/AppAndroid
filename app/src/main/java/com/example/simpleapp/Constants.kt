@@ -3,5 +3,5 @@ package com.example.simpleapp
 object Constants {
     const val SHARED_PREF_FILE = "simple_app"
     const val PIN_SIZE = 4
-    const val PIN_CODE_KEY = "pincode"
+    const val TAG = "MyAppTag"
 }

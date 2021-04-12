@@ -3,7 +3,7 @@ package com.example.simpleapp.presenters
 import androidx.appcompat.app.AppCompatActivity
 import com.example.simpleapp.contracts.LogInActivityContract
 import com.example.simpleapp.models.PinModel
-import com.example.simpleapp.models.PinState
+import com.example.simpleapp.models.utils.PinState
 
 class LogInActivityPresenter(
     private val view: LogInActivityContract.View,
@@ -16,11 +16,17 @@ class LogInActivityPresenter(
         activity.finish()
     }
 
-    override fun onViewCreated() {
-        val result = getSumResultPinNumbers()
+    override fun subscribe(view: LogInActivityContract.View) {
+        TODO("Not yet implemented")
+    }
+
+    override fun unsubscribe() {
+        TODO("Not yet implemented")
+    }
+
+    fun onViewCreated() {
+        val result = pinModel.calculateSumPinNumbers()
         view.showSumResult(result)
     }
 
-    private fun getSumResultPinNumbers(): String =
-        pinModel.permanentPin!!.map { Integer.valueOf(it.toString()) }.sum().toString()
 }

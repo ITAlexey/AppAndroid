@@ -1,15 +1,23 @@
 package com.example.simpleapp.models
 
-import android.content.SharedPreferences
-import com.example.simpleapp.Constants.PIN_CODE_KEY
+import com.example.simpleapp.models.utils.PinParser
+import com.example.simpleapp.models.utils.PinState
 
-class PinModel(
-    private val sharedPreferences: SharedPreferences,
-    var permanentPin: String? = sharedPreferences.getString(PIN_CODE_KEY, ""),
-    var currentPinState: PinState = if (permanentPin!!.isNotEmpty()) PinState.LOGOUT else PinState.CREATE,
-    private var confirmationPin: String = "",
+
+class PinModel(private val sharedPreferences: SharedPrefRepo) {
+    var currentPinState: PinState = getPinState()
+    private var confirmationPin: String = ""
     var temporaryPin: String = ""
-) {
+        private set
+
+    private fun getPinState(): PinState {
+        return if (sharedPreferences.getPin()!!.isNotEmpty()) {
+            PinState.LOGOUT
+        } else {
+            PinState.CREATE
+        }
+    }
+
     fun addNumber(number: Int) {
         temporaryPin += number.toString()
     }
@@ -28,6 +36,9 @@ class PinModel(
         resetTemporaryPin()
     }
 
+    fun calculateSumPinNumbers(): String =
+        sharedPreferences.getPin()!!.map { Integer.valueOf(it.toString()) }.sum().toString()
+
     fun resetTemporaryPin() {
         temporaryPin = ""
     }
@@ -37,63 +48,30 @@ class PinModel(
     }
 
     private fun createPinIfNotSimple() {
-        if (!isPinSimple()) {
+        val isPinSimple: Boolean = PinParser.checkOnSimplicity(temporaryPin)
+        if (!isPinSimple) {
             confirmationPin = temporaryPin
             updatePinState(PinState.CONFIRM)
         }
     }
 
     private fun deletePinIfSuccess() {
-        if (temporaryPin == permanentPin) {
-            removeSavedPin()
+        if (sharedPreferences.isPinCorrect(temporaryPin)) {
+            sharedPreferences.removePin()
+            updatePinState(PinState.CREATE)
         }
     }
 
     private fun loginIfSuccess() {
-        if (temporaryPin == permanentPin) {
+        if (sharedPreferences.isPinCorrect(temporaryPin)) {
             updatePinState(PinState.LOGIN)
         }
-    }
-
-    private fun removeSavedPin() {
-        sharedPreferences.edit().remove(PIN_CODE_KEY).apply()
-        updatePinState(PinState.CREATE)
     }
 
     private fun savePinIfSuccess() {
         if (confirmationPin == temporaryPin) {
             updatePinState(PinState.LOGOUT)
-            saveToSharedPref()
-            permanentPin = confirmationPin
+            sharedPreferences.savePin(confirmationPin)
         }
     }
-
-    private fun isPinSimple(): Boolean =
-        isPinConsistsOfSameNumbers() || isPinConsistsOfNumbersIncreasedByOne() || isPinConsistsOfNumbersDecreasedByOne()
-
-    private fun isPinConsistsOfNumbersDecreasedByOne(): Boolean {
-        for (i in temporaryPin.length - 1 downTo 1) {
-            if (temporaryPin[i].toInt() - temporaryPin[i - 1].toInt() != 1) {
-                return false
-            }
-        }
-        return true
-    }
-
-    private fun isPinConsistsOfNumbersIncreasedByOne(): Boolean {
-        for (i in 0 until temporaryPin.length - 1) {
-           if (temporaryPin[i].toInt() - temporaryPin[i + 1].toInt() != 1) {
-              return false
-           }
-        }
-        return true
-    }
-
-    private fun isPinConsistsOfSameNumbers(): Boolean = temporaryPin.toSet().size == 1
-
-    private fun saveToSharedPref() =
-        sharedPreferences
-            .edit()
-            .putString(PIN_CODE_KEY, confirmationPin)
-            .apply()
 }

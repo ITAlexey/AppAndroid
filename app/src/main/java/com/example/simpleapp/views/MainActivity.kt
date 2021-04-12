@@ -3,11 +3,14 @@ package com.example.simpleapp.views
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.annotation.StringRes
 import com.example.simpleapp.BaseApp
+import com.example.simpleapp.Constants.PIN_SIZE
+import com.example.simpleapp.Constants.TAG
 import com.example.simpleapp.R
 import com.example.simpleapp.adapter.PinCodeAdapter
 import com.example.simpleapp.contracts.MainActivityContract
@@ -19,19 +22,22 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     private lateinit var pinCodeAdapter: PinCodeAdapter
     private lateinit var presenter: MainActivityContract.Presenter
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        Log.d(TAG, "mainActivity created")
         setContentView(binding.root)
         initAdapter()
         val model = (applicationContext as BaseApp).pinModel
-        presenter = MainActivityPresenter(this, model)
-        presenter.onViewCreated()
+        presenter = MainActivityPresenter(model)
+        presenter.subscribe(this, savedInstanceState)
         initListeners()
     }
 
-
+    override fun onStop() {
+        super.onStop()
+        presenter.unsubscribe()
+    }
 
     private fun initListeners() {
         binding.apply {
@@ -62,14 +68,17 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     private fun initAdapter() {
-        pinCodeAdapter = PinCodeAdapter(0, 4)
-        val recyclerView = binding.rvPinCode
-        recyclerView.apply {
+        pinCodeAdapter = PinCodeAdapter(0, PIN_SIZE)
+        binding.rvPinCode.apply {
             adapter = pinCodeAdapter
             setHasFixedSize(true)
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // save temporary pin and pin state
+    }
 
     override fun showMessage(@StringRes popupTextResId: Int) =
         Toast.makeText(this, popupTextResId, Toast.LENGTH_SHORT).show()
@@ -83,7 +92,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     override fun updatePinField(pinLen: Int) {
-       pinCodeAdapter.updateState(pinLen)
+        pinCodeAdapter.updateState(pinLen)
     }
 
     override fun hideResetButton() {
@@ -95,7 +104,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         startActivity(intent)
     }
 
-    override fun modifyTitleText(titleTextResId: Int) {
+    override fun setTitleText(titleTextResId: Int) {
         binding.tvTitle.text = resources.getString(titleTextResId)
     }
 

@@ -17,7 +17,6 @@ class LogInActivity : AppCompatActivity(), LogInActivityContract.View {
         setContentView(binding.root)
         val model = (application as BaseApp).pinModel
         presenter = LogInActivityPresenter(this, model)
-        presenter.onViewCreated()
         initListeners()
     }
 
