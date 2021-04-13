@@ -1,6 +1,5 @@
 package com.example.simpleapp.views
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,29 +8,39 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.annotation.StringRes
 import com.example.simpleapp.BaseApp
-import com.example.simpleapp.Constants.PIN_SIZE
+import com.example.simpleapp.Constants.PIN_STATE
 import com.example.simpleapp.Constants.TAG
 import com.example.simpleapp.R
-import com.example.simpleapp.adapter.PinCodeAdapter
+import com.example.simpleapp.adapter.PinAdapter
 import com.example.simpleapp.contracts.MainActivityContract
 import com.example.simpleapp.databinding.ActivityMainBinding
+import com.example.simpleapp.models.utils.PinState
 import com.example.simpleapp.presenters.MainActivityPresenter
+import com.example.simpleapp.utils.getEnum
+import com.example.simpleapp.utils.putEnum
 
 class MainActivity : AppCompatActivity(), MainActivityContract.View {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var pinCodeAdapter: PinCodeAdapter
+    private lateinit var pinAdapter: PinAdapter
     private lateinit var presenter: MainActivityContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        Log.d(TAG, "mainActivity created")
         setContentView(binding.root)
-        initAdapter()
         val model = (applicationContext as BaseApp).pinModel
+        Log.d(TAG, model.temporaryPin)
         presenter = MainActivityPresenter(model)
-        presenter.subscribe(this, savedInstanceState)
+        presenter.subscribe(
+            this,
+            if (savedInstanceState != null) readFromBundle(savedInstanceState) else PinState.CREATE
+        )
+        initAdapter()
         initListeners()
+    }
+
+    private fun readFromBundle(outState: Bundle?): PinState {
+        return outState!!.getEnum(PIN_STATE, PinState.CREATE)
     }
 
     override fun onStop() {
@@ -68,16 +77,16 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     private fun initAdapter() {
-        pinCodeAdapter = PinCodeAdapter(0, PIN_SIZE)
+        pinAdapter = presenter.createPinAdapter()
         binding.rvPinCode.apply {
-            adapter = pinCodeAdapter
+            adapter = pinAdapter
             setHasFixedSize(true)
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
+        outState.putEnum(PIN_STATE, presenter.getPinState())
         super.onSaveInstanceState(outState)
-        // save temporary pin and pin state
     }
 
     override fun showMessage(@StringRes popupTextResId: Int) =
@@ -92,7 +101,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     override fun updatePinField(pinLen: Int) {
-        pinCodeAdapter.updateState(pinLen)
+        pinAdapter.updateState(pinLen)
     }
 
     override fun hideResetButton() {
@@ -100,7 +109,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     override fun showLogInActivity() {
-        val intent = Intent(this, LogInActivity::class.java)
+        val intent = LogInActivity.creteIntent(this)
         startActivity(intent)
     }
 

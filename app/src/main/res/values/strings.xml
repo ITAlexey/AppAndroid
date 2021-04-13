@@ -3,10 +3,10 @@
     <string name="setUpBtn">Set up\npin code</string>
     <string name="resetBtn">Reset\npin Code</string>
 
-    <string name="title_main">Enter pin code</string>
-    <string name="title_confirm">Confirm previous pin code</string>
+    <string name="title_logout">Enter pin code</string>
+    <string name="title_reset">Confirm previous pin code</string>
     <string name="title_create">Create pin code</string>
-    <string name="title_repeat">Repeat pin code</string>
+    <string name="title_confirm">Repeat pin code</string>
     <string name="title_logged_in">You are logged in</string>
 
     <string name="popup_success_enter">You are logged in</string>

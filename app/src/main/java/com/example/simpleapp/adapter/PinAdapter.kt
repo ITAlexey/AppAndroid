@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.simpleapp.R
 import com.example.simpleapp.databinding.ItemRvPinBinding
 
-class PinCodeAdapter(
+class PinAdapter(
     @IntRange(from = 0) private var currentPinLen: Int,
     @IntRange(from = 4) private val pinSize: Int
-) : RecyclerView.Adapter<PinCodeAdapter.PinCodeHolder>() {
+) : RecyclerView.Adapter<PinAdapter.PinCodeHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PinCodeHolder {
         val itemView = ItemRvPinBinding.inflate(LayoutInflater.from(parent.context), parent, false)

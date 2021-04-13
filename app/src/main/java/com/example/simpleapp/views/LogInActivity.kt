@@ -1,5 +1,7 @@
 package com.example.simpleapp.views
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.simpleapp.BaseApp
@@ -26,5 +28,11 @@ class LogInActivity : AppCompatActivity(), LogInActivityContract.View {
 
     override fun showSumResult(sumResult: String) {
         binding.tvSumResult.text = sumResult
+    }
+
+    companion object {
+        fun creteIntent(packageContext: Context) : Intent {
+           return Intent(packageContext, LogInActivity::class.java)
+        }
     }
 }

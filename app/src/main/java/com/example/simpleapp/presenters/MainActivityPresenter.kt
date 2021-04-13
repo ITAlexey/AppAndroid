@@ -1,8 +1,8 @@
 package com.example.simpleapp.presenters
 
-import android.os.Bundle
 import com.example.simpleapp.Constants.PIN_SIZE
 import com.example.simpleapp.R
+import com.example.simpleapp.adapter.PinAdapter
 import com.example.simpleapp.contracts.MainActivityContract
 import com.example.simpleapp.models.PinModel
 import com.example.simpleapp.models.utils.PinState
@@ -12,6 +12,7 @@ class MainActivityPresenter(
 ) :
     MainActivityContract.Presenter {
     private var view: MainActivityContract.View? = null
+    private lateinit var currentPinState: PinState
 
     override fun onNumberButtonClicked(number: Int) {
         if (pinModel.temporaryPin.length < PIN_SIZE) {
@@ -29,9 +30,9 @@ class MainActivityPresenter(
     private fun selectTitleText(pinState: PinState) {
         when (pinState) {
             PinState.CREATE -> view?.setTitleText(R.string.title_create)
-            PinState.CONFIRM -> view?.setTitleText(R.string.title_confirm)
+            PinState.CONFIRM -> view?.setTitleText(R.string.title_reset)
             PinState.LOGOUT -> view?.apply {
-                setTitleText(R.string.title_main)
+                setTitleText(R.string.title_logout)
                 showResetButton()
             }
             PinState.RESET -> Unit
@@ -44,7 +45,7 @@ class MainActivityPresenter(
         pinModel.resetTemporaryPin()
         view?.updatePinField()
         view?.hideResetButton()
-        view?.setTitleText(R.string.title_repeat)
+        view?.setTitleText(R.string.title_confirm)
     }
 
     override fun onBackspaceButtonClicked() {
@@ -57,16 +58,23 @@ class MainActivityPresenter(
         }
     }
 
-    override fun subscribe(view: MainActivityContract.View, state: Bundle?) {
-        // title (depends on pin code's state)
-        // reset button (also depends on pin code's state)
-        // fullness of pin code (depends on bundle's state)
-        // backspace button (depends on fullness of pin code or length of temporary pin)
+    override fun subscribe(view: MainActivityContract.View, pinState: PinState) {
         this.view = view
-
+        currentPinState = pinState
+        view.setTitleText(pinState.titleTextId)
+        if (pinState == PinState.LOGOUT) {
+            view.showResetButton()
+        }
+        if (pinModel.temporaryPin.isNotEmpty()) {
+            view.showBackspaceButton()
+        }
     }
 
-    override fun subscribe(view: MainActivityContract.View) = subscribe(view, null)
+    override fun subscribe(view: MainActivityContract.View) = subscribe(view, PinState.CREATE)
+
+    override fun getPinState(): PinState = currentPinState
+
+    override fun createPinAdapter(): PinAdapter = PinAdapter(pinModel.temporaryPin.length, PIN_SIZE)
 
     override fun unsubscribe() {
         view = null

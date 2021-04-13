@@ -3,10 +3,10 @@
     <string name="setUpBtn">Установить\nпин код</string>
     <string name="resetBtn">Сбросить\nпин код</string>
 
-    <string name="title_main">Введите пин код</string>
-    <string name="title_confirm">Введите старый пин код</string>
+    <string name="title_logout">Введите пин код</string>
+    <string name="title_reset">Введите старый пин код</string>
     <string name="title_create">Создайте пин код</string>
-    <string name="title_repeat">Повторите пин код</string>
+    <string name="title_confirm">Повторите пин код</string>
     <string name="title_logged_in">Вы вошли</string>
 
     <string name="popup_success_enter">Добро пожаловать</string>
