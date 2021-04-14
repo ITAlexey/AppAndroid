@@ -1,5 +1,6 @@
 package com.example.simpleapp.presenters
 
+import androidx.annotation.StringRes
 import com.example.simpleapp.Constants.PIN_SIZE
 import com.example.simpleapp.R
 import com.example.simpleapp.adapter.PinAdapter
@@ -12,39 +13,43 @@ class MainActivityPresenter(
 ) :
     MainActivityContract.Presenter {
     private var view: MainActivityContract.View? = null
-    private lateinit var currentPinState: PinState
+    private var currentPinState: PinState? = null
 
     override fun onNumberButtonClicked(number: Int) {
         if (pinModel.temporaryPin.length < PIN_SIZE) {
             pinModel.addNumber(number)
-            view?.showBackspaceButton()
+            view?.showOrHideBackspaceButton(true)
             if (pinModel.temporaryPin.length == PIN_SIZE) {
-                pinModel.processPinField()
-                selectTitleText(pinModel.currentPinState)
-                view?.hideBackspaceButton()
+                processPin()
+                view?.showOrHideBackspaceButton(false)
             }
             view?.updatePinField(pinModel.temporaryPin.length)
         }
     }
 
-    private fun selectTitleText(pinState: PinState) {
-        when (pinState) {
-            PinState.CREATE -> view?.setTitleText(R.string.title_create)
-            PinState.CONFIRM -> view?.setTitleText(R.string.title_reset)
-            PinState.LOGOUT -> view?.apply {
-                setTitleText(R.string.title_logout)
-                showResetButton()
-            }
-            PinState.RESET -> Unit
-            PinState.LOGIN -> view?.showLogInActivity()
+    private fun processPin() {
+        val successCase: () -> Unit = {
+            currentPinState = currentPinState!!.nextState()
+            currentPinState!!.modifyViewAppearance(view)
         }
+        val failCase = { popupTextId: Int -> view?.showPopupMessage(popupTextId) }
+
+        when (currentPinState) {
+            PinState.CREATE -> pinModel.createPinIfSuccess(successCase, failCase)
+            PinState.CONFIRM -> pinModel.savePinIfSuccess(successCase, failCase)
+            PinState.LOGOUT -> pinModel.loginIfSuccess(successCase, failCase)
+            PinState.RESET -> pinModel.deletePinIfSuccess(successCase, failCase)
+            PinState.LOGIN -> Unit
+        }
+        pinModel.resetTemporaryPin()
     }
 
+
     override fun onResetButtonClicked() {
-        pinModel.updatePinState(PinState.RESET)
         pinModel.resetTemporaryPin()
+        currentPinState = PinState.RESET
         view?.updatePinField()
-        view?.hideResetButton()
+        view?.showOrHideResetButton(false)
         view?.setTitleText(R.string.title_confirm)
     }
 
@@ -54,25 +59,23 @@ class MainActivityPresenter(
             view?.updatePinField(pinModel.temporaryPin.length)
         }
         if (pinModel.temporaryPin.isEmpty()) {
-            view?.hideBackspaceButton()
+            view?.showOrHideBackspaceButton(false)
         }
     }
 
-    override fun subscribe(view: MainActivityContract.View, pinState: PinState) {
+    override fun subscribe(view: MainActivityContract.View, pinState: PinState?) {
         this.view = view
-        currentPinState = pinState
-        view.setTitleText(pinState.titleTextId)
-        if (pinState == PinState.LOGOUT) {
-            view.showResetButton()
-        }
+        currentPinState =
+            pinState ?: if (pinModel.isPinSaved()) PinState.LOGOUT else PinState.CREATE
+        currentPinState!!.modifyViewAppearance(this.view)
         if (pinModel.temporaryPin.isNotEmpty()) {
-            view.showBackspaceButton()
+            view.showOrHideBackspaceButton(true)
         }
     }
 
-    override fun subscribe(view: MainActivityContract.View) = subscribe(view, PinState.CREATE)
+    override fun subscribe(view: MainActivityContract.View) = subscribe(view, null)
 
-    override fun getPinState(): PinState = currentPinState
+    override fun getPinState(): PinState? = currentPinState
 
     override fun createPinAdapter(): PinAdapter = PinAdapter(pinModel.temporaryPin.length, PIN_SIZE)
 

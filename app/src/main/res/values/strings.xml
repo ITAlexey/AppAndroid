@@ -9,12 +9,12 @@
     <string name="title_confirm">Repeat pin code</string>
     <string name="title_logged_in">You are logged in</string>
 
-    <string name="popup_success_enter">You are logged in</string>
-    <string name="popup_fail_enter">Incorrect pin code, try again</string>
+    <string name="popup_fail">Incorrect pin code, try again</string>
     <string name="popup_different">Pin codes are different, try again</string>
-    <string name="popup_record">Pin code has been recorded</string>
+    <string name="popup_saved">Pin code has been recorded</string>
     <string name="popup_reset">Pin code has been reset</string>
     <string name="popup_finger_warning">Finger print is currently unavailable</string>
+    <string name="popup_simple">Pin is very simple, try again</string>
 
     <string name="number_1" translatable="false">1</string>
     <string name="number_2" translatable="false">2</string>

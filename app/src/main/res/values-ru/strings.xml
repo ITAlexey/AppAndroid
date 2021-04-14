@@ -9,12 +9,12 @@
     <string name="title_confirm">Повторите пин код</string>
     <string name="title_logged_in">Вы вошли</string>
 
-    <string name="popup_success_enter">Добро пожаловать</string>
-    <string name="popup_fail_enter">Неверный пин код, попробуйте снова</string>
+    <string name="popup_fail">Неверный пин код, попробуйте снова</string>
     <string name="popup_different">Пин коды отличны, попробуйте снова</string>
-    <string name="popup_record">Пин код сохранен</string>
+    <string name="popup_saved">Пин код сохранен</string>
     <string name="popup_reset">Пин код сброшен</string>
     <string name="popup_finger_warning">Отпечаток пальца в настоящий момент не доступен</string>
+    <string name="popup_simple">Пин код слишком прост, попробуйте снова</string>
 
     <string name="img_backspace_sign">Удалить введенную цифру в поле пин кода</string>
     <string name="img_fingerprint">Войти с помощью отпечатка пальца</string>

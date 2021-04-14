@@ -1,22 +1,13 @@
 package com.example.simpleapp.models
 
+import com.example.simpleapp.R
 import com.example.simpleapp.models.utils.PinParser
-import com.example.simpleapp.models.utils.PinState
 
 
 class PinModel(private val sharedPreferences: SharedPrefRepo) {
-    var currentPinState: PinState = getPinState()
     private var confirmationPin: String = ""
     var temporaryPin: String = ""
         private set
-
-    private fun getPinState(): PinState {
-        return if (sharedPreferences.getPin()!!.isNotEmpty()) {
-            PinState.LOGOUT
-        } else {
-            PinState.CREATE
-        }
-    }
 
     fun addNumber(number: Int) {
         temporaryPin += number.toString()
@@ -26,15 +17,6 @@ class PinModel(private val sharedPreferences: SharedPrefRepo) {
         temporaryPin = temporaryPin.substring(0, temporaryPin.length - 1)
     }
 
-    fun processPinField() {
-        when (currentPinState) {
-            PinState.CREATE -> createPinIfNotSimple()
-            PinState.CONFIRM -> savePinIfSuccess()
-            PinState.LOGOUT -> loginIfSuccess()
-            PinState.RESET -> deletePinIfSuccess()
-        }
-        resetTemporaryPin()
-    }
 
     fun calculateSumPinNumbers(): String =
         sharedPreferences.getPin()!!.map { Integer.valueOf(it.toString()) }.sum().toString()
@@ -43,35 +25,38 @@ class PinModel(private val sharedPreferences: SharedPrefRepo) {
         temporaryPin = ""
     }
 
-    fun updatePinState(state: PinState) {
-        currentPinState = state
-    }
-
-    private fun createPinIfNotSimple() {
+    fun createPinIfSuccess(success: () -> Unit, fail: (Int) -> Unit?)  {
         val isPinSimple: Boolean = PinParser.checkOnSimplicity(temporaryPin)
         if (!isPinSimple) {
             confirmationPin = temporaryPin
-            updatePinState(PinState.CONFIRM)
+            success()
+        } else {
+            fail(R.string.popup_simple)
         }
     }
 
-    private fun deletePinIfSuccess() {
+    fun deletePinIfSuccess(success: () -> Unit, fail: (Int) -> Unit?) {
         if (sharedPreferences.isPinCorrect(temporaryPin)) {
             sharedPreferences.removePin()
-            updatePinState(PinState.CREATE)
+            success()
         }
+        fail(R.string.popup_different)
     }
 
-    private fun loginIfSuccess() {
+    fun loginIfSuccess(success: () -> Unit, fail: (Int) -> Unit?) {
         if (sharedPreferences.isPinCorrect(temporaryPin)) {
-            updatePinState(PinState.LOGIN)
+            success()
         }
+        fail(R.string.popup_fail)
     }
 
-    private fun savePinIfSuccess() {
+    fun savePinIfSuccess(success: () -> Unit, fail: (Int) -> Unit?) {
         if (confirmationPin == temporaryPin) {
-            updatePinState(PinState.LOGOUT)
             sharedPreferences.savePin(confirmationPin)
+            success()
         }
+        fail(R.string.popup_different)
     }
+
+    fun isPinSaved(): Boolean = sharedPreferences.getPin()!!.isNotEmpty()
 }

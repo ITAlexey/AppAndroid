@@ -12,7 +12,6 @@ class LogInActivityPresenter(
     LogInActivityContract.Presenter {
 
     override fun onLogOutButtonClicked(activity: AppCompatActivity) {
-        pinModel.updatePinState(PinState.LOGOUT)
         activity.finish()
     }
 

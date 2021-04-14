@@ -2,14 +2,12 @@ package com.example.simpleapp.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.annotation.StringRes
 import com.example.simpleapp.BaseApp
 import com.example.simpleapp.Constants.PIN_STATE
-import com.example.simpleapp.Constants.TAG
 import com.example.simpleapp.R
 import com.example.simpleapp.adapter.PinAdapter
 import com.example.simpleapp.contracts.MainActivityContract
@@ -28,15 +26,17 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val model = (applicationContext as BaseApp).pinModel
-        Log.d(TAG, model.temporaryPin)
-        presenter = MainActivityPresenter(model)
-        presenter.subscribe(
-            this,
-            if (savedInstanceState != null) readFromBundle(savedInstanceState) else PinState.CREATE
-        )
+        initPresenter(savedInstanceState)
         initAdapter()
         initListeners()
+    }
+
+    private fun initPresenter(savedInstanceState: Bundle?) {
+        presenter = MainActivityPresenter((applicationContext as BaseApp).pinModel)
+        presenter.subscribe(
+            this,
+            if (savedInstanceState != null) readFromBundle(savedInstanceState) else null
+        )
     }
 
     private fun readFromBundle(outState: Bundle?): PinState {
@@ -89,23 +89,19 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         super.onSaveInstanceState(outState)
     }
 
-    override fun showMessage(@StringRes popupTextResId: Int) =
+    override fun showPopupMessage(@StringRes popupTextResId: Int) =
         Toast.makeText(this, popupTextResId, Toast.LENGTH_SHORT).show()
-
-    override fun showBackspaceButton() {
-        binding.imgBackSpace.visibility = View.VISIBLE
-    }
-
-    override fun hideBackspaceButton() {
-        binding.imgBackSpace.visibility = View.INVISIBLE
-    }
 
     override fun updatePinField(pinLen: Int) {
         pinAdapter.updateState(pinLen)
     }
 
-    override fun hideResetButton() {
-        binding.btnReset.visibility = View.INVISIBLE
+    override fun showOrHideBackspaceButton(isVisible: Boolean) {
+        binding.imgBackSpace.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+    }
+
+    override fun showOrHideResetButton(isVisible: Boolean) {
+        binding.btnReset.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
     }
 
     override fun showLogInActivity() {
@@ -115,10 +111,6 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     override fun setTitleText(titleTextResId: Int) {
         binding.tvTitle.text = resources.getString(titleTextResId)
-    }
-
-    override fun showResetButton() {
-        binding.btnReset.visibility = View.VISIBLE
     }
 
 

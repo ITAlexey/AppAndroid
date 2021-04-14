@@ -11,19 +11,17 @@ interface MainActivityContract {
         fun onNumberButtonClicked(number: Int)
         fun onResetButtonClicked()
         fun onBackspaceButtonClicked()
-        fun subscribe(view: View, pinState: PinState)
+        fun subscribe(view: View, pinState: PinState?)
         fun getPinState(): PinState?
         fun createPinAdapter(): PinAdapter
     }
 
     interface View : BaseView {
         fun updatePinField(pinLen: Int = 0)
-        fun showBackspaceButton()
-        fun hideBackspaceButton()
-        fun showResetButton()
-        fun hideResetButton()
+        fun showOrHideBackspaceButton(isVisible: Boolean)
+        fun showOrHideResetButton(isVisible: Boolean)
         fun showLogInActivity()
         fun setTitleText(@StringRes titleTextResId: Int)
-        fun showMessage(@StringRes popupTextResId: Int)
+        fun showPopupMessage(@StringRes popupTextResId: Int)
     }
 }
