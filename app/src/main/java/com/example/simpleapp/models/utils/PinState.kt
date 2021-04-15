@@ -6,10 +6,16 @@ import com.example.simpleapp.contracts.MainActivityContract
 enum class PinState {
     LOGIN {
         override fun modifyViewAppearance(view: MainActivityContract.View?) {
-           view?.showLogInActivity()
+            view?.showLogInActivity()
         }
 
         override fun nextState(): PinState = LOGOUT
+
+        override fun showFailMessage(view: MainActivityContract.View?) {
+        }
+
+        override fun showSuccessMessage(view: MainActivityContract.View?) {
+        }
     },
     LOGOUT {
         override fun modifyViewAppearance(view: MainActivityContract.View?) {
@@ -18,6 +24,14 @@ enum class PinState {
         }
 
         override fun nextState(): PinState = LOGIN
+
+        override fun showFailMessage(view: MainActivityContract.View?) {
+            view?.showPopupMessage(R.string.popup_fail)
+        }
+
+        override fun showSuccessMessage(view: MainActivityContract.View?) {
+            view?.showPopupMessage(R.string.popup_saved)
+        }
     },
     CREATE {
         override fun modifyViewAppearance(view: MainActivityContract.View?) {
@@ -26,6 +40,14 @@ enum class PinState {
         }
 
         override fun nextState(): PinState = CONFIRM
+
+        override fun showFailMessage(view: MainActivityContract.View?) {
+            view?.showPopupMessage(R.string.popup_simple)
+        }
+
+        override fun showSuccessMessage(view: MainActivityContract.View?) {
+            view?.showPopupMessage(R.string.popup_reset)
+        }
     },
     CONFIRM {
         override fun modifyViewAppearance(view: MainActivityContract.View?) {
@@ -34,6 +56,13 @@ enum class PinState {
         }
 
         override fun nextState(): PinState = LOGOUT
+
+        override fun showFailMessage(view: MainActivityContract.View?) {
+            view?.showPopupMessage(R.string.popup_different)
+        }
+
+        override fun showSuccessMessage(view: MainActivityContract.View?) {
+        }
     },
     RESET {
         override fun modifyViewAppearance(view: MainActivityContract.View?) {
@@ -42,8 +71,17 @@ enum class PinState {
         }
 
         override fun nextState(): PinState = CREATE
+
+        override fun showFailMessage(view: MainActivityContract.View?) {
+            view?.showPopupMessage(R.string.popup_different)
+        }
+
+        override fun showSuccessMessage(view: MainActivityContract.View?) {
+        }
     };
 
     abstract fun modifyViewAppearance(view: MainActivityContract.View?)
     abstract fun nextState(): PinState
+    abstract fun showFailMessage(view: MainActivityContract.View?)
+    abstract fun showSuccessMessage(view: MainActivityContract.View?)
 }

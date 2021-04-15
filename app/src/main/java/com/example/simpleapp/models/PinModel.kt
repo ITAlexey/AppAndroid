@@ -1,6 +1,6 @@
 package com.example.simpleapp.models
 
-import com.example.simpleapp.R
+import com.example.simpleapp.Constants.PIN_SIZE
 import com.example.simpleapp.models.utils.PinParser
 
 
@@ -25,38 +25,38 @@ class PinModel(private val sharedPreferences: SharedPrefRepo) {
         temporaryPin = ""
     }
 
-    fun createPinIfSuccess(success: () -> Unit, fail: (Int) -> Unit?)  {
+    fun createPinIfSuccess(processResult: (Boolean) -> Unit)  {
         val isPinSimple: Boolean = PinParser.checkOnSimplicity(temporaryPin)
         if (!isPinSimple) {
             confirmationPin = temporaryPin
-            success()
-        } else {
-            fail(R.string.popup_simple)
         }
+        processResult(!isPinSimple)
     }
 
-    fun deletePinIfSuccess(success: () -> Unit, fail: (Int) -> Unit?) {
-        if (sharedPreferences.isPinCorrect(temporaryPin)) {
+    fun deletePinIfSuccess(processResult: (Boolean) -> Unit) {
+        val isPinCorrect = sharedPreferences.isPinCorrect(temporaryPin)
+        if (isPinCorrect) {
             sharedPreferences.removePin()
-            success()
         }
-        fail(R.string.popup_different)
+        processResult(isPinCorrect)
     }
 
-    fun loginIfSuccess(success: () -> Unit, fail: (Int) -> Unit?) {
-        if (sharedPreferences.isPinCorrect(temporaryPin)) {
-            success()
-        }
-        fail(R.string.popup_fail)
+    fun loginIfSuccess(processResult: (Boolean) -> Unit) {
+        val isPinCorrect = sharedPreferences.isPinCorrect(temporaryPin)
+        processResult(isPinCorrect)
     }
 
-    fun savePinIfSuccess(success: () -> Unit, fail: (Int) -> Unit?) {
-        if (confirmationPin == temporaryPin) {
+    fun savePinIfSuccess(processResult: (Boolean) -> Unit) {
+        val isPinsEqual = confirmationPin == temporaryPin
+        if (isPinsEqual) {
             sharedPreferences.savePin(confirmationPin)
-            success()
         }
-        fail(R.string.popup_different)
+        processResult(isPinsEqual)
     }
+
+    fun isTemporaryPinEmpty(): Boolean = temporaryPin.isEmpty()
+
+    fun isTemporaryPinFull(): Boolean = temporaryPin.length == PIN_SIZE
 
     fun isPinSaved(): Boolean = sharedPreferences.getPin()!!.isNotEmpty()
 }

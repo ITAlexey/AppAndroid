@@ -1,8 +1,6 @@
 package com.example.simpleapp.presenters
 
-import androidx.annotation.StringRes
 import com.example.simpleapp.Constants.PIN_SIZE
-import com.example.simpleapp.R
 import com.example.simpleapp.adapter.PinAdapter
 import com.example.simpleapp.contracts.MainActivityContract
 import com.example.simpleapp.models.PinModel
@@ -16,10 +14,10 @@ class MainActivityPresenter(
     private var currentPinState: PinState? = null
 
     override fun onNumberButtonClicked(number: Int) {
-        if (pinModel.temporaryPin.length < PIN_SIZE) {
+        if (!pinModel.isTemporaryPinFull()) {
             pinModel.addNumber(number)
             view?.showOrHideBackspaceButton(true)
-            if (pinModel.temporaryPin.length == PIN_SIZE) {
+            if (pinModel.isTemporaryPinFull()) {
                 processPin()
                 view?.showOrHideBackspaceButton(false)
             }
@@ -28,17 +26,21 @@ class MainActivityPresenter(
     }
 
     private fun processPin() {
-        val successCase: () -> Unit = {
-            currentPinState = currentPinState!!.nextState()
-            currentPinState!!.modifyViewAppearance(view)
+        val processResult: (Boolean) -> Unit = { success ->
+            if (success) {
+                currentPinState = currentPinState!!.nextState()
+                currentPinState!!.modifyViewAppearance(view)
+                currentPinState!!.showSuccessMessage(view)
+            } else {
+                currentPinState!!.showFailMessage(view)
+            }
         }
-        val failCase = { popupTextId: Int -> view?.showPopupMessage(popupTextId) }
 
         when (currentPinState) {
-            PinState.CREATE -> pinModel.createPinIfSuccess(successCase, failCase)
-            PinState.CONFIRM -> pinModel.savePinIfSuccess(successCase, failCase)
-            PinState.LOGOUT -> pinModel.loginIfSuccess(successCase, failCase)
-            PinState.RESET -> pinModel.deletePinIfSuccess(successCase, failCase)
+            PinState.CREATE -> pinModel.createPinIfSuccess(processResult)
+            PinState.CONFIRM -> pinModel.savePinIfSuccess(processResult)
+            PinState.LOGOUT -> pinModel.loginIfSuccess(processResult)
+            PinState.RESET -> pinModel.deletePinIfSuccess(processResult)
             PinState.LOGIN -> Unit
         }
         pinModel.resetTemporaryPin()
@@ -49,16 +51,15 @@ class MainActivityPresenter(
         pinModel.resetTemporaryPin()
         currentPinState = PinState.RESET
         view?.updatePinField()
-        view?.showOrHideResetButton(false)
-        view?.setTitleText(R.string.title_confirm)
+        currentPinState!!.modifyViewAppearance(view)
     }
 
     override fun onBackspaceButtonClicked() {
-        if (pinModel.temporaryPin.isNotEmpty()) {
+        if (!pinModel.isTemporaryPinEmpty()) {
             pinModel.removeNumber()
             view?.updatePinField(pinModel.temporaryPin.length)
         }
-        if (pinModel.temporaryPin.isEmpty()) {
+        if (pinModel.isTemporaryPinEmpty()) {
             view?.showOrHideBackspaceButton(false)
         }
     }
