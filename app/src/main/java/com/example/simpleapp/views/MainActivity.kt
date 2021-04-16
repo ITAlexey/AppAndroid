@@ -3,14 +3,12 @@ package com.example.simpleapp.views
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.annotation.StringRes
 import com.example.simpleapp.BaseApp
 import com.example.simpleapp.Constants.PIN_STATE
-import com.example.simpleapp.Constants.TAG
 import com.example.simpleapp.R
 import com.example.simpleapp.adapter.PinAdapter
 import com.example.simpleapp.contracts.MainActivityContract
@@ -30,7 +28,6 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Log.d(TAG, "Main onCreate")
         bundle = savedInstanceState
         presenter = MainActivityPresenter((applicationContext as BaseApp).pinModel)
         initAdapter()
@@ -39,17 +36,10 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     override fun onStart() {
         super.onStart()
-        Log.d(TAG, "Main onStart")
         presenter.subscribe(
             this,
             if (bundle != null) readFromBundle(bundle) else null
         )
-    }
-
-    override fun onStop() {
-        Log.d(TAG, "Main onStop")
-        presenter.unsubscribe()
-        super.onStop()
     }
 
     private fun readFromBundle(outState: Bundle?): PinState {
@@ -92,13 +82,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "Main onDestroy")
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
-        Log.d(TAG, "Main onSaveInstanceState")
         outState.putEnum(PIN_STATE, presenter.getPinState())
         super.onSaveInstanceState(outState)
     }

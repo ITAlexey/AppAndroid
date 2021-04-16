@@ -16,7 +16,6 @@ class LogInActivity : AppCompatActivity(), LogInActivityContract.View {
     private lateinit var presenter: LogInActivityContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(TAG, "Log onCreate")
         super.onCreate(savedInstanceState)
         binding = ActivityLogInBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -25,7 +24,6 @@ class LogInActivity : AppCompatActivity(), LogInActivityContract.View {
     }
 
     override fun onStart() {
-        Log.d(TAG, "Log onStart")
         presenter.subscribe(this)
         super.onStart()
     }
@@ -39,19 +37,12 @@ class LogInActivity : AppCompatActivity(), LogInActivityContract.View {
     }
 
     override fun closeActivity() {
-        Log.d(TAG, "Log closeActivity")
         finish()
     }
 
     override fun onStop() {
-        Log.d(TAG, "Log onStop")
         super.onStop()
         presenter.unsubscribe()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "Log onDestroy")
     }
 
     companion object {
