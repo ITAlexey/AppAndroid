@@ -68,6 +68,9 @@ class MainActivityPresenter(
         this.view = view
         currentPinState =
             pinState ?: if (pinModel.isPinSaved()) PinState.LOGOUT else PinState.CREATE
+        if (currentPinState == PinState.LOGIN) {
+            currentPinState = currentPinState!!.nextState()
+        }
         currentPinState!!.modifyViewAppearance(this.view)
         if (pinModel.temporaryPin.isNotEmpty()) {
             view.showOrHideBackspaceButton(true)
@@ -81,7 +84,6 @@ class MainActivityPresenter(
     override fun createPinAdapter(): PinAdapter = PinAdapter(pinModel.temporaryPin.length, PIN_SIZE)
 
     override fun unsubscribe() {
-        view = null
+       view = null
     }
-
 }

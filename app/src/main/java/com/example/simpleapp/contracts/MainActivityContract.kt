@@ -20,7 +20,7 @@ interface MainActivityContract {
         fun updatePinField(pinLen: Int = 0)
         fun showOrHideBackspaceButton(isVisible: Boolean)
         fun showOrHideResetButton(isVisible: Boolean)
-        fun showLogInActivity()
+        fun moveToLogInActivity()
         fun setTitleText(@StringRes titleTextResId: Int)
         fun showPopupMessage(@StringRes popupTextResId: Int)
     }

@@ -6,10 +6,11 @@ import com.example.simpleapp.BaseView
 
 interface LogInActivityContract {
     interface Presenter: BasePresenter<View> {
-        fun onLogOutButtonClicked(activity: AppCompatActivity)
+        fun onLogOutButtonClicked()
     }
 
     interface View: BaseView {
         fun showSumResult(sumResult: String)
+        fun closeActivity()
     }
 }

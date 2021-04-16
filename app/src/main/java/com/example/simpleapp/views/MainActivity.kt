@@ -1,13 +1,16 @@
 package com.example.simpleapp.views
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.annotation.StringRes
 import com.example.simpleapp.BaseApp
 import com.example.simpleapp.Constants.PIN_STATE
+import com.example.simpleapp.Constants.TAG
 import com.example.simpleapp.R
 import com.example.simpleapp.adapter.PinAdapter
 import com.example.simpleapp.contracts.MainActivityContract
@@ -21,31 +24,36 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     private lateinit var binding: ActivityMainBinding
     private lateinit var pinAdapter: PinAdapter
     private lateinit var presenter: MainActivityContract.Presenter
+    private var bundle: Bundle? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initPresenter(savedInstanceState)
+        Log.d(TAG, "Main onCreate")
+        bundle = savedInstanceState
+        presenter = MainActivityPresenter((applicationContext as BaseApp).pinModel)
         initAdapter()
         initListeners()
     }
 
-    private fun initPresenter(savedInstanceState: Bundle?) {
-        presenter = MainActivityPresenter((applicationContext as BaseApp).pinModel)
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "Main onStart")
         presenter.subscribe(
             this,
-            if (savedInstanceState != null) readFromBundle(savedInstanceState) else null
+            if (bundle != null) readFromBundle(bundle) else null
         )
+    }
+
+    override fun onStop() {
+        Log.d(TAG, "Main onStop")
+        presenter.unsubscribe()
+        super.onStop()
     }
 
     private fun readFromBundle(outState: Bundle?): PinState {
         return outState!!.getEnum(PIN_STATE, PinState.CREATE)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        presenter.unsubscribe()
     }
 
     private fun initListeners() {
@@ -84,7 +92,13 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "Main onDestroy")
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
+        Log.d(TAG, "Main onSaveInstanceState")
         outState.putEnum(PIN_STATE, presenter.getPinState())
         super.onSaveInstanceState(outState)
     }
@@ -104,9 +118,9 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         binding.btnReset.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
     }
 
-    override fun showLogInActivity() {
+    override fun moveToLogInActivity() {
         val intent = LogInActivity.creteIntent(this)
-        startActivity(intent)
+        startActivity(Intent(intent))
     }
 
     override fun setTitleText(titleTextResId: Int) {

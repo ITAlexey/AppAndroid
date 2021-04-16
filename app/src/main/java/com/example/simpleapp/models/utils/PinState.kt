@@ -6,7 +6,7 @@ import com.example.simpleapp.contracts.MainActivityContract
 enum class PinState {
     LOGIN {
         override fun modifyViewAppearance(view: MainActivityContract.View?) {
-            view?.showLogInActivity()
+            view?.moveToLogInActivity()
         }
 
         override fun nextState(): PinState = LOGOUT
