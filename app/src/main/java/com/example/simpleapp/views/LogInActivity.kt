@@ -3,10 +3,8 @@ package com.example.simpleapp.views
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.simpleapp.BaseApp
-import com.example.simpleapp.Constants.TAG
 import com.example.simpleapp.contracts.LogInActivityContract
 import com.example.simpleapp.databinding.ActivityLogInBinding
 import com.example.simpleapp.presenters.LogInActivityPresenter

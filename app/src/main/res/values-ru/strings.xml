@@ -7,17 +7,18 @@
     <string name="title_reset">Введите старый пин код</string>
     <string name="title_create">Создайте пин код</string>
     <string name="title_confirm">Повторите пин код</string>
-    <string name="title_logged_in">Вы вошли</string>
 
-    <string name="popup_fail">Неверный пин код, попробуйте снова</string>
-    <string name="popup_different">Пин коды отличны, попробуйте снова</string>
+    <string name="popup_fail">Неверный пин код,\nпопробуйте снова</string>
+    <string name="popup_different">Пин коды отличны,\nпопробуйте снова</string>
     <string name="popup_saved">Пин код сохранен</string>
     <string name="popup_reset">Пин код сброшен</string>
     <string name="popup_finger_warning">Отпечаток пальца в настоящий момент не доступен</string>
-    <string name="popup_simple">Пин код слишком прост, попробуйте снова</string>
+    <string name="popup_simple">Пин код слишком прост,\nпопробуйте снова</string>
 
     <string name="img_backspace_sign">Удалить введенную цифру в поле пин кода</string>
     <string name="img_fingerprint">Войти с помощью отпечатка пальца</string>
     <string name="img_logout">Вернуться в окно ввода пин кода</string>
     <string name="img_pin_dot">Статус заполненности пин кода</string>
+    <string name="second_title">Добро пожаловать</string>
+    <string name="message_sum">Сумма пин кода\nсоставляет:</string>
 </resources>

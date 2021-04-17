@@ -42,6 +42,11 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         )
     }
 
+    override fun onStop() {
+        presenter.unsubscribe()
+        super.onStop()
+    }
+
     private fun readFromBundle(outState: Bundle?): PinState {
         return outState!!.getEnum(PIN_STATE, PinState.CREATE)
     }
@@ -110,6 +115,4 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     override fun setTitleText(titleTextResId: Int) {
         binding.tvTitle.text = resources.getString(titleTextResId)
     }
-
-
 }
