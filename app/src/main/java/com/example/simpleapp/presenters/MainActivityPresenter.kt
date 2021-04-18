@@ -46,7 +46,6 @@ class MainActivityPresenter(
         pinModel.resetTemporaryPin()
     }
 
-
     override fun onResetButtonClicked() {
         pinModel.resetTemporaryPin()
         currentPinState = PinState.RESET

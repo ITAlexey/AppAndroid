@@ -1,6 +1,5 @@
 package com.example.simpleapp.contracts
 
-import androidx.appcompat.app.AppCompatActivity
 import com.example.simpleapp.BasePresenter
 import com.example.simpleapp.BaseView
 

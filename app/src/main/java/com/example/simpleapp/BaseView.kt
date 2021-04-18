@@ -1,5 +1,3 @@
 package com.example.simpleapp
 
-interface BaseView {
-
-}
+interface BaseView
