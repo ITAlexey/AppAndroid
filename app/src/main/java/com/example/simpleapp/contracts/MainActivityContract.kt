@@ -13,13 +13,12 @@ interface MainActivityContract {
         fun onBackspaceButtonClicked()
         fun subscribe(view: View, pinState: PinState?)
         fun getPinState(): PinState?
-        fun createPinAdapter(): PinAdapter
     }
 
     interface View : BaseView {
         fun updatePinField(pinLen: Int = 0)
-        fun showOrHideBackspaceButton(isVisible: Boolean)
-        fun showOrHideResetButton(isVisible: Boolean)
+        fun updateVisibilityBackspaceButton(isVisible: Boolean)
+        fun updateVisibilityResetButton(isVisible: Boolean)
         fun moveToLogInActivity()
         fun setTitleText(@StringRes titleTextResId: Int)
         fun showPopupMessage(@StringRes popupTextResId: Int)

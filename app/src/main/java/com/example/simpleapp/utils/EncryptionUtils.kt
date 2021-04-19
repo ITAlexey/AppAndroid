@@ -36,7 +36,6 @@ object EncryptionUtils {
     }
 
     fun createKeysIfNotExists() {
-        val keyStore = KeyStore.getInstance(ANDROID_KEY_STORE).apply { load(null) }
         val alias = keyStore.aliases().toList()
         if (!alias.contains(ALIAS)) {
             val keyGenParameterSpec = KeyGenParameterSpec.Builder(

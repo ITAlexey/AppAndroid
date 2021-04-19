@@ -7,7 +7,9 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.core.view.isInvisible
 import com.example.simpleapp.BaseApp
+import com.example.simpleapp.Constants.INITIAL_PIN_LENGTH
 import com.example.simpleapp.Constants.PIN_STATE
 import com.example.simpleapp.R
 import com.example.simpleapp.adapter.PinAdapter
@@ -36,10 +38,8 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     override fun onStart() {
         super.onStart()
-        presenter.subscribe(
-            this,
-            if (bundle != null) readFromBundle(bundle) else null
-        )
+        val pinState = getStateFromBundle(bundle)
+        presenter.subscribe(this, pinState)
     }
 
     override fun onStop() {
@@ -47,8 +47,8 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         super.onStop()
     }
 
-    private fun readFromBundle(outState: Bundle?): PinState {
-        return outState!!.getEnum(PIN_STATE, PinState.CREATE)
+    private fun getStateFromBundle(outState: Bundle?): PinState? {
+        return outState?.getEnum(PIN_STATE, PinState.CREATE)
     }
 
     private fun initListeners() {
@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     private fun initAdapter() {
-        pinAdapter = presenter.createPinAdapter()
+        pinAdapter = PinAdapter(INITIAL_PIN_LENGTH)
         binding.rvPinCode.apply {
             adapter = pinAdapter
             setHasFixedSize(true)
@@ -99,12 +99,16 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         pinAdapter.updateState(pinLen)
     }
 
-    override fun showOrHideBackspaceButton(isVisible: Boolean) {
-        binding.imgBackSpace.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+    override fun updateVisibilityBackspaceButton(isVisible: Boolean) {
+        updateViewVisibility(binding.imgBackSpace, isVisible)
     }
 
-    override fun showOrHideResetButton(isVisible: Boolean) {
-        binding.btnReset.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+    override fun updateVisibilityResetButton(isVisible: Boolean) {
+        updateViewVisibility(binding.btnReset, isVisible)
+    }
+
+    private fun updateViewVisibility(view: View, isVisible: Boolean) {
+        view.isInvisible = !isVisible
     }
 
     override fun moveToLogInActivity() {
@@ -112,7 +116,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         startActivity(Intent(intent))
     }
 
-    override fun setTitleText(titleTextResId: Int) {
+    override fun setTitleText(@StringRes titleTextResId: Int) {
         binding.tvTitle.text = resources.getString(titleTextResId)
     }
 }
