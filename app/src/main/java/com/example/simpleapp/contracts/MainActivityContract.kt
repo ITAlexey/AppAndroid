@@ -3,7 +3,6 @@ package com.example.simpleapp.contracts
 import androidx.annotation.StringRes
 import com.example.simpleapp.BasePresenter
 import com.example.simpleapp.BaseView
-import com.example.simpleapp.adapter.PinAdapter
 import com.example.simpleapp.models.utils.PinState
 
 interface MainActivityContract {
