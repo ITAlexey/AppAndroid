@@ -6,8 +6,7 @@ import com.example.simpleapp.models.utils.PinParser
 
 class PinModel(private val sharedPreferences: SharedPrefRepo) {
     private var confirmationPin: String = ""
-    var temporaryPin: String = ""
-        private set
+    private var temporaryPin: String = ""
 
     fun addNumber(number: Int) {
         temporaryPin += number.toString()

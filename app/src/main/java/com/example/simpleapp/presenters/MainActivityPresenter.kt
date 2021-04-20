@@ -1,5 +1,6 @@
 package com.example.simpleapp.presenters
 
+import androidx.annotation.StringRes
 import com.example.simpleapp.R
 import com.example.simpleapp.contracts.MainActivityContract
 import com.example.simpleapp.models.PinModel
@@ -20,7 +21,7 @@ class MainActivityPresenter(
                 processPin()
                 view?.updateVisibilityBackspaceButton(isVisible = false)
             }
-            view?.updatePinField(pinModel.temporaryPin.length)
+            view?.updatePinField(pinModel.getPinLength())
         }
     }
 
@@ -39,12 +40,27 @@ class MainActivityPresenter(
 
     private fun processResult(isSuccess: Boolean) {
         if (isSuccess) {
-            currentPinState = currentPinState.nextState()
-            currentPinState.modifyViewAppearance(view)
             processSuccessMessage()
+            currentPinState = currentPinState.nextState()
+            modifyViewsAppearance()
         } else {
             processFailMessage()
         }
+    }
+
+    private fun modifyViewsAppearance() {
+        when (currentPinState) {
+            PinState.CREATE -> modifyAppearance(R.string.title_create, isVisible = false)
+            PinState.CONFIRM ->modifyAppearance(R.string.title_confirm, isVisible = false)
+            PinState.LOGOUT ->modifyAppearance(R.string.title_logout, isVisible = true)
+            PinState.RESET ->modifyAppearance(R.string.title_reset, isVisible = false)
+            PinState.LOGIN -> view?.moveToLogInActivity()
+        }
+    }
+
+    private fun modifyAppearance(@StringRes titleTextResId: Int, isVisible: Boolean) {
+        view?.setTitleText(titleTextResId)
+        view?.updateVisibilityResetButton(isVisible)
     }
 
     private fun processFailMessage() {
@@ -59,9 +75,9 @@ class MainActivityPresenter(
 
     private fun processSuccessMessage() {
         when (currentPinState) {
-            PinState.CREATE -> view?.showPopupMessage(R.string.popup_reset)
-            PinState.LOGOUT -> view?.showPopupMessage(R.string.popup_saved)
-            PinState.CONFIRM, PinState.LOGIN, PinState.RESET -> Unit
+            PinState.RESET -> view?.showPopupMessage(R.string.popup_reset)
+            PinState.CONFIRM -> view?.showPopupMessage(R.string.popup_saved)
+            PinState.LOGOUT, PinState.LOGIN, PinState.CREATE -> Unit
         }
     }
 
@@ -69,13 +85,13 @@ class MainActivityPresenter(
         pinModel.resetPin()
         currentPinState = PinState.RESET
         view?.updatePinField()
-        currentPinState.modifyViewAppearance(view)
+        modifyViewsAppearance()
     }
 
     override fun onBackspaceButtonClicked() {
         if (pinModel.isPinNotEmpty()) {
             pinModel.removeNumber()
-            view?.updatePinField(pinModel.temporaryPin.length)
+            view?.updatePinField(pinModel.getPinLength())
         }
         if (pinModel.isPinEmpty()) {
             view?.updateVisibilityBackspaceButton(isVisible = false)
@@ -85,7 +101,7 @@ class MainActivityPresenter(
     override fun subscribe(view: MainActivityContract.View, pinState: PinState?) {
         this.view = view
         currentPinState = definePinState(pinState)
-        currentPinState.modifyViewAppearance(this.view)
+        modifyViewsAppearance()
         if (pinModel.isPinNotEmpty()) {
             view.updateVisibilityBackspaceButton(isVisible = true)
         }
