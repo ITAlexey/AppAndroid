@@ -109,13 +109,13 @@ class MainActivityPresenter(
     }
 
     private fun definePinState(pinState: PinState?): PinState {
-        val state = pinState ?: if (pinModel.isPinSaved()) {
+        var state = pinState ?: if (pinModel.isPinSaved()) {
             PinState.LOGOUT
         } else {
             PinState.CREATE
         }
         if (state == PinState.LOGIN) {
-            state.nextState()
+            state = state.nextState()
         }
         return state
     }

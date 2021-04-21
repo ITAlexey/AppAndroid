@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     override fun moveToLogInActivity() {
         val intent = LogInActivity.creteIntent(this)
-        startActivity(Intent(intent))
+        startActivity(intent)
     }
 
     override fun setTitleText(@StringRes titleTextResId: Int) {
