@@ -3,7 +3,7 @@ package com.example.simpleapp.contracts
 import com.example.simpleapp.BasePresenter
 import com.example.simpleapp.BaseView
 
-interface LogInActivityContract {
+interface WelcomeActivityContract {
     interface Presenter: BasePresenter<View> {
         fun onLogOutButtonClicked()
     }

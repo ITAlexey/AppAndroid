@@ -1,41 +1,58 @@
 package com.example.simpleapp.presenters
 
+import android.os.Bundle
 import androidx.annotation.StringRes
+import com.example.simpleapp.Constants
 import com.example.simpleapp.R
 import com.example.simpleapp.contracts.MainActivityContract
 import com.example.simpleapp.simpleapp.PinModel
 import com.example.simpleapp.simpleapp.utils.PinState
+import com.example.simpleapp.utils.getEnum
+import com.example.simpleapp.utils.putEnum
 
 class MainActivityPresenter(
-    private val pinModel: PinModel
-) :
-    MainActivityContract.Presenter {
-    private var view: MainActivityContract.View? = null
-    private lateinit var currentPinState: PinState
+    private val view: MainActivityContract.View,
+    private val pinModel: PinModel,
+    bundle: Bundle?
+) : MainActivityContract.Presenter {
 
-    override fun onNumberButtonClicked(number: Int) {
-        if (!pinModel.isPinFull()) {
-            pinModel.addNumber(number)
-            view?.updateVisibilityBackspaceButton(isVisible = true)
-            if (pinModel.isPinFull()) {
-                processPin()
-                view?.updateVisibilityBackspaceButton(isVisible = false)
-            }
-            view?.updatePinField(pinModel.getPinLength())
+    private var currentPinState: PinState
+
+    init {
+        currentPinState = getStateFromBundle(bundle) ?: getStateFromModel()
+        modifyViewsAppearance()
+        if (pinModel.isPinNotEmpty) {
+            view.updateVisibilityBackspaceButton(isVisible = true)
+        }
+        view.updatePinField(pinModel.pinLength)
+    }
+
+    private fun getStateFromBundle(outState: Bundle?): PinState? {
+        return outState?.getEnum(Constants.PIN_STATE, PinState.CREATE)
+    }
+
+    private fun getStateFromModel(): PinState {
+        return if (pinModel.isPinSaved) {
+            PinState.LOGOUT
+        } else {
+            PinState.CREATE
         }
     }
 
-    private fun processPin() {
-        var isSuccess = false
-        when (currentPinState) {
-            PinState.CREATE -> isSuccess = pinModel.createPinIfSuccess()
-            PinState.CONFIRM -> isSuccess = pinModel.savePinIfSuccess()
-            PinState.LOGOUT -> isSuccess = pinModel.loginIfSuccess()
-            PinState.RESET -> isSuccess = pinModel.deletePinIfSuccess()
-            PinState.LOGIN -> Unit
+    private fun processPinIfFull() {
+        if (pinModel.isPinFull) {
+            var isSuccess = false
+            when (currentPinState) {
+                PinState.CREATE -> isSuccess = pinModel.createPinIfSuccess()
+                PinState.CONFIRM -> isSuccess = pinModel.savePinIfSuccess()
+                PinState.LOGOUT -> isSuccess = pinModel.loginIfSuccess()
+                PinState.RESET -> isSuccess = pinModel.deletePinIfSuccess()
+                PinState.LOGIN -> Unit
+            }
+            view.updateVisibilityBackspaceButton(isVisible = false)
+            processResult(isSuccess)
+            pinModel.resetPin()
         }
-        processResult(isSuccess)
-        pinModel.resetPin()
     }
 
     private fun processResult(isSuccess: Boolean) {
@@ -51,82 +68,66 @@ class MainActivityPresenter(
     private fun modifyViewsAppearance() {
         when (currentPinState) {
             PinState.CREATE -> modifyAppearance(R.string.title_create, isVisible = false)
-            PinState.CONFIRM ->modifyAppearance(R.string.title_confirm, isVisible = false)
-            PinState.LOGOUT ->modifyAppearance(R.string.title_logout, isVisible = true)
-            PinState.RESET ->modifyAppearance(R.string.title_reset, isVisible = false)
-            PinState.LOGIN -> view?.moveToLogInActivity()
+            PinState.CONFIRM -> modifyAppearance(R.string.title_confirm, isVisible = false)
+            PinState.LOGOUT -> modifyAppearance(R.string.title_logout, isVisible = true)
+            PinState.RESET -> modifyAppearance(R.string.title_reset, isVisible = false)
+            PinState.LOGIN -> {
+                currentPinState = currentPinState.nextState()
+                view.moveToLogInActivity()
+            }
         }
     }
 
     private fun modifyAppearance(@StringRes titleTextResId: Int, isVisible: Boolean) {
-        view?.setTitleText(titleTextResId)
-        view?.updateVisibilityResetButton(isVisible)
+        view.setTitleText(titleTextResId)
+        view.updateVisibilityResetButton(isVisible)
     }
 
     private fun processFailMessage() {
         when (currentPinState) {
-            PinState.CREATE -> view?.showPopupMessage(R.string.popup_simple)
+            PinState.CREATE -> view.showPopupMessage(R.string.popup_simple)
             PinState.CONFIRM, PinState.RESET ->
-                view?.showPopupMessage(R.string.popup_different)
-            PinState.LOGOUT -> view?.showPopupMessage(R.string.popup_fail)
+                view.showPopupMessage(R.string.popup_different)
+            PinState.LOGOUT -> view.showPopupMessage(R.string.popup_fail)
             PinState.LOGIN -> Unit
         }
     }
 
     private fun processSuccessMessage() {
         when (currentPinState) {
-            PinState.RESET -> view?.showPopupMessage(R.string.popup_reset)
-            PinState.CONFIRM -> view?.showPopupMessage(R.string.popup_saved)
+            PinState.RESET -> view.showPopupMessage(R.string.popup_reset)
+            PinState.CONFIRM -> view.showPopupMessage(R.string.popup_saved)
             PinState.LOGOUT, PinState.LOGIN, PinState.CREATE -> Unit
+        }
+    }
+
+    override fun onNumberButtonClicked(number: Int) {
+        if (!pinModel.isPinFull) {
+            pinModel.addNumber(number)
+            view.updateVisibilityBackspaceButton(isVisible = true)
+            processPinIfFull()
+            view.updatePinField(pinModel.pinLength)
         }
     }
 
     override fun onResetButtonClicked() {
         pinModel.resetPin()
         currentPinState = PinState.RESET
-        view?.updatePinField()
+        view.updatePinField()
         modifyViewsAppearance()
     }
 
     override fun onBackspaceButtonClicked() {
-        if (pinModel.isPinNotEmpty()) {
+        if (pinModel.isPinNotEmpty) {
             pinModel.removeNumber()
-            view?.updatePinField(pinModel.getPinLength())
+            view.updatePinField(pinModel.pinLength)
         }
-        if (pinModel.isPinEmpty()) {
-            view?.updateVisibilityBackspaceButton(isVisible = false)
+        if (pinModel.isPinEmpty) {
+            view.updateVisibilityBackspaceButton(isVisible = false)
         }
     }
 
-    override fun subscribe(view: MainActivityContract.View, pinState: PinState?) {
-        this.view = view
-        currentPinState = definePinState(pinState)
-        modifyViewsAppearance()
-        if (pinModel.isPinNotEmpty()) {
-            view.updateVisibilityBackspaceButton(isVisible = true)
-        }
-        view.updatePinField(pinModel.getPinLength())
-    }
-
-    private fun definePinState(pinState: PinState?): PinState {
-        var state = pinState ?: if (pinModel.isPinSaved()) {
-            PinState.LOGOUT
-        } else {
-            PinState.CREATE
-        }
-        if (state == PinState.LOGIN) {
-            state = state.nextState()
-        }
-        return state
-    }
-
-    override fun subscribe(view: MainActivityContract.View) =
-        subscribe(view, null)
-
-    override fun getPinState(): PinState =
-        currentPinState
-
-    override fun unsubscribe() {
-        view = null
+    override fun onSavedInstanceStateCalled(outState: Bundle) {
+        outState.putEnum(Constants.PIN_STATE, currentPinState)
     }
 }

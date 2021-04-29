@@ -11,6 +11,26 @@ class PinModel(private val sharedPreferences: SharedPrefRepo) {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var temporaryPin: String = ""
 
+    var isPinEmpty: Boolean = true
+        get() = temporaryPin.isEmpty()
+        private set
+
+    var isPinNotEmpty: Boolean = true
+        get() = temporaryPin.isNotEmpty()
+        private set
+
+    var isPinFull: Boolean = true
+        get() = temporaryPin.length == PIN_SIZE
+        private set
+
+    var isPinSaved: Boolean = false
+        get() = sharedPreferences.getPin().isNotEmpty()
+        private set
+
+    var pinLength: Int = 0
+        get() = temporaryPin.length
+        private set
+
     fun addNumber(number: Int) {
         temporaryPin += number.toString()
     }
@@ -20,7 +40,11 @@ class PinModel(private val sharedPreferences: SharedPrefRepo) {
     }
 
     fun calculateSumPinNumbers(): String =
-        sharedPreferences.getPin().map { Integer.valueOf(it.toString()) }.sum().toString()
+        sharedPreferences
+            .getPin()
+            .map { Integer.valueOf(it.toString()) }
+            .sum()
+            .toString()
 
     fun resetPin() {
         temporaryPin = ""
@@ -55,19 +79,4 @@ class PinModel(private val sharedPreferences: SharedPrefRepo) {
         }
         return false
     }
-
-    fun isPinEmpty(): Boolean =
-        temporaryPin.isEmpty()
-
-    fun isPinFull(): Boolean =
-        temporaryPin.length == PIN_SIZE
-
-    fun isPinSaved(): Boolean =
-        sharedPreferences.getPin().isNotEmpty()
-
-    fun getPinLength(): Int =
-        temporaryPin.length
-
-    fun isPinNotEmpty(): Boolean =
-        temporaryPin.isNotEmpty()
 }

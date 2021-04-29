@@ -9,45 +9,29 @@ import androidx.annotation.StringRes
 import androidx.core.view.isInvisible
 import com.example.simpleapp.BaseApp
 import com.example.simpleapp.Constants.INITIAL_PIN_LENGTH
-import com.example.simpleapp.Constants.PIN_STATE
 import com.example.simpleapp.R
 import com.example.simpleapp.adapter.PinAdapter
 import com.example.simpleapp.contracts.MainActivityContract
 import com.example.simpleapp.databinding.ActivityMainBinding
-import com.example.simpleapp.simpleapp.utils.PinState
 import com.example.simpleapp.presenters.MainActivityPresenter
-import com.example.simpleapp.utils.getEnum
-import com.example.simpleapp.utils.putEnum
 
 class MainActivity : AppCompatActivity(), MainActivityContract.View {
     private lateinit var binding: ActivityMainBinding
     private lateinit var pinAdapter: PinAdapter
     private lateinit var presenter: MainActivityContract.Presenter
-    private var bundle: Bundle? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        bundle = savedInstanceState
-        presenter = MainActivityPresenter((applicationContext as BaseApp).pinModel)
         initAdapter()
+        initPresenter(savedInstanceState)
         initListeners()
     }
 
-    override fun onStart() {
-        super.onStart()
-        val pinState = getStateFromBundle(bundle)
-        presenter.subscribe(this, pinState)
-    }
-
-    override fun onStop() {
-        presenter.unsubscribe()
-        super.onStop()
-    }
-
-    private fun getStateFromBundle(outState: Bundle?): PinState? {
-        return outState?.getEnum(PIN_STATE, PinState.CREATE)
+    private fun initPresenter(outState: Bundle?) {
+        val model = (applicationContext as BaseApp).pinModel
+        presenter = MainActivityPresenter(this, model, outState)
     }
 
     private fun initListeners() {
@@ -86,9 +70,13 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         }
     }
 
+    private fun updateViewVisibility(view: View, isVisible: Boolean) {
+        view.isInvisible = !isVisible
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putEnum(PIN_STATE, presenter.getPinState())
         super.onSaveInstanceState(outState)
+        presenter.onSavedInstanceStateCalled(outState)
     }
 
     override fun showPopupMessage(@StringRes popupTextResId: Int) =
@@ -106,12 +94,9 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         updateViewVisibility(binding.btnReset, isVisible)
     }
 
-    private fun updateViewVisibility(view: View, isVisible: Boolean) {
-        view.isInvisible = !isVisible
-    }
 
     override fun moveToLogInActivity() {
-        val intent = LogInActivity.creteIntent(this)
+        val intent = WelcomeActivity.creteIntent(this)
         startActivity(intent)
     }
 

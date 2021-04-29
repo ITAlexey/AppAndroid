@@ -5,25 +5,25 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.simpleapp.BaseApp
-import com.example.simpleapp.contracts.LogInActivityContract
+import com.example.simpleapp.contracts.WelcomeActivityContract
 import com.example.simpleapp.databinding.ActivityLogInBinding
-import com.example.simpleapp.presenters.LogInActivityPresenter
+import com.example.simpleapp.presenters.WelcomeActivityPresenter
 
-class LogInActivity : AppCompatActivity(), LogInActivityContract.View {
+class WelcomeActivity : AppCompatActivity(), WelcomeActivityContract.View {
     private lateinit var binding: ActivityLogInBinding
-    private lateinit var presenter: LogInActivityContract.Presenter
+    private lateinit var presenter: WelcomeActivityContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLogInBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        presenter = LogInActivityPresenter((applicationContext as BaseApp).pinModel)
+        initPresenter()
         initListeners()
     }
 
-    override fun onStart() {
-        presenter.subscribe(this)
-        super.onStart()
+    private fun initPresenter() {
+        val model = (applicationContext as BaseApp).pinModel
+        presenter = WelcomeActivityPresenter(this, model)
     }
 
     private fun initListeners() {
@@ -38,14 +38,9 @@ class LogInActivity : AppCompatActivity(), LogInActivityContract.View {
         finish()
     }
 
-    override fun onStop() {
-        super.onStop()
-        presenter.unsubscribe()
-    }
-
     companion object {
         fun creteIntent(packageContext: Context) : Intent {
-            return Intent(packageContext, LogInActivity::class.java)
+            return Intent(packageContext, WelcomeActivity::class.java)
         }
     }
 }

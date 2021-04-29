@@ -19,17 +19,12 @@ class PinAdapter(
     }
 
     override fun onBindViewHolder(holder: PinCodeHolder, position: Int) {
-        val color = if (position < currentPinLen) {
-            ContextCompat.getColor(
-                holder.imgPinDot.context,
-                R.color.blue
-            )
+        var color = if (position < currentPinLen) {
+            R.color.blue
         } else {
-            ContextCompat.getColor(
-                holder.imgPinDot.context,
-                R.color.gray
-            )
+            R.color.gray
         }
+        color = ContextCompat.getColor(holder.imgPinDot.context, color)
         holder.imgPinDot.setColorFilter(color)
     }
 
@@ -38,10 +33,10 @@ class PinAdapter(
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = PIN_SIZE
+    override fun getItemCount(): Int =
+        PIN_SIZE
 
-    class PinCodeHolder(binding: ItemRvPinBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class PinCodeHolder(binding: ItemRvPinBinding) : RecyclerView.ViewHolder(binding.root) {
         val imgPinDot = binding.imgPinDot
     }
 }

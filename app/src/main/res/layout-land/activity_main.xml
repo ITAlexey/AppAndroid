@@ -19,11 +19,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/main_margin"
+            android:gravity="center"
+            android:minLines="2"
             android:text="@string/title_logout"
             android:textColor="@color/black"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
