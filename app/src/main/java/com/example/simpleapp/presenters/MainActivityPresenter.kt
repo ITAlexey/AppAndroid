@@ -3,8 +3,8 @@ package com.example.simpleapp.presenters
 import androidx.annotation.StringRes
 import com.example.simpleapp.R
 import com.example.simpleapp.contracts.MainActivityContract
-import com.example.simpleapp.models.PinModel
-import com.example.simpleapp.models.utils.PinState
+import com.example.simpleapp.simpleapp.PinModel
+import com.example.simpleapp.simpleapp.utils.PinState
 
 class MainActivityPresenter(
     private val pinModel: PinModel

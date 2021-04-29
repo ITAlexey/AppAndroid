@@ -1,4 +1,4 @@
-package com.example.simpleapp.models
+package com.example.simpleapp.simpleapp
 
 import android.content.SharedPreferences
 import com.example.simpleapp.utils.EncryptionUtils

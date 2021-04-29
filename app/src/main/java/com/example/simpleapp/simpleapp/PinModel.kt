@@ -1,12 +1,15 @@
-package com.example.simpleapp.models
+package com.example.simpleapp.simpleapp
 
+import androidx.annotation.VisibleForTesting
 import com.example.simpleapp.Constants.PIN_SIZE
-import com.example.simpleapp.models.utils.PinParser
+import com.example.simpleapp.simpleapp.utils.PinParser
 
 
 class PinModel(private val sharedPreferences: SharedPrefRepo) {
     private var confirmationPin: String = ""
-    private var temporaryPin: String = ""
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var temporaryPin: String = ""
 
     fun addNumber(number: Int) {
         temporaryPin += number.toString()

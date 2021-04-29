@@ -1,7 +1,7 @@
 package com.example.simpleapp.presenters
 
 import com.example.simpleapp.contracts.LogInActivityContract
-import com.example.simpleapp.models.PinModel
+import com.example.simpleapp.simpleapp.PinModel
 
 class LogInActivityPresenter(
     private val pinModel: PinModel

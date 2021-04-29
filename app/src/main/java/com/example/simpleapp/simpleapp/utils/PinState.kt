@@ -1,4 +1,4 @@
-package com.example.simpleapp.models.utils
+package com.example.simpleapp.simpleapp.utils
 
 enum class PinState {
     LOGIN {

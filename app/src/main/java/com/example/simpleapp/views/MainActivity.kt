@@ -1,6 +1,5 @@
 package com.example.simpleapp.views
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -15,7 +14,7 @@ import com.example.simpleapp.R
 import com.example.simpleapp.adapter.PinAdapter
 import com.example.simpleapp.contracts.MainActivityContract
 import com.example.simpleapp.databinding.ActivityMainBinding
-import com.example.simpleapp.models.utils.PinState
+import com.example.simpleapp.simpleapp.utils.PinState
 import com.example.simpleapp.presenters.MainActivityPresenter
 import com.example.simpleapp.utils.getEnum
 import com.example.simpleapp.utils.putEnum
