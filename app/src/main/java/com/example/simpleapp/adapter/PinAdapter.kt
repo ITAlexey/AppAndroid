@@ -5,12 +5,11 @@ import android.view.ViewGroup
 import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.simpleapp.Constants.PIN_SIZE
 import com.example.simpleapp.R
 import com.example.simpleapp.databinding.ItemRvPinBinding
 
 class PinAdapter(
-    @IntRange(from = 0) private var currentPinLen: Int
+    @IntRange(from = 0) private var currentPinLen: Int = 0
 ) : RecyclerView.Adapter<PinAdapter.PinCodeHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PinCodeHolder {
@@ -38,5 +37,9 @@ class PinAdapter(
 
     class PinCodeHolder(binding: ItemRvPinBinding) : RecyclerView.ViewHolder(binding.root) {
         val imgPinDot = binding.imgPinDot
+    }
+
+    companion object {
+        const val PIN_SIZE = 4
     }
 }

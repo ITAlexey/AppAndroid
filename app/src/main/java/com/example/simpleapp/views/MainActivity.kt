@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.view.isInvisible
 import com.example.simpleapp.BaseApp
-import com.example.simpleapp.Constants.INITIAL_PIN_LENGTH
 import com.example.simpleapp.R
 import com.example.simpleapp.adapter.PinAdapter
 import com.example.simpleapp.contracts.MainActivityContract
@@ -63,7 +62,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     private fun initAdapter() {
-        pinAdapter = PinAdapter(INITIAL_PIN_LENGTH)
+        pinAdapter = PinAdapter()
         binding.rvPinCode.apply {
             adapter = pinAdapter
             setHasFixedSize(true)

@@ -2,12 +2,10 @@ package com.example.simpleapp
 
 import com.example.simpleapp.contracts.MainActivityContract
 import com.example.simpleapp.presenters.MainActivityPresenter
-import com.example.simpleapp.simpleapp.PinModel
+import com.example.simpleapp.models.PinModel
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 

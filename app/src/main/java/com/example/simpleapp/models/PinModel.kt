@@ -1,8 +1,8 @@
-package com.example.simpleapp.simpleapp
+package com.example.simpleapp.models
 
 import androidx.annotation.VisibleForTesting
-import com.example.simpleapp.Constants.PIN_SIZE
-import com.example.simpleapp.simpleapp.utils.PinParser
+import com.example.simpleapp.adapter.PinAdapter.Companion.PIN_SIZE
+import com.example.simpleapp.models.utils.PinParser
 
 
 class PinModel(private val sharedPreferences: SharedPrefRepo) {

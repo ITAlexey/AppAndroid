@@ -1,7 +1,7 @@
 package com.example.simpleapp.presenters
 
 import com.example.simpleapp.contracts.WelcomeActivityContract
-import com.example.simpleapp.simpleapp.PinModel
+import com.example.simpleapp.models.PinModel
 
 class WelcomeActivityPresenter(
     private val view: WelcomeActivityContract.View,

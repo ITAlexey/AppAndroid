@@ -1,7 +1,7 @@
 package com.example.simpleapp
 
-import com.example.simpleapp.simpleapp.PinModel
-import com.example.simpleapp.simpleapp.SharedPrefRepo
+import com.example.simpleapp.models.PinModel
+import com.example.simpleapp.models.SharedPrefRepo
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
@@ -22,14 +22,14 @@ class PinModelTest {
     @Test
     fun `addNumber check if not empty`() {
         model.addNumber(GOOD_PIN)
-        Assert.assertTrue(model.isPinNotEmpty())
+        Assert.assertTrue(model.isPinNotEmpty)
     }
 
     @Test
     fun `removeNumber delete one digit`() {
         model.addNumber(GOOD_PIN)
         model.removeNumber()
-        Assert.assertEquals(3, model.getPinLength())
+        Assert.assertEquals(3, model.pinLength)
     }
 
     @Test
@@ -133,7 +133,7 @@ class PinModelTest {
     @Test
     fun `isPinSaved verify that getPin has been called`() {
         whenever(sharedPrefRepo.getPin()).thenReturn("3333")
-        model.isPinSaved()
+        model.isPinSaved
         verify(sharedPrefRepo, times(1)).getPin()
     }
 

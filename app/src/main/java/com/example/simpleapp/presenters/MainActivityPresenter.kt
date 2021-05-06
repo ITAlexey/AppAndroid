@@ -2,11 +2,10 @@ package com.example.simpleapp.presenters
 
 import android.os.Bundle
 import androidx.annotation.StringRes
-import com.example.simpleapp.Constants
 import com.example.simpleapp.R
 import com.example.simpleapp.contracts.MainActivityContract
-import com.example.simpleapp.simpleapp.PinModel
-import com.example.simpleapp.simpleapp.utils.PinState
+import com.example.simpleapp.models.PinModel
+import com.example.simpleapp.models.utils.PinState
 import com.example.simpleapp.utils.getEnum
 import com.example.simpleapp.utils.putEnum
 
@@ -28,7 +27,7 @@ class MainActivityPresenter(
     }
 
     private fun getStateFromBundle(outState: Bundle?): PinState? {
-        return outState?.getEnum(Constants.PIN_STATE, PinState.CREATE)
+        return outState?.getEnum(PIN_STATE, PinState.CREATE)
     }
 
     private fun getStateFromModel(): PinState {
@@ -128,6 +127,10 @@ class MainActivityPresenter(
     }
 
     override fun onSavedInstanceStateCalled(outState: Bundle) {
-        outState.putEnum(Constants.PIN_STATE, currentPinState)
+        outState.putEnum(PIN_STATE, currentPinState)
+    }
+
+    companion object {
+        private const val PIN_STATE = "com.example.simpleapp.pin_state"
     }
 }

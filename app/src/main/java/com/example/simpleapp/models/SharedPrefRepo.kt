@@ -1,9 +1,10 @@
-package com.example.simpleapp.simpleapp
+package com.example.simpleapp.models
 
 import android.content.SharedPreferences
 import com.example.simpleapp.utils.EncryptionUtils
+import java.lang.IllegalStateException
 
-class SharedPrefRepo(private val sharedPreferences: SharedPreferences) {
+class SharedPrefRepo private constructor(private val sharedPreferences: SharedPreferences) {
 
     fun getPin(): String {
         val pin = sharedPreferences.getString(PIN_CODE_KEY, "") ?: ""
@@ -27,5 +28,13 @@ class SharedPrefRepo(private val sharedPreferences: SharedPreferences) {
 
     companion object {
         private const val PIN_CODE_KEY = "PIN_CODE"
+        private var INITIALIZED: SharedPrefRepo? = null
+
+        fun initialized(sharedPreferences: SharedPreferences) {
+            INITIALIZED = SharedPrefRepo(sharedPreferences)
+        }
+
+        fun getInstance(): SharedPrefRepo =
+            INITIALIZED ?: throw IllegalStateException("SharedPrefRepo class has not been initialized!")
     }
 }

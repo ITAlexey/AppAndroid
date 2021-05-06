@@ -1,4 +1,4 @@
-package com.example.simpleapp.simpleapp.utils
+package com.example.simpleapp.models.utils
 
 object PinParser {
     private lateinit var pin: String
