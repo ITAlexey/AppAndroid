@@ -57,10 +57,18 @@ class MainActivityPresenter(
     private fun processResult(isSuccess: Boolean) {
         if (isSuccess) {
             processSuccessMessage()
-            currentPinState = currentPinState.nextState()
+            updatePinState()
             modifyViewsAppearance()
+            processIfLoginState()
         } else {
             processFailMessage()
+        }
+    }
+
+    private fun processIfLoginState() {
+        if (currentPinState == PinState.LOGIN) {
+            updatePinState()
+            view.moveToLogInActivity()
         }
     }
 
@@ -70,10 +78,7 @@ class MainActivityPresenter(
             PinState.CONFIRM -> modifyAppearance(R.string.title_confirm, isVisible = false)
             PinState.LOGOUT -> modifyAppearance(R.string.title_logout, isVisible = true)
             PinState.RESET -> modifyAppearance(R.string.title_reset, isVisible = false)
-            PinState.LOGIN -> {
-                currentPinState = currentPinState.nextState()
-                view.moveToLogInActivity()
-            }
+            PinState.LOGIN -> Unit
         }
     }
 
@@ -98,6 +103,10 @@ class MainActivityPresenter(
             PinState.CONFIRM -> view.showPopupMessage(R.string.popup_saved)
             PinState.LOGOUT, PinState.LOGIN, PinState.CREATE -> Unit
         }
+    }
+
+    private fun updatePinState() {
+        updatePinState()
     }
 
     override fun onNumberButtonClicked(number: Int) {
