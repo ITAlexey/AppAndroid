@@ -34,8 +34,8 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     private fun initListeners() {
-        binding.apply {
-            btnReset.setOnClickListener { presenter.onResetButtonClicked() }
+        val keyboardBinding = binding.conLNumbers
+        keyboardBinding.apply {
             tvNumber0.setOnClickListener { onKeyboardButtonClicked(0, it) }
             tvNumber1.setOnClickListener { onKeyboardButtonClicked(1, it) }
             tvNumber2.setOnClickListener { onKeyboardButtonClicked(2, it) }
@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
             tvNumber9.setOnClickListener { onKeyboardButtonClicked(9, it) }
             imgBackSpace.setOnClickListener { onKeyboardButtonClicked(item = it) }
         }
+        binding.btnReset.setOnClickListener { presenter.onResetButtonClicked() }
     }
 
     private fun animateKeyboardButton(item: View) =
@@ -86,7 +87,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     override fun updateVisibilityBackspaceButton(isVisible: Boolean) {
-        updateViewVisibility(binding.imgBackSpace, isVisible)
+        updateViewVisibility(binding.conLNumbers.imgBackSpace, isVisible)
     }
 
     override fun updateVisibilityResetButton(isVisible: Boolean) {

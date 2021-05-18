@@ -6,16 +6,16 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.simpleapp.BaseApp
 import com.example.simpleapp.contracts.WelcomeActivityContract
-import com.example.simpleapp.databinding.ActivityLogInBinding
+import com.example.simpleapp.databinding.ActivityWelcomeBinding
 import com.example.simpleapp.presenters.WelcomeActivityPresenter
 
 class WelcomeActivity : AppCompatActivity(), WelcomeActivityContract.View {
-    private lateinit var binding: ActivityLogInBinding
+    private lateinit var binding: ActivityWelcomeBinding
     private lateinit var presenter: WelcomeActivityContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLogInBinding.inflate(layoutInflater)
+        binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initPresenter()
         initListeners()
