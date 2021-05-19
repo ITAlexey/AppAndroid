@@ -1,17 +1,17 @@
 package com.example.simpleapp.presenters
 
-import com.example.simpleapp.contracts.WelcomeActivityContract
+import com.example.simpleapp.contracts.LoggedInContract
 import com.example.simpleapp.models.PinModel
 
-class WelcomeActivityPresenter(
-    private val view: WelcomeActivityContract.View,
+class LoggedInPresenter(
+    private val view: LoggedInContract.View,
     pinModel: PinModel
-) : WelcomeActivityContract.Presenter {
-
+) : LoggedInContract.Presenter {
     init {
         val result = pinModel.calculateSumPinNumbers()
         view.showSumResult(result)
     }
+
     override fun onLogOutButtonClicked() {
         view.closeActivity()
     }

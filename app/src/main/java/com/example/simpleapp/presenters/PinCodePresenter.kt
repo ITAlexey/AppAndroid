@@ -3,17 +3,17 @@ package com.example.simpleapp.presenters
 import android.os.Bundle
 import androidx.annotation.StringRes
 import com.example.simpleapp.R
-import com.example.simpleapp.contracts.MainActivityContract
+import com.example.simpleapp.contracts.PinCodeFragmentContract
 import com.example.simpleapp.models.PinModel
 import com.example.simpleapp.models.utils.PinState
 import com.example.simpleapp.utils.getEnum
 import com.example.simpleapp.utils.putEnum
 
-class MainActivityPresenter(
-    private val view: MainActivityContract.View,
+class PinCodePresenter(
+    private val view: PinCodeFragmentContract.View,
     private val pinModel: PinModel,
     bundle: Bundle?
-) : MainActivityContract.Presenter {
+) : PinCodeFragmentContract.Presenter {
 
     private var currentPinState: PinState
 
@@ -68,7 +68,7 @@ class MainActivityPresenter(
     private fun processIfLoginState() {
         if (currentPinState == PinState.LOGIN) {
             updatePinState()
-            view.moveToLogInActivity()
+            view.moveToLoggedInFragment()
         }
     }
 
@@ -137,6 +137,9 @@ class MainActivityPresenter(
 
     override fun onSavedInstanceStateCalled(outState: Bundle) {
         outState.putEnum(PIN_STATE, currentPinState)
+    }
+
+    override fun onViewCreated() {
     }
 
     companion object {

@@ -1,7 +1,5 @@
 package com.example.simpleapp
 
-import com.example.simpleapp.contracts.MainActivityContract
-import com.example.simpleapp.presenters.MainActivityPresenter
 import com.example.simpleapp.models.PinModel
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
