@@ -9,6 +9,7 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.view.isInvisible
+import androidx.fragment.app.commit
 import com.example.simpleapp.BaseApp
 import com.example.simpleapp.R
 import com.example.simpleapp.adapter.PinAdapter
@@ -34,7 +35,6 @@ class PinCodeFragment : Fragment(), PinCodeFragmentContract.View {
         initAdapter()
         initListeners()
         initPresenter(savedInstanceState)
-        presenter.onViewCreated()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -49,15 +49,20 @@ class PinCodeFragment : Fragment(), PinCodeFragmentContract.View {
         pinAdapter.updateState(pinLen)
     }
 
-    override fun updateVisibilityBackspaceButton(isVisible: Boolean?) {
+    override fun updateVisibilityBackspaceButton(isVisible: Boolean) {
         updateViewVisibility(binding?.conLNumbers?.imgBackSpace, isVisible)
     }
 
-    override fun updateVisibilityResetButton(isVisible: Boolean?) {
+    override fun updateVisibilityResetButton(isVisible: Boolean) {
         updateViewVisibility(binding?.btnReset, isVisible)
     }
 
-    override fun moveToLoggedInFragment() {
+    override fun moveToLoggedInFragment(pinSumResult: Int) {
+        val loggedInFragment = LoggedInFragment.newInstance(pinSumResult)
+        requireActivity().supportFragmentManager.commit {
+            replace(R.id.fragment_container, loggedInFragment)
+            addToBackStack(null)
+        }
     }
 
     override fun setTitleText(@StringRes titleTextResId: Int) {
@@ -96,8 +101,8 @@ class PinCodeFragment : Fragment(), PinCodeFragmentContract.View {
         binding?.btnReset?.setOnClickListener { presenter.onResetButtonClicked() }
     }
 
-    private fun updateViewVisibility(view: View?, isVisible: Boolean?) {
-        view?.isInvisible = isVisible ?: true
+    private fun updateViewVisibility(view: View?, isVisible: Boolean) {
+        view?.isInvisible = !isVisible
     }
 
     private fun animateKeyboardButton(item: View) =

@@ -39,12 +39,11 @@ class PinModel(private val sharedPreferences: SharedPrefRepo) {
         temporaryPin = temporaryPin.substring(0, temporaryPin.lastIndex)
     }
 
-    fun calculateSumPinNumbers(): String =
+    fun calculateSumPinNumbers(): Int =
         sharedPreferences
             .getPin()
             .map { Integer.valueOf(it.toString()) }
             .sum()
-            .toString()
 
     fun resetPin() {
         temporaryPin = ""

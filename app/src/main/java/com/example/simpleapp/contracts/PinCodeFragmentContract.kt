@@ -9,11 +9,11 @@ interface PinCodeFragmentContract {
     interface View: BaseView {
         fun updatePinField(pinLen: Int = 0)
 
-        fun updateVisibilityBackspaceButton(isVisible: Boolean?)
+        fun updateVisibilityBackspaceButton(isVisible: Boolean)
 
-        fun updateVisibilityResetButton(isVisible: Boolean?)
+        fun updateVisibilityResetButton(isVisible: Boolean)
 
-        fun moveToLoggedInFragment()
+        fun moveToLoggedInFragment(pinSumResult: Int)
 
         fun setTitleText(@StringRes titleTextResId: Int)
 
@@ -28,7 +28,5 @@ interface PinCodeFragmentContract {
         fun onBackspaceButtonClicked()
 
         fun onSavedInstanceStateCalled(outState: Bundle)
-
-        fun onViewCreated()
     }
 }

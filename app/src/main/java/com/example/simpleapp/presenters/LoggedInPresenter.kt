@@ -7,12 +7,12 @@ class LoggedInPresenter(
     private val view: LoggedInContract.View,
     pinModel: PinModel
 ) : LoggedInContract.Presenter {
+
     init {
-        val result = pinModel.calculateSumPinNumbers()
-        view.showSumResult(result)
+        view.showPinSumResult()
     }
 
     override fun onLogOutButtonClicked() {
-        view.closeActivity()
+        view.moveToPinCodeFragment()
     }
 }

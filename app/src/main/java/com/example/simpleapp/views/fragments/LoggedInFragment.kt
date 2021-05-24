@@ -13,7 +13,12 @@ import com.example.simpleapp.presenters.LoggedInPresenter
 class LoggedInFragment : Fragment(), LoggedInContract.View {
     private var binding: FragmentLoggedInBinding? = null
     private lateinit var presenter: LoggedInContract.Presenter
+    private var pinSumResult = 0
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        pinSumResult = arguments?.getInt(ARG_PIN_SUM) ?: 0
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,13 +33,6 @@ class LoggedInFragment : Fragment(), LoggedInContract.View {
         initListeners()
     }
 
-    override fun showSumResult(sumResult: String) {
-        binding?.tvSumResult?.text = sumResult
-    }
-
-    override fun closeActivity() {
-    }
-
     private fun initPresenter() {
         val app = requireActivity().applicationContext as BaseApp
         val model = app.pinModel
@@ -45,8 +43,20 @@ class LoggedInFragment : Fragment(), LoggedInContract.View {
         binding?.imgLogOut?.setOnClickListener{ presenter.onLogOutButtonClicked() }
     }
 
+    override fun moveToPinCodeFragment() {
+        requireActivity().supportFragmentManager.popBackStack()
+    }
+
+    override fun showPinSumResult() {
+        binding?.tvSumResult?.text = pinSumResult.toString()
+    }
+
     companion object {
-        fun newInstance() =
-            LoggedInFragment()
+        private const val  ARG_PIN_SUM = "com.example.simpleapp.pin_sum"
+
+        fun newInstance(pinSumResult: Int): LoggedInFragment {
+            val args = Bundle().apply { putInt(ARG_PIN_SUM, pinSumResult) }
+            return LoggedInFragment().apply { arguments =  args}
+        }
     }
 }

@@ -68,7 +68,8 @@ class PinCodePresenter(
     private fun processIfLoginState() {
         if (currentPinState == PinState.LOGIN) {
             updatePinState()
-            view.moveToLoggedInFragment()
+            val pinSumResult = pinModel.calculateSumPinNumbers()
+            view.moveToLoggedInFragment(pinSumResult)
         }
     }
 
@@ -106,7 +107,7 @@ class PinCodePresenter(
     }
 
     private fun updatePinState() {
-        updatePinState()
+        currentPinState = currentPinState.nextState()
     }
 
     override fun onNumberButtonClicked(number: Int) {
@@ -137,9 +138,6 @@ class PinCodePresenter(
 
     override fun onSavedInstanceStateCalled(outState: Bundle) {
         outState.putEnum(PIN_STATE, currentPinState)
-    }
-
-    override fun onViewCreated() {
     }
 
     companion object {
