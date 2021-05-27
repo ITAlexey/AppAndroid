@@ -3,14 +3,16 @@ package com.example.simpleapp.contracts
 import com.example.simpleapp.BasePresenter
 import com.example.simpleapp.BaseView
 
-interface LoggedInContract {
+interface DialogSettingsContract {
     interface View : BaseView {
-        fun moveToPinCodeFragment()
+       fun applyLightTheme()
 
-        fun showPinSumResult()
+       fun applyDarkTheme()
+
+       fun applyDefaultSystemTheme()
     }
 
     interface Presenter : BasePresenter<View> {
-        fun onLogOutButtonClicked()
+        fun onChangeThemeButtonClicked(themeType: Int)
     }
 }

@@ -7,27 +7,31 @@ import java.lang.IllegalStateException
 class SharedPrefRepo private constructor(private val sharedPreferences: SharedPreferences) {
 
     fun getPin(): String {
-        val pin = sharedPreferences.getString(PIN_CODE_KEY, "") ?: ""
+        val pin = sharedPreferences.getString(KEY_PIN_CODE, "") ?: ""
         return if (pin.isNotEmpty()) EncryptionUtils.decryptData(pin) else ""
     }
+
+    fun getApplicationTheme(): Int =
+        sharedPreferences.getInt(KEY_APP_THEME, 0)
 
     fun savePin(pinToBeSaved: String) =
         sharedPreferences
             .edit()
-            .putString(PIN_CODE_KEY, EncryptionUtils.encryptData(pinToBeSaved))
+            .putString(KEY_PIN_CODE, EncryptionUtils.encryptData(pinToBeSaved))
             .apply()
 
     fun removePin() =
         sharedPreferences
             .edit()
-            .remove(PIN_CODE_KEY)
+            .remove(KEY_PIN_CODE)
             .apply()
 
     fun isPinCorrect(pinToBeCompared: String): Boolean =
         pinToBeCompared == getPin()
 
     companion object {
-        private const val PIN_CODE_KEY = "PIN_CODE"
+        private const val KEY_PIN_CODE = "PIN_CODE"
+        private const val KEY_APP_THEME = "APP_THEME"
         private var INITIALIZED: SharedPrefRepo? = null
 
         fun initialized(sharedPreferences: SharedPreferences) {

@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="NumbersForPinCode" parent="Widget.AppCompat.TextView">
+    <style name="SimpleApp" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+        <item name="colorPrimary">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="textAllCaps">false</item>
+        <item name="buttonStyle">?android:attr/borderlessButtonStyle</item>
+    </style>
+
+    <style name="NumbersForPinCode" parent="SimpleApp">
         <item name="android:gravity">center</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/tv_pin_nbr</item>
-        <item name="android:textColor">@color/black</item>
     </style>
-    <style name="ButtonMain" parent="Widget.AppCompat.Button">
-        <item name="textAllCaps">false</item>
+
+    <style name="TextView.Title" parent="SimpleApp">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
     </style>
+
 </resources>
