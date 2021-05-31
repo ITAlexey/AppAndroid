@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Pin Code</string>
+    <string name="app_name">Pin code</string>
     <string name="setUpBtn">Set up\npin code</string>
-    <string name="resetBtn">Reset\npin Code</string>
+    <string name="resetBtn">Reset\npin code</string>
 
     <string name="title_logout">Enter pin code</string>
     <string name="title_reset">Repeat old pin code\n to reset</string>

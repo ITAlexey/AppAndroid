@@ -19,7 +19,7 @@ class PinAdapter(
 
     override fun onBindViewHolder(holder: PinCodeHolder, position: Int) {
         var color = if (position < currentPinLen) {
-            R.color.blue
+            R.color.turquoise
         } else {
             R.color.gray
         }

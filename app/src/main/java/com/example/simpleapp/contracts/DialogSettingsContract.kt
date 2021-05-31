@@ -5,14 +5,18 @@ import com.example.simpleapp.BaseView
 
 interface DialogSettingsContract {
     interface View : BaseView {
-       fun applyLightTheme()
+        fun changeAppTheme(themeType: Int)
 
-       fun applyDarkTheme()
+        fun turnOnLightThemeButton()
 
-       fun applyDefaultSystemTheme()
+        fun turnOnDarkThemeButton()
+
+        fun turnOnDefaultSystemButton()
     }
 
     interface Presenter : BasePresenter<View> {
         fun onChangeThemeButtonClicked(themeType: Int)
+
+        fun onViewCreated()
     }
 }

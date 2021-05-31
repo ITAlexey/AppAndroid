@@ -2,7 +2,9 @@ package com.example.simpleapp.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.commit
+import com.example.simpleapp.BaseApp
 import com.example.simpleapp.R
 import com.example.simpleapp.contracts.MainActivityContract
 import com.example.simpleapp.databinding.ActivityMainBinding
@@ -16,11 +18,13 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        presenter = MainActivityPresenter(this)
+        val themeModel = (applicationContext as BaseApp).themeModel
+        presenter = MainActivityPresenter(this, themeModel)
         setContentView(binding.root)
         if (savedInstanceState == null) {
             showPinCodeFragment()
         }
+        presenter.onViewCreated()
     }
 
     override fun onStart() {
@@ -36,7 +40,11 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     override fun openSettingsDialog() {
-        val dialog = DialogSettingsFragment.newInstance(0)
+        val dialog = DialogAppThemesFragment.newInstance()
         dialog.show(supportFragmentManager, "hello")
+    }
+
+    override fun applyAppTheme(themeMode: Int) {
+        AppCompatDelegate.setDefaultNightMode(themeMode)
     }
 }

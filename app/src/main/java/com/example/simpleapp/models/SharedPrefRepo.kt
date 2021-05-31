@@ -1,37 +1,34 @@
 package com.example.simpleapp.models
 
 import android.content.SharedPreferences
-import com.example.simpleapp.utils.EncryptionUtils
 import java.lang.IllegalStateException
 
 class SharedPrefRepo private constructor(private val sharedPreferences: SharedPreferences) {
+    fun getIntByKey(key: String, defaultValue: Int): Int =
+        sharedPreferences.getInt(key, defaultValue)
 
-    fun getPin(): String {
-        val pin = sharedPreferences.getString(KEY_PIN_CODE, "") ?: ""
-        return if (pin.isNotEmpty()) EncryptionUtils.decryptData(pin) else ""
-    }
+    fun getStringByKey(key: String, defaultValue: String): String =
+        sharedPreferences.getString(key, defaultValue) ?: ""
 
-    fun getApplicationTheme(): Int =
-        sharedPreferences.getInt(KEY_APP_THEME, 0)
-
-    fun savePin(pinToBeSaved: String) =
+    fun removeDataByKey(key: String) =
         sharedPreferences
             .edit()
-            .putString(KEY_PIN_CODE, EncryptionUtils.encryptData(pinToBeSaved))
+            .remove(key)
             .apply()
 
-    fun removePin() =
+    fun putStringByKey(key: String, data: String) =
         sharedPreferences
             .edit()
-            .remove(KEY_PIN_CODE)
+            .putString(key, data)
             .apply()
 
-    fun isPinCorrect(pinToBeCompared: String): Boolean =
-        pinToBeCompared == getPin()
+    fun putIntByKey(key: String, data: Int) =
+        sharedPreferences
+            .edit()
+            .putInt(key, data)
+            .apply()
 
     companion object {
-        private const val KEY_PIN_CODE = "PIN_CODE"
-        private const val KEY_APP_THEME = "APP_THEME"
         private var INITIALIZED: SharedPrefRepo? = null
 
         fun initialized(sharedPreferences: SharedPreferences) {
@@ -39,6 +36,7 @@ class SharedPrefRepo private constructor(private val sharedPreferences: SharedPr
         }
 
         fun getInstance(): SharedPrefRepo =
-            INITIALIZED ?: throw IllegalStateException("SharedPrefRepo class has not been initialized!")
+            INITIALIZED
+                ?: throw IllegalStateException("SharedPrefRepo class has not been initialized!")
     }
 }

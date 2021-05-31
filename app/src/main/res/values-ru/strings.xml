@@ -22,4 +22,7 @@
     <string name="second_title">Добро пожаловать</string>
     <string name="message_sum">Сумма пин кода\nсоставляет:</string>
     <string name="img_btn_settings">Нажать сюда, чтобы изменить тему приложения</string>
+    <string name="btn_light_theme">Светлая</string>
+    <string name="btn_dark_theme">Темная</string>
+    <string name="btn_default_theme">Системная</string>
 </resources>

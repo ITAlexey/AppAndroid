@@ -16,15 +16,12 @@
 
         <TextView
             android:id="@+id/tvTitle"
+            style="@style/TextView.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/main_margin"
-            android:gravity="center"
             android:minLines="2"
             android:text="@string/title_logout"
-            android:textColor="@color/black"
-            android:textSize="28sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -42,13 +39,11 @@
             tools:itemCount="4"
             tools:listitem="@layout/item_rv_pin" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnReset"
-            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/main_margin"
-            android:background="@drawable/btn_main_background"
             android:text="@string/resetBtn"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"

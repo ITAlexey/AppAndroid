@@ -14,10 +14,12 @@ object EncryptionUtils {
     private val keyStore by lazy { KeyStore.getInstance(ANDROID_KEY_STORE).apply { load(null) } }
 
     fun decryptData(data: String): String {
-        val privateKey = getPrivateKey()
-        cipher.init(Cipher.DECRYPT_MODE, privateKey)
-        val encryptedData = Base64.decode(data, Base64.DEFAULT)
-        return String(cipher.doFinal(encryptedData))
+        return if (data.isNotEmpty()) {
+            val privateKey = getPrivateKey()
+            cipher.init(Cipher.DECRYPT_MODE, privateKey)
+            val encryptedData = Base64.decode(data, Base64.DEFAULT)
+            String(cipher.doFinal(encryptedData))
+        } else ""
     }
 
     fun encryptData(data: String): String {

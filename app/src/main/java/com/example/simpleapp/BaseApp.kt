@@ -4,10 +4,13 @@ import android.app.Application
 import android.content.Context
 import com.example.simpleapp.models.PinModel
 import com.example.simpleapp.models.SharedPrefRepo
+import com.example.simpleapp.models.ThemeModel
 import com.example.simpleapp.utils.EncryptionUtils
 
 class BaseApp : Application() {
     lateinit var pinModel: PinModel
+        private set
+    lateinit var themeModel: ThemeModel
         private set
 
     override fun onCreate() {
@@ -17,6 +20,7 @@ class BaseApp : Application() {
         SharedPrefRepo.initialized(sharedPreferences)
         val sharedPrefRepo = SharedPrefRepo.getInstance()
         pinModel = PinModel(sharedPrefRepo)
+        themeModel = ThemeModel(sharedPrefRepo)
     }
 
     companion object {
