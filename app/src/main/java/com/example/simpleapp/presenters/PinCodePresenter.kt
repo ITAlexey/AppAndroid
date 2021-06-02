@@ -11,53 +11,67 @@ class PinCodePresenter(
     private val pinModel: PinModel,
 ) : PinCodeFragmentContract.Presenter {
 
-    init {
-        modifyViewsAppearance()
-        if (pinModel.isPinNotEmpty) {
-            view.updateVisibilityBackspaceButton(isVisible = true)
+    override fun onViewCreated() {
+        processPinState()
+    }
+
+    private fun processPinState() {
+        val backspaceButtonVisibility = pinModel.isPinNotEmpty
+        when (pinModel.pinState) {
+            PinState.CREATE -> updateViewsAppearance(
+                R.string.title_create,
+                backspaceButtonVisibility
+            )
+            PinState.CONFIRM -> updateViewsAppearance(
+                R.string.title_confirm,
+                backspaceButtonVisibility
+            )
+            PinState.LOGOUT -> updateViewsAppearance(
+                R.string.title_logout,
+                backspaceButtonVisibility,
+                resetButtonVisibility = true
+            )
+            PinState.RESET -> updateViewsAppearance(R.string.title_reset, backspaceButtonVisibility)
+            PinState.LOGIN -> Unit
         }
+    }
+
+    private fun updateViewsAppearance(
+        @StringRes titleTextResId: Int,
+        backspaceVisibility: Boolean,
+        resetButtonVisibility: Boolean = false
+    ) {
+        view.setTitleText(titleTextResId)
+        view.updateVisibilityResetButton(resetButtonVisibility)
+        view.updateVisibilityBackspaceButton(backspaceVisibility)
         view.updatePinField(pinModel.pinLength)
     }
 
     override fun onNumberButtonClicked(number: Int) {
         if (!pinModel.isPinFull) {
             pinModel.addNumber(number)
-            view.updateVisibilityBackspaceButton(isVisible = true)
             processPinIfFull()
-            view.updatePinField(pinModel.pinLength)
-        }
-    }
-
-    override fun onResetButtonClicked() {
-        pinModel.resetPin()
-        pinModel.updatePinState(PinState.RESET)
-        view.updatePinField()
-        modifyViewsAppearance()
-    }
-
-    override fun onBackspaceButtonClicked() {
-        if (pinModel.isPinNotEmpty) {
-            pinModel.removeNumber()
-            view.updatePinField(pinModel.pinLength)
-        }
-        if (pinModel.isPinEmpty) {
-            view.updateVisibilityBackspaceButton(isVisible = false)
         }
     }
 
     private fun processPinIfFull() {
         if (pinModel.isPinFull) {
-            var result = false to PinState.LOGOUT
-            when (pinModel.pinState) {
-                PinState.CREATE -> result = pinModel.createPinIfSuccess()
-                PinState.CONFIRM -> result = pinModel.savePinIfSuccess()
-                PinState.LOGOUT -> result = pinModel.loginIfSuccess()
-                PinState.RESET -> result = pinModel.deletePinIfSuccess()
-                PinState.LOGIN -> Unit
-            }
-            view.updateVisibilityBackspaceButton(isVisible = false)
-            processResult(result.first, result.second)
+            val result = getProcessResult()
             pinModel.resetPin()
+            processResult(result.first, result.second)
+        } else {
+            view.updateVisibilityBackspaceButton(pinModel.isPinNotEmpty)
+            view.updatePinField(pinModel.pinLength)
+        }
+    }
+
+    private fun getProcessResult(): Pair<Boolean, PinState> {
+        return when (pinModel.pinState) {
+            PinState.CREATE -> pinModel.createPinIfSuccess()
+            PinState.CONFIRM -> pinModel.savePinIfSuccess()
+            PinState.LOGOUT -> pinModel.loginIfSuccess()
+            PinState.RESET -> pinModel.deletePinIfSuccess()
+            PinState.LOGIN -> false to PinState.LOGOUT
         }
     }
 
@@ -82,22 +96,7 @@ class PinCodePresenter(
             PinState.LOGOUT, PinState.LOGIN, PinState.CREATE -> Unit
         }
         pinModel.updatePinState(newPinState)
-        modifyViewsAppearance()
-    }
-
-    private fun modifyViewsAppearance() {
-        when (pinModel.pinState) {
-            PinState.CREATE -> modifyAppearance(R.string.title_create, isVisible = false)
-            PinState.CONFIRM -> modifyAppearance(R.string.title_confirm, isVisible = false)
-            PinState.LOGOUT -> modifyAppearance(R.string.title_logout, isVisible = true)
-            PinState.RESET -> modifyAppearance(R.string.title_reset, isVisible = false)
-            PinState.LOGIN -> Unit
-        }
-    }
-
-    private fun modifyAppearance(@StringRes titleTextResId: Int, isVisible: Boolean) {
-        view.setTitleText(titleTextResId)
-        view.updateVisibilityResetButton(isVisible)
+        processPinState()
     }
 
     private fun processFailMessage() {
@@ -107,6 +106,23 @@ class PinCodePresenter(
                 view.showPopupMessage(R.string.popup_different)
             PinState.LOGOUT -> view.showPopupMessage(R.string.popup_fail)
             PinState.LOGIN -> Unit
+        }
+        processPinState()
+    }
+
+    override fun onResetButtonClicked() {
+        pinModel.resetPin()
+        pinModel.updatePinState(PinState.RESET)
+        processPinState()
+    }
+
+    override fun onBackspaceButtonClicked() {
+        if (pinModel.isPinNotEmpty) {
+            pinModel.removeNumber()
+            view.updatePinField(pinModel.pinLength)
+        }
+        if (pinModel.isPinEmpty) {
+            view.updateVisibilityBackspaceButton(isVisible = false)
         }
     }
 }

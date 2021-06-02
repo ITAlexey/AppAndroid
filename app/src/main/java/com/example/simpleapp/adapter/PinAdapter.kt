@@ -9,7 +9,7 @@ import com.example.simpleapp.R
 import com.example.simpleapp.databinding.ItemRvPinBinding
 
 class PinAdapter(
-    @IntRange(from = 0) private var currentPinLen: Int = 0
+    @IntRange(from = 0) private var currentPinLen: Int
 ) : RecyclerView.Adapter<PinAdapter.PinCodeHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PinCodeHolder {

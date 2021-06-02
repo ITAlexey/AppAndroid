@@ -15,6 +15,7 @@ import com.example.simpleapp.R
 import com.example.simpleapp.adapter.PinAdapter
 import com.example.simpleapp.contracts.PinCodeFragmentContract
 import com.example.simpleapp.databinding.FragmentPinCodeBinding
+import com.example.simpleapp.models.pincode.PinModel
 import com.example.simpleapp.presenters.PinCodePresenter
 
 class PinCodeFragment : Fragment(), PinCodeFragmentContract.View {
@@ -32,9 +33,48 @@ class PinCodeFragment : Fragment(), PinCodeFragmentContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapter()
+
+        val model = (requireActivity().applicationContext as BaseApp).pinModel
+
+        initAdapter(model)
         initListeners()
-        initPresenter()
+        presenter = PinCodePresenter(this, model)
+
+        presenter.onViewCreated()
+    }
+
+    private fun initAdapter(pinModel: PinModel) {
+        pinAdapter = PinAdapter(pinModel.pinLength)
+        binding?.rvPinCode?.apply {
+            adapter = pinAdapter
+            setHasFixedSize(true)
+        }
+    }
+
+    private fun initListeners() {
+        val keyboardBinding = binding?.conLNumbers
+        keyboardBinding?.apply {
+            tvNumber0.setOnClickListener { onKeyboardButtonClicked(0, it) }
+            tvNumber1.setOnClickListener { onKeyboardButtonClicked(1, it) }
+            tvNumber2.setOnClickListener { onKeyboardButtonClicked(2, it) }
+            tvNumber3.setOnClickListener { onKeyboardButtonClicked(3, it) }
+            tvNumber4.setOnClickListener { onKeyboardButtonClicked(4, it) }
+            tvNumber5.setOnClickListener { onKeyboardButtonClicked(5, it) }
+            tvNumber6.setOnClickListener { onKeyboardButtonClicked(6, it) }
+            tvNumber7.setOnClickListener { onKeyboardButtonClicked(7, it) }
+            tvNumber8.setOnClickListener { onKeyboardButtonClicked(8, it) }
+            tvNumber9.setOnClickListener { onKeyboardButtonClicked(9, it) }
+            imgBackSpace.setOnClickListener { onKeyboardButtonClicked(item = it) }
+        }
+        binding?.btnReset?.setOnClickListener { presenter.onResetButtonClicked() }
+    }
+
+    private fun onKeyboardButtonClicked(number: Int = -1, item: View) {
+        animateKeyboardButton(item)
+        when {
+            number < 0 -> presenter.onBackspaceButtonClicked()
+            else -> presenter.onNumberButtonClicked(number)
+        }
     }
 
     override fun showPopupMessage(@StringRes popupTextResId: Int) =
@@ -64,52 +104,12 @@ class PinCodeFragment : Fragment(), PinCodeFragmentContract.View {
         binding?.tvTitle?.text = resources.getString(titleTextResId)
     }
 
-    private fun initPresenter() {
-        val app = requireActivity().applicationContext as BaseApp
-        val model = app.pinModel
-        presenter = PinCodePresenter(this, model)
-    }
-
-    private fun initAdapter() {
-        pinAdapter = PinAdapter()
-        binding?.rvPinCode?.apply {
-            adapter = pinAdapter
-            setHasFixedSize(true)
-        }
-    }
-
-    private fun initListeners() {
-        val keyboardBinding = binding?.conLNumbers
-        keyboardBinding?.apply {
-            tvNumber0.setOnClickListener { onKeyboardButtonClicked(0, it) }
-            tvNumber1.setOnClickListener { onKeyboardButtonClicked(1, it) }
-            tvNumber2.setOnClickListener { onKeyboardButtonClicked(2, it) }
-            tvNumber3.setOnClickListener { onKeyboardButtonClicked(3, it) }
-            tvNumber4.setOnClickListener { onKeyboardButtonClicked(4, it) }
-            tvNumber5.setOnClickListener { onKeyboardButtonClicked(5, it) }
-            tvNumber6.setOnClickListener { onKeyboardButtonClicked(6, it) }
-            tvNumber7.setOnClickListener { onKeyboardButtonClicked(7, it) }
-            tvNumber8.setOnClickListener { onKeyboardButtonClicked(8, it) }
-            tvNumber9.setOnClickListener { onKeyboardButtonClicked(9, it) }
-            imgBackSpace.setOnClickListener { onKeyboardButtonClicked(item = it) }
-        }
-        binding?.btnReset?.setOnClickListener { presenter.onResetButtonClicked() }
-    }
-
     private fun updateViewVisibility(view: View?, isVisible: Boolean) {
         view?.isInvisible = !isVisible
     }
 
     private fun animateKeyboardButton(item: View) =
         item.startAnimation(AnimationUtils.loadAnimation(item.context, R.anim.btn_clicked))
-
-    private fun onKeyboardButtonClicked(number: Int = -1, item: View) {
-        animateKeyboardButton(item)
-        when {
-            number < 0 -> presenter.onBackspaceButtonClicked()
-            else -> presenter.onNumberButtonClicked(number)
-        }
-    }
 
     companion object {
         fun newInstance() =

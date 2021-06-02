@@ -20,6 +20,8 @@ interface PinCodeFragmentContract {
     }
 
     interface Presenter: BasePresenter<View> {
+        fun onViewCreated()
+
         fun onNumberButtonClicked(number: Int)
 
         fun onResetButtonClicked()
