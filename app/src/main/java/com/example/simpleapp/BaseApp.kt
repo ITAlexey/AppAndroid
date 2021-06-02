@@ -2,10 +2,10 @@ package com.example.simpleapp
 
 import android.app.Application
 import android.content.Context
-import com.example.simpleapp.models.PinModel
+import com.example.simpleapp.models.pincode.PinModel
 import com.example.simpleapp.models.SharedPrefRepo
 import com.example.simpleapp.models.ThemeModel
-import com.example.simpleapp.utils.EncryptionUtils
+import com.example.simpleapp.models.pincode.EncryptionUtils
 
 class BaseApp : Application() {
     lateinit var pinModel: PinModel

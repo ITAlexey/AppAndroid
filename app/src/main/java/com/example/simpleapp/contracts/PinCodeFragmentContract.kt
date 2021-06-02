@@ -1,6 +1,5 @@
 package com.example.simpleapp.contracts
 
-import android.os.Bundle
 import androidx.annotation.StringRes
 import com.example.simpleapp.BasePresenter
 import com.example.simpleapp.BaseView
@@ -26,7 +25,5 @@ interface PinCodeFragmentContract {
         fun onResetButtonClicked()
 
         fun onBackspaceButtonClicked()
-
-        fun onSavedInstanceStateCalled(outState: Bundle)
     }
 }

@@ -34,12 +34,7 @@ class PinCodeFragment : Fragment(), PinCodeFragmentContract.View {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         initListeners()
-        initPresenter(savedInstanceState)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        presenter.onSavedInstanceStateCalled(outState)
+        initPresenter()
     }
 
     override fun showPopupMessage(@StringRes popupTextResId: Int) =
@@ -69,10 +64,10 @@ class PinCodeFragment : Fragment(), PinCodeFragmentContract.View {
         binding?.tvTitle?.text = resources.getString(titleTextResId)
     }
 
-    private fun initPresenter(outState: Bundle?) {
+    private fun initPresenter() {
         val app = requireActivity().applicationContext as BaseApp
         val model = app.pinModel
-        presenter = PinCodePresenter(this, model, outState)
+        presenter = PinCodePresenter(this, model)
     }
 
     private fun initAdapter() {

@@ -1,4 +1,4 @@
-package com.example.simpleapp.utils
+package com.example.simpleapp.models.pincode
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties

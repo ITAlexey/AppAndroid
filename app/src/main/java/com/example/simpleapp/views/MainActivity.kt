@@ -9,6 +9,7 @@ import com.example.simpleapp.R
 import com.example.simpleapp.contracts.MainActivityContract
 import com.example.simpleapp.databinding.ActivityMainBinding
 import com.example.simpleapp.presenters.MainActivityPresenter
+import com.example.simpleapp.views.fragments.DialogAppThemesFragment
 import com.example.simpleapp.views.fragments.PinCodeFragment
 
 class MainActivity : AppCompatActivity(), MainActivityContract.View {

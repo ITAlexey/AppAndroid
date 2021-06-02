@@ -1,9 +1,9 @@
-package com.example.simpleapp.models.utils
+package com.example.simpleapp.models.pincode
 
 object PinParser {
     private lateinit var pin: String
     fun checkOnSimplicity(pin: String): Boolean {
-        this.pin = pin
+        PinParser.pin = pin
         return isPinConsistsOfSameNumbers() || isPinConsistsOfNumbersIncreasedByOne() || isPinConsistsOfNumbersDecreasedByOne()
     }
 

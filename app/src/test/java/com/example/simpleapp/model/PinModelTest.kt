@@ -1,6 +1,6 @@
-package com.example.simpleapp
+package com.example.simpleapp.model
 
-import com.example.simpleapp.models.PinModel
+import com.example.simpleapp.models.pincode.PinModel
 import com.example.simpleapp.models.SharedPrefRepo
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times

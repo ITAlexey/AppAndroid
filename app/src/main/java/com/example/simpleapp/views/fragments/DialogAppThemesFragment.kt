@@ -1,4 +1,4 @@
-package com.example.simpleapp.views
+package com.example.simpleapp.views.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,7 @@ import com.example.simpleapp.R
 import com.example.simpleapp.contracts.DialogSettingsContract
 import com.example.simpleapp.databinding.FragmentDialogAppThemesBinding
 import com.example.simpleapp.presenters.DialogAppThemesPresenter
+import com.example.simpleapp.views.MainActivity
 
 class DialogAppThemesFragment : DialogFragment(), DialogSettingsContract.View {
     private var binding: FragmentDialogAppThemesBinding? = null
