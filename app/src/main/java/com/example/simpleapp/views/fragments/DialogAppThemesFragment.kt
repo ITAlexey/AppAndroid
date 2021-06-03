@@ -8,14 +8,14 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.DialogFragment
 import com.example.simpleapp.BaseApp
 import com.example.simpleapp.R
-import com.example.simpleapp.contracts.DialogSettingsContract
+import com.example.simpleapp.contracts.DialogAppThemeContract
 import com.example.simpleapp.databinding.FragmentDialogAppThemesBinding
 import com.example.simpleapp.presenters.DialogAppThemesPresenter
 import com.example.simpleapp.views.MainActivity
 
-class DialogAppThemesFragment : DialogFragment(), DialogSettingsContract.View {
+class DialogAppThemesFragment : DialogFragment(), DialogAppThemeContract.View {
     private var binding: FragmentDialogAppThemesBinding? = null
-    private lateinit var presenter: DialogSettingsContract.Presenter
+    private lateinit var presenter: DialogAppThemeContract.Presenter
 
     override fun onCreateView(
         inflater: LayoutInflater,

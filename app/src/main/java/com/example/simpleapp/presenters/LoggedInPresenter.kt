@@ -5,10 +5,9 @@ import com.example.simpleapp.models.pincode.PinModel
 
 class LoggedInPresenter(
     private val view: LoggedInContract.View,
-    pinModel: PinModel
 ) : LoggedInContract.Presenter {
 
-    init {
+    override fun onViewCreated() {
         view.showPinSumResult()
     }
 

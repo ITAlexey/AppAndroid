@@ -3,7 +3,7 @@ package com.example.simpleapp.contracts
 import com.example.simpleapp.BasePresenter
 import com.example.simpleapp.BaseView
 
-interface DialogSettingsContract {
+interface DialogAppThemeContract {
     interface View : BaseView {
         fun changeAppTheme(themeType: Int)
 

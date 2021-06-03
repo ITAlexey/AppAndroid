@@ -12,5 +12,7 @@ interface LoggedInContract {
 
     interface Presenter : BasePresenter<View> {
         fun onLogOutButtonClicked()
+
+        fun onViewCreated()
     }
 }

@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.simpleapp.BaseApp
 import com.example.simpleapp.contracts.LoggedInContract
 import com.example.simpleapp.databinding.FragmentLoggedInBinding
 import com.example.simpleapp.presenters.LoggedInPresenter
@@ -17,6 +16,7 @@ class LoggedInFragment : Fragment(), LoggedInContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         pinSumResult = arguments?.getInt(ARG_PIN_SUM) ?: 0
     }
     override fun onCreateView(
@@ -29,17 +29,14 @@ class LoggedInFragment : Fragment(), LoggedInContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initPresenter()
-        initListeners()
+
+        presenter = LoggedInPresenter(this)
+        initButtonListener()
+
+        presenter.onViewCreated()
     }
 
-    private fun initPresenter() {
-        val app = requireActivity().applicationContext as BaseApp
-        val model = app.pinModel
-        presenter = LoggedInPresenter(this, model)
-    }
-
-    private fun initListeners() {
+    private fun initButtonListener() {
         binding?.imgLogOut?.setOnClickListener{ presenter.onLogOutButtonClicked() }
     }
 

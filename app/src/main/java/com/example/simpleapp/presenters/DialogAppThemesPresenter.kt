@@ -1,14 +1,14 @@
 package com.example.simpleapp.presenters
 
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.simpleapp.contracts.DialogSettingsContract
+import com.example.simpleapp.contracts.DialogAppThemeContract
 import com.example.simpleapp.models.ThemeModel
 import java.lang.IllegalStateException
 
 class DialogAppThemesPresenter(
-    private val view: DialogSettingsContract.View,
+    private val view: DialogAppThemeContract.View,
     private val themeModel: ThemeModel
-) : DialogSettingsContract.Presenter {
+) : DialogAppThemeContract.Presenter {
 
     override fun onChangeThemeButtonClicked(themeType: Int) {
         view.changeAppTheme(themeType)
