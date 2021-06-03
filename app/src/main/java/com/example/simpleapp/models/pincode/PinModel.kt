@@ -7,6 +7,8 @@ import com.example.simpleapp.models.SharedPrefRepo
 class PinModel(private val sharedPrefRepo: SharedPrefRepo) {
     private var confirmationPin: String = ""
     private var temporaryPin: String = ""
+    var processedPinResult = false to PinState.CREATE
+        private set
     var pinState: PinState
         private set
 
@@ -14,7 +16,7 @@ class PinModel(private val sharedPrefRepo: SharedPrefRepo) {
         pinState = if (getPin().isNotEmpty()) {
             PinState.LOGOUT
         } else {
-           PinState.CREATE
+            PinState.CREATE
         }
     }
 
@@ -55,36 +57,40 @@ class PinModel(private val sharedPrefRepo: SharedPrefRepo) {
         temporaryPin = ""
     }
 
-    fun createPinIfSuccess(): Pair<Boolean, PinState> {
+    fun createPinIfSuccess() {
         val isPinSimple: Boolean = PinParser.checkOnSimplicity(temporaryPin)
-        if (!isPinSimple) {
+        processedPinResult = if (!isPinSimple) {
             confirmationPin = temporaryPin
-            return true to PinState.CONFIRM
+            true to PinState.CONFIRM
+        } else {
+            false to PinState.CREATE
         }
-        return false to PinState.CREATE
     }
 
-    fun deletePinIfSuccess(): Pair<Boolean, PinState> {
-        if (isPinCorrect(temporaryPin)) {
+    fun deletePinIfSuccess() {
+        processedPinResult = if (isPinCorrect(temporaryPin)) {
             removePin()
-            return true to PinState.CREATE
+            true to PinState.CREATE
+        } else {
+            false to PinState.LOGOUT
         }
-        return false to PinState.LOGOUT
     }
 
-    fun loginIfSuccess(): Pair<Boolean, PinState> {
-        if (isPinCorrect(temporaryPin)) {
-           return true to PinState.LOGIN
+    fun loginIfSuccess() {
+        processedPinResult = if (isPinCorrect(temporaryPin)) {
+            true to PinState.LOGIN
+        } else {
+            false to PinState.LOGOUT
         }
-        return false to PinState.LOGOUT
     }
 
-    fun savePinIfSuccess(): Pair<Boolean, PinState> {
-        if (confirmationPin == temporaryPin) {
+    fun savePinIfSuccess() {
+        processedPinResult = if (confirmationPin == temporaryPin) {
             savePin()
-            return true to PinState.LOGOUT
+            true to PinState.LOGOUT
+        } else {
+            false to PinState.CONFIRM
         }
-        return false to PinState.CONFIRM
     }
 
     private fun getPin(): String {

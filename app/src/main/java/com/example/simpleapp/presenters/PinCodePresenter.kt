@@ -31,7 +31,9 @@ class PinCodePresenter(
                 backspaceButtonVisibility,
                 resetButtonVisibility = true
             )
-            PinState.RESET -> updateViewsAppearance(R.string.title_reset, backspaceButtonVisibility)
+            PinState.RESET -> updateViewsAppearance(
+                R.string.title_reset,
+                backspaceButtonVisibility)
             PinState.LOGIN -> Unit
         }
     }
@@ -56,29 +58,31 @@ class PinCodePresenter(
 
     private fun processPinIfFull() {
         if (pinModel.isPinFull) {
-            val result = getProcessResult()
+            processPinStateTransition()
             pinModel.resetPin()
-            processResult(result.first, result.second)
+            processResult()
         } else {
             view.updateVisibilityBackspaceButton(pinModel.isPinNotEmpty)
             view.updatePinField(pinModel.pinLength)
         }
     }
 
-    private fun getProcessResult(): Pair<Boolean, PinState> {
-        return when (pinModel.pinState) {
+    private fun processPinStateTransition() {
+        when (pinModel.pinState) {
             PinState.CREATE -> pinModel.createPinIfSuccess()
             PinState.CONFIRM -> pinModel.savePinIfSuccess()
             PinState.LOGOUT -> pinModel.loginIfSuccess()
             PinState.RESET -> pinModel.deletePinIfSuccess()
-            PinState.LOGIN -> false to PinState.LOGOUT
+            PinState.LOGIN -> Unit
         }
     }
 
-    private fun processResult(isSuccess: Boolean, newPinState: PinState) {
+    private fun processResult() {
+        val processedResultIsSuccess = pinModel.processedPinResult.first
+        val processedResultNewPinState = pinModel.processedPinResult.second
         when {
-            newPinState == PinState.LOGIN -> processLoginState()
-            isSuccess -> processSuccessMessage(newPinState)
+            processedResultNewPinState == PinState.LOGIN -> processLoginState()
+            processedResultIsSuccess -> processSuccessMessage(processedResultNewPinState)
             else -> processFailMessage()
         }
     }
