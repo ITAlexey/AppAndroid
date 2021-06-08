@@ -8,6 +8,7 @@ import com.example.simpleapp.BaseApp
 import com.example.simpleapp.R
 import com.example.simpleapp.contracts.MainActivityContract
 import com.example.simpleapp.databinding.ActivityMainBinding
+import com.example.simpleapp.models.themes.ThemeApp
 import com.example.simpleapp.presenters.MainActivityPresenter
 import com.example.simpleapp.views.fragments.DialogAppThemesFragment
 import com.example.simpleapp.views.fragments.PinCodeFragment
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         dialog.show(supportFragmentManager, "hello")
     }
 
-    override fun applyAppTheme(themeMode: Int) {
-        AppCompatDelegate.setDefaultNightMode(themeMode)
+    override fun applyAppTheme(themeType: ThemeApp) {
+        AppCompatDelegate.setDefaultNightMode(themeType.themeMode)
     }
 }

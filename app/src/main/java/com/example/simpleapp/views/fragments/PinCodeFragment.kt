@@ -15,7 +15,6 @@ import com.example.simpleapp.R
 import com.example.simpleapp.adapter.PinAdapter
 import com.example.simpleapp.contracts.PinCodeFragmentContract
 import com.example.simpleapp.databinding.FragmentPinCodeBinding
-import com.example.simpleapp.models.pincode.PinModel
 import com.example.simpleapp.presenters.PinCodePresenter
 
 class PinCodeFragment : Fragment(), PinCodeFragmentContract.View {
@@ -36,15 +35,15 @@ class PinCodeFragment : Fragment(), PinCodeFragmentContract.View {
 
         val model = (requireActivity().applicationContext as BaseApp).pinModel
 
-        initAdapter(model)
+        initAdapter()
         initListeners()
         presenter = PinCodePresenter(this, model)
 
         presenter.onViewCreated()
     }
 
-    private fun initAdapter(pinModel: PinModel) {
-        pinAdapter = PinAdapter(pinModel.pinLength)
+    private fun initAdapter() {
+        pinAdapter = PinAdapter()
         binding?.rvPinCode?.apply {
             adapter = pinAdapter
             setHasFixedSize(true)

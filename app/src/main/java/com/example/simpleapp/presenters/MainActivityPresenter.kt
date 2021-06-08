@@ -1,7 +1,7 @@
 package com.example.simpleapp.presenters
 
 import com.example.simpleapp.contracts.MainActivityContract
-import com.example.simpleapp.models.ThemeModel
+import com.example.simpleapp.models.themes.ThemeModel
 
 class MainActivityPresenter(
     private val view: MainActivityContract.View,
@@ -13,7 +13,7 @@ class MainActivityPresenter(
     }
 
     override fun onViewCreated() {
-        val themeMode = themeModel.getTheme()
-        view.applyAppTheme(themeMode)
+        val theme = themeModel.getSavedTheme()
+        view.applyAppTheme(theme)
     }
 }

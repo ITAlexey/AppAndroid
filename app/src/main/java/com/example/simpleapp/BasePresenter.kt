@@ -1,3 +1,5 @@
 package com.example.simpleapp
 
-interface BasePresenter<V: BaseView>
+interface BasePresenter<V: BaseView> {
+    fun onViewCreated()
+}

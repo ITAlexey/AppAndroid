@@ -1,13 +1,10 @@
 package com.example.simpleapp.presenter
 
-import androidx.appcompat.app.AppCompatDelegate
 import com.example.simpleapp.contracts.DialogAppThemeContract
-import com.example.simpleapp.models.ThemeModel
+import com.example.simpleapp.models.themes.ThemeApp
+import com.example.simpleapp.models.themes.ThemeModel
 import com.example.simpleapp.presenters.DialogAppThemesPresenter
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import org.junit.jupiter.api.Test
 
 class DialogAppThemePresenterTest {
@@ -17,7 +14,7 @@ class DialogAppThemePresenterTest {
 
     @Test
     fun `onViewCreated _ when light theme is chosen _ verify turnOnLightThemeButton is called`() {
-        whenever(themeModel.getTheme()).thenReturn(LIGHT)
+        whenever(themeModel.getSavedTheme()).thenReturn(ThemeApp.LIGHT)
 
         presenter.onViewCreated()
 
@@ -26,7 +23,7 @@ class DialogAppThemePresenterTest {
 
     @Test
     fun `onViewCreated _ when dark theme is chosen _ verify turnOnDarkThemeButton is called`() {
-        whenever(themeModel.getTheme()).thenReturn(NIGHT)
+        whenever(themeModel.getSavedTheme()).thenReturn(ThemeApp.DARK)
 
         presenter.onViewCreated()
 
@@ -35,7 +32,7 @@ class DialogAppThemePresenterTest {
 
     @Test
     fun `onViewCreated _ when default system theme is chosen _ verify turnOnLightThemeButton is called`() {
-        whenever(themeModel.getTheme()).thenReturn(DEFAULT)
+        whenever(themeModel.getSavedTheme()).thenReturn(ThemeApp.SYSTEM)
 
         presenter.onViewCreated()
 
@@ -44,21 +41,8 @@ class DialogAppThemePresenterTest {
 
     @Test
     fun `onChangeThemeButtonClicked _ verify changeAppTheme is called`() {
-        presenter.onChangeThemeButtonClicked(LIGHT)
+        presenter.onChangeThemeButtonClicked(ThemeApp.LIGHT)
 
-        verify(view, times(1)).changeAppTheme(LIGHT)
-    }
-
-    @Test
-    fun `onChangeThemeButtonClicked _ verify saveTheme is called`() {
-        presenter.onChangeThemeButtonClicked(LIGHT)
-
-        verify(themeModel, times(1)).saveTheme(LIGHT)
-    }
-
-    companion object {
-        private const val LIGHT = AppCompatDelegate.MODE_NIGHT_NO
-        private const val NIGHT = AppCompatDelegate.MODE_NIGHT_YES
-        private const val DEFAULT = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        verify(view, times(1)).changeAppTheme(ThemeApp.LIGHT)
     }
 }

@@ -1,7 +1,8 @@
 package com.example.simpleapp.presenter
 
 import com.example.simpleapp.contracts.MainActivityContract
-import com.example.simpleapp.models.ThemeModel
+import com.example.simpleapp.models.themes.ThemeApp
+import com.example.simpleapp.models.themes.ThemeModel
 import com.example.simpleapp.presenters.MainActivityPresenter
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
@@ -16,18 +17,18 @@ class MainActivityPresenterTest {
     private val presenter = MainActivityPresenter(view, themeModel)
 
     @Test
-    fun `onViewCreated _ verify getTheme is called`() {
+    fun `onViewCreated _ verify applyAppTheme is called`() {
+        whenever(themeModel.getSavedTheme()).thenReturn(ThemeApp.LIGHT)
+
         presenter.onViewCreated()
 
-        verify(themeModel, times(1)).getTheme()
+        verify(view, times(1)).applyAppTheme(ThemeApp.LIGHT)
     }
 
     @Test
-    fun `onViewCreated _ verify applyAppTheme is called`() {
-        whenever(themeModel.getTheme()).thenReturn(1)
+    fun `onSettingsButtonClicked _ verify openSettingsDialog is called`() {
+        presenter.onSettingsButtonClicked()
 
-        presenter.onViewCreated()
-
-        verify(view, times(1)).applyAppTheme(1)
+        verify(view, times(1)).openSettingsDialog()
     }
 }

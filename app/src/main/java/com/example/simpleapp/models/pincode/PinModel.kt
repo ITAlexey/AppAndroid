@@ -7,9 +7,13 @@ import com.example.simpleapp.models.SharedPrefRepo
 class PinModel(private val sharedPrefRepo: SharedPrefRepo) {
     private var confirmationPin: String = ""
     private var temporaryPin: String = ""
-    var processedPinResult = false to PinState.CREATE
+    var processedPinStatus = false to PinState.CREATE
         private set
+
     var pinState: PinState
+        private set
+    var isPinSimple: Boolean = true
+        get() = PinParser.checkOnSimplicity(temporaryPin)
         private set
 
     init {
@@ -57,58 +61,32 @@ class PinModel(private val sharedPrefRepo: SharedPrefRepo) {
         temporaryPin = ""
     }
 
-    fun createPinIfSuccess() {
-        val isPinSimple: Boolean = PinParser.checkOnSimplicity(temporaryPin)
-        processedPinResult = if (!isPinSimple) {
-            confirmationPin = temporaryPin
-            true to PinState.CONFIRM
-        } else {
-            false to PinState.CREATE
-        }
+    fun updateProcessedPinStatus(isSuccess: Boolean, newPinState: PinState) {
+        processedPinStatus = isSuccess to newPinState
     }
 
-    fun deletePinIfSuccess() {
-        processedPinResult = if (isPinCorrect(temporaryPin)) {
-            removePin()
-            true to PinState.CREATE
-        } else {
-            false to PinState.LOGOUT
-        }
+    fun checkPinsEquality(): Boolean =
+        confirmationPin == temporaryPin
+
+    fun saveAsConfirmationPin() {
+        confirmationPin = temporaryPin
     }
 
-    fun loginIfSuccess() {
-        processedPinResult = if (isPinCorrect(temporaryPin)) {
-            true to PinState.LOGIN
-        } else {
-            false to PinState.LOGOUT
-        }
-    }
+    fun isPinCorrect(savedPin: String) : Boolean =
+        temporaryPin == savedPin
 
-    fun savePinIfSuccess() {
-        processedPinResult = if (confirmationPin == temporaryPin) {
-            savePin()
-            true to PinState.LOGOUT
-        } else {
-            false to PinState.CONFIRM
-        }
-    }
-
-    private fun getPin(): String {
+    fun getPin(): String {
         val pin = sharedPrefRepo.getStringByKey(KEY_PIN_CODE, "")
         return EncryptionUtils.decryptData(pin)
     }
 
-    private fun savePin() {
+    fun savePin() {
         val encryptedPin = EncryptionUtils.encryptData(confirmationPin)
         sharedPrefRepo.putStringByKey(KEY_PIN_CODE, encryptedPin)
     }
 
-    private fun removePin() =
+    fun removePin() =
         sharedPrefRepo.removeDataByKey(KEY_PIN_CODE)
-
-
-    private fun isPinCorrect(pinToBeCompared: String): Boolean =
-        pinToBeCompared == getPin()
 
     companion object {
         private const val KEY_PIN_CODE = "KEY_PIN_CODE"

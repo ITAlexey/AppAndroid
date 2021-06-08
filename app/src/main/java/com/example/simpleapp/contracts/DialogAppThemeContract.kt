@@ -2,10 +2,11 @@ package com.example.simpleapp.contracts
 
 import com.example.simpleapp.BasePresenter
 import com.example.simpleapp.BaseView
+import com.example.simpleapp.models.themes.ThemeApp
 
 interface DialogAppThemeContract {
     interface View : BaseView {
-        fun changeAppTheme(themeType: Int)
+        fun changeAppTheme(themeType: ThemeApp)
 
         fun turnOnLightThemeButton()
 
@@ -15,8 +16,6 @@ interface DialogAppThemeContract {
     }
 
     interface Presenter : BasePresenter<View> {
-        fun onChangeThemeButtonClicked(themeType: Int)
-
-        fun onViewCreated()
+        fun onChangeThemeButtonClicked(themeType: ThemeApp)
     }
 }

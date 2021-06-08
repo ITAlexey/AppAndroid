@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.example.simpleapp.models.pincode.PinModel
 import com.example.simpleapp.models.SharedPrefRepo
-import com.example.simpleapp.models.ThemeModel
+import com.example.simpleapp.models.themes.ThemeModel
 import com.example.simpleapp.models.pincode.EncryptionUtils
 
 class BaseApp : Application() {

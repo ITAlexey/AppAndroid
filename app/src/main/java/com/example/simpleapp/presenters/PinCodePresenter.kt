@@ -33,7 +33,8 @@ class PinCodePresenter(
             )
             PinState.RESET -> updateViewsAppearance(
                 R.string.title_reset,
-                backspaceButtonVisibility)
+                backspaceButtonVisibility
+            )
             PinState.LOGIN -> Unit
         }
     }
@@ -69,17 +70,54 @@ class PinCodePresenter(
 
     private fun processPinStateTransition() {
         when (pinModel.pinState) {
-            PinState.CREATE -> pinModel.createPinIfSuccess()
-            PinState.CONFIRM -> pinModel.savePinIfSuccess()
-            PinState.LOGOUT -> pinModel.loginIfSuccess()
-            PinState.RESET -> pinModel.deletePinIfSuccess()
+            PinState.CREATE -> createPinIfSuccess()
+            PinState.CONFIRM -> savePinIfSuccess()
+            PinState.LOGOUT -> loginIfSuccess()
+            PinState.RESET -> deletePinIfSuccess()
             PinState.LOGIN -> Unit
         }
     }
 
+    private fun createPinIfSuccess() {
+        if (!pinModel.isPinSimple) {
+            pinModel.saveAsConfirmationPin()
+            pinModel.updateProcessedPinStatus(true, PinState.CONFIRM)
+        } else {
+            pinModel.updateProcessedPinStatus(false, PinState.CREATE)
+        }
+    }
+
+    private fun savePinIfSuccess() {
+        if (pinModel.checkPinsEquality()) {
+            pinModel.savePin()
+            pinModel.updateProcessedPinStatus(true, PinState.LOGOUT)
+        } else {
+            pinModel.updateProcessedPinStatus(false, PinState.CONFIRM )
+        }
+    }
+
+    private fun loginIfSuccess() {
+        val pin = pinModel.getPin()
+        if (pinModel.isPinCorrect(pin)) {
+            pinModel.updateProcessedPinStatus(true, PinState.LOGIN)
+        } else {
+            pinModel.updateProcessedPinStatus(false, PinState.LOGOUT)
+        }
+    }
+
+    private fun deletePinIfSuccess() {
+        val pin = pinModel.getPin()
+        if (pinModel.isPinCorrect(pin)) {
+            pinModel.removePin()
+            pinModel.updateProcessedPinStatus(true, PinState.CREATE)
+        } else {
+            pinModel.updateProcessedPinStatus(false, PinState.LOGOUT)
+        }
+    }
+
     private fun processResult() {
-        val processedResultIsSuccess = pinModel.processedPinResult.first
-        val processedResultNewPinState = pinModel.processedPinResult.second
+        val processedResultIsSuccess = pinModel.processedPinStatus.first
+        val processedResultNewPinState = pinModel.processedPinStatus.second
         when {
             processedResultNewPinState == PinState.LOGIN -> processLoginState()
             processedResultIsSuccess -> processSuccessMessage(processedResultNewPinState)

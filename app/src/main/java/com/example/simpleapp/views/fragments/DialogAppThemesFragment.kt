@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.DialogFragment
 import com.example.simpleapp.BaseApp
 import com.example.simpleapp.R
 import com.example.simpleapp.contracts.DialogAppThemeContract
 import com.example.simpleapp.databinding.FragmentDialogAppThemesBinding
+import com.example.simpleapp.models.themes.ThemeApp
 import com.example.simpleapp.presenters.DialogAppThemesPresenter
 import com.example.simpleapp.views.MainActivity
 
@@ -42,15 +42,15 @@ class DialogAppThemesFragment : DialogFragment(), DialogAppThemeContract.View {
         binding?.apply {
             btnManager.setOnCheckedChangeListener{_, selectedButton ->
                 when(selectedButton) {
-                    R.id.btnDarkTheme -> presenter.onChangeThemeButtonClicked(DARK)
-                    R.id.btnLightTheme -> presenter.onChangeThemeButtonClicked(LIGHT)
-                    R.id.btnSystemTheme -> presenter.onChangeThemeButtonClicked(SYSTEM)
+                    R.id.btnDarkTheme -> presenter.onChangeThemeButtonClicked(ThemeApp.DARK)
+                    R.id.btnLightTheme -> presenter.onChangeThemeButtonClicked(ThemeApp.LIGHT)
+                    else -> presenter.onChangeThemeButtonClicked(ThemeApp.SYSTEM)
                 }
             }
         }
     }
 
-    override fun changeAppTheme(themeType: Int) {
+    override fun changeAppTheme(themeType: ThemeApp) {
         (requireActivity() as MainActivity).applyAppTheme(themeType)
     }
 
@@ -67,9 +67,6 @@ class DialogAppThemesFragment : DialogFragment(), DialogAppThemeContract.View {
     }
 
     companion object {
-        private const val DARK = AppCompatDelegate.MODE_NIGHT_YES
-        private const val LIGHT = AppCompatDelegate.MODE_NIGHT_NO
-        private const val SYSTEM = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 
         fun newInstance(): DialogAppThemesFragment =
             DialogAppThemesFragment()

@@ -1,16 +1,15 @@
 package com.example.simpleapp.presenters
 
-import androidx.appcompat.app.AppCompatDelegate
 import com.example.simpleapp.contracts.DialogAppThemeContract
-import com.example.simpleapp.models.ThemeModel
-import java.lang.IllegalStateException
+import com.example.simpleapp.models.themes.ThemeApp
+import com.example.simpleapp.models.themes.ThemeModel
 
 class DialogAppThemesPresenter(
     private val view: DialogAppThemeContract.View,
     private val themeModel: ThemeModel
 ) : DialogAppThemeContract.Presenter {
 
-    override fun onChangeThemeButtonClicked(themeType: Int) {
+    override fun onChangeThemeButtonClicked(themeType: ThemeApp) {
         view.changeAppTheme(themeType)
         themeModel.saveTheme(themeType)
     }
@@ -20,11 +19,10 @@ class DialogAppThemesPresenter(
     }
 
     private fun updateButtons() {
-        when (themeModel.getTheme()) {
-            AppCompatDelegate.MODE_NIGHT_YES -> view.turnOnDarkThemeButton()
-            AppCompatDelegate.MODE_NIGHT_NO -> view.turnOnLightThemeButton()
-            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> view.turnOnDefaultSystemButton()
-            else -> throw  IllegalStateException("Invalid themeMode")
+        when (themeModel.getSavedTheme()) {
+            ThemeApp.DARK -> view.turnOnDarkThemeButton()
+            ThemeApp.LIGHT -> view.turnOnLightThemeButton()
+            else -> view.turnOnDefaultSystemButton()
         }
     }
 

@@ -6,7 +6,9 @@ import com.example.simpleapp.models.pincode.PinModel
 import com.example.simpleapp.models.pincode.PinState
 import com.example.simpleapp.presenters.PinCodePresenter
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Test
+import org.junit.jupiter.api.Test
+
+//TODO change some fields to any() method
 
 class PinCodePresenterTest {
     private val view: PinCodeFragmentContract.View = mock()
@@ -174,17 +176,8 @@ class PinCodePresenterTest {
     }
 
     @Test
-    fun `onNumberButtonClicked _ when pin is full _ then addNumber is never called`() {
-        whenever(pinModel.isPinFull).thenReturn(true)
-
-        presenter.onNumberButtonClicked(1)
-
-        verify(pinModel, times(0)).addNumber(1)
-    }
-
-    @Test
     fun `onNumberButtonClicked _ when pin is not full _ then addNumber is called`() {
-        whenever(pinModel.isPinFull).thenReturn(false)
+        setupPinFullness()
 
         presenter.onNumberButtonClicked(1)
 
@@ -192,19 +185,20 @@ class PinCodePresenterTest {
     }
 
     @Test
-    fun `onNumberButtonClicked _ when pin is not full _ then updateVisibilityBackspaceButton is called`() {
-        whenever(pinModel.isPinFull).thenReturn(false)
-        whenever(pinModel.isPinNotEmpty).thenReturn(true)
+    fun `onNumberButtonClicked _ when pin is not full _ verify updateVisibilityBackspaceButton is called`() {
+        setupPinFullness()
+        setupPinNotEmptiness()
 
         presenter.onNumberButtonClicked(1)
 
-        verify(view, times(1)).updateVisibilityBackspaceButton(true)
+        verify(view, times(1)).updateVisibilityBackspaceButton(false)
     }
 
     @Test
-    fun `onNumberButtonClicked _ when pin is not full _ then updatePinField is called`() {
-        whenever(pinModel.isPinFull).thenReturn(false)
-        whenever(pinModel.pinLength).thenReturn(1)
+    fun `onNumberButtonClicked _ when pin is not full _ verify updatePinField is called`() {
+        setupPinFullness()
+        setupPinNotEmptiness()
+        setupPinLength(1)
 
         presenter.onNumberButtonClicked(1)
 
@@ -212,25 +206,43 @@ class PinCodePresenterTest {
     }
 
     @Test
-    fun `onNumberButtonClicked _ when pin is full and state is create _ verify createPinIfSuccess is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.CREATE)
-        whenever(pinModel.processedPinResult).thenReturn(false to PinState.CREATE)
+    fun `onNumberButtonClicked _ when createPinIfSuccess is called and pin is simple _ verify updateProcessedPinStatus is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.CREATE, false to PinState.CREATE)
+        setupPinSimplicity(isPinSimple = true)
 
         presenter.onNumberButtonClicked(1)
 
-        verify(pinModel, times(1)).createPinIfSuccess()
+        verify(pinModel, times(1)).updateProcessedPinStatus(false, PinState.CREATE)
+    }
+
+    @Test
+    fun `onNumberButtonClicked _ when createPinIfSuccess is called and pin isn't simple _ verify saveAsConfirmationPin is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.CREATE, false to PinState.CREATE)
+        setupPinSimplicity()
+
+        presenter.onNumberButtonClicked(1)
+
+        verify(pinModel, times(1)).saveAsConfirmationPin()
+    }
+
+    @Test
+    fun `onNumberButtonClicked _ when createPinIfSuccess is called and pin isn't simple _ verify updateProcessedPinStatus is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.CREATE, false to PinState.CREATE)
+        setupPinSimplicity()
+
+        presenter.onNumberButtonClicked(1)
+
+        verify(pinModel, times(1)).updateProcessedPinStatus(true, PinState.CONFIRM)
     }
 
     @Test
     fun `onNumberButtonClicked _ when createPinIfSuccess failed _ verify showPopupMessaged is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.CREATE)
-        whenever(pinModel.processedPinResult).thenReturn(false to PinState.CREATE)
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.CREATE, false to PinState.CREATE)
+        setupPinSimplicity()
 
         presenter.onNumberButtonClicked(1)
 
@@ -238,12 +250,9 @@ class PinCodePresenterTest {
     }
 
     @Test
-    fun `onNumberButtonClicked _ when createPinIfSuccess succeeded _ verify showPopupMessaged is never called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.CREATE)
-        whenever(pinModel.processedPinResult).thenReturn(true to PinState.CREATE)
+    fun `onNumberButtonClicked _ when createPinIfSuccess succeeded _ verify showPopupMessage is never called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.CREATE, true to PinState.CREATE)
 
         presenter.onNumberButtonClicked(1)
 
@@ -252,11 +261,8 @@ class PinCodePresenterTest {
 
     @Test
     fun `onNumberButtonClicked _ when createPinIfSuccess succeeded _ verify updatePinState is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.CREATE)
-        whenever(pinModel.processedPinResult).thenReturn(true to PinState.CONFIRM)
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.CREATE, true to PinState.CONFIRM)
 
         presenter.onNumberButtonClicked(1)
 
@@ -264,38 +270,43 @@ class PinCodePresenterTest {
     }
 
     @Test
-    fun `onNumberButtonClicked _ when pin is full and state is confirm _ verify savePinIfSuccess is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.CONFIRM)
-        whenever(pinModel.processedPinResult).thenReturn(false to PinState.CONFIRM)
+    fun `onNumberButtonClicked _ when savePinIfSuccess is called and pins are equal _ verify savePin is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.CONFIRM, false to PinState.CONFIRM)
+        whenever(pinModel.checkPinsEquality()).thenReturn(true)
 
         presenter.onNumberButtonClicked(1)
 
-        verify(pinModel, times(1)).savePinIfSuccess()
+        verify(pinModel, times(1)).savePin()
     }
 
     @Test
-    fun `onNumberButtonClicked _ when savePinIfSuccess failed _ verify showPopupMessaged is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.CONFIRM)
-        whenever(pinModel.processedPinResult).thenReturn(false to PinState.CREATE)
+    fun `onNumberButtonClicked _ when savePinIfSuccess is called and pins are equal _ verify updateProcessedPinStatus is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.CONFIRM, false to PinState.CONFIRM)
+        whenever(pinModel.checkPinsEquality()).thenReturn(true)
 
         presenter.onNumberButtonClicked(1)
 
-        verify(view, times(1)).showPopupMessage(R.string.popup_different)
+        verify(pinModel, times(1)).updateProcessedPinStatus(true, PinState.LOGOUT)
     }
 
     @Test
-    fun `onNumberButtonClicked _ when savePinIfSuccess succeeded _ verify showPopupMessaged is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.CONFIRM)
-        whenever(pinModel.processedPinResult).thenReturn(true to PinState.CONFIRM)
+    fun `onNumberButtonClicked _ when savePinIfSuccess is called and pins are not equal _ verify updateProcessedPinStatus is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.CONFIRM, false to PinState.CONFIRM)
+        whenever(pinModel.checkPinsEquality()).thenReturn(false)
+
+        presenter.onNumberButtonClicked(1)
+
+        verify(pinModel, times(1)).updateProcessedPinStatus(false, PinState.CONFIRM)
+    }
+
+    @Test
+    fun `onNumberButtonClicked _ when savePinIfSuccess succeeded _ verify showPopupMessage is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.CONFIRM, true to PinState.LOGOUT)
+        whenever(pinModel.checkPinsEquality()).thenReturn(true)
 
         presenter.onNumberButtonClicked(1)
 
@@ -303,64 +314,56 @@ class PinCodePresenterTest {
     }
 
     @Test
-    fun `onNumberButtonClicked _ when savePinIfSuccess succeeded _ verify updatePinState is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.CONFIRM)
-        whenever(pinModel.processedPinResult).thenReturn(true to PinState.LOGOUT)
+    fun `onNumberButtonClicked _ when savePinIfSuccess failed _ verify showPopupMessaged is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.CONFIRM, false to PinState.CONFIRM)
+        whenever(pinModel.checkPinsEquality()).thenReturn(false)
 
         presenter.onNumberButtonClicked(1)
 
-        verify(pinModel, times(1)).updatePinState(PinState.LOGOUT)
+        verify(view, times(1)).showPopupMessage(R.string.popup_different)
     }
 
     @Test
-    fun `onNumberButtonClicked _ when pin is full and state is logout _ verify loginIfSuccess is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.LOGOUT)
-        whenever(pinModel.processedPinResult).thenReturn(false to PinState.LOGOUT)
+    fun `onNumberButtonClicked _ when loginIfSuccess is called  _ verify getPin is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.LOGOUT, false to PinState.LOGOUT)
 
         presenter.onNumberButtonClicked(1)
 
-        verify(pinModel, times(1)).loginIfSuccess()
+        verify(pinModel, times(1)).getPin()
     }
 
     @Test
-    fun `onNumberButtonClicked _ when loginIfSuccess failed _ verify showPopupMessaged is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.LOGOUT)
-        whenever(pinModel.processedPinResult).thenReturn(false to PinState.LOGOUT)
+    fun `onNumberButtonClicked _ when loginIfSuccess and pin isn't correct  _ verify updateProcessedPinStatus is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.LOGOUT, false to PinState.LOGOUT)
+        whenever(pinModel.getPin()).thenReturn("1234")
+        whenever(pinModel.isPinCorrect("1234")).thenReturn(false)
 
         presenter.onNumberButtonClicked(1)
 
-        verify(view, times(1)).showPopupMessage(R.string.popup_fail)
+        verify(pinModel, times(1)).updateProcessedPinStatus(false, PinState.LOGOUT)
     }
 
     @Test
-    fun `onNumberButtonClicked _ when loginIfSuccess succeeded _ verify updatePinState is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.LOGOUT)
-        whenever(pinModel.processedPinResult).thenReturn(true to PinState.LOGIN)
+    fun `onNumberButtonClicked _ when loginIfSuccess and pin is correct  _ verify updateProcessedPinStatus is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.LOGOUT, false to PinState.LOGOUT)
+        whenever(pinModel.getPin()).thenReturn("1234")
+        whenever(pinModel.isPinCorrect("1234")).thenReturn(true)
 
         presenter.onNumberButtonClicked(1)
 
-        verify(pinModel, times(1)).updatePinState(PinState.LOGOUT)
+        verify(pinModel, times(1)).updateProcessedPinStatus(true, PinState.LOGIN)
     }
 
     @Test
     fun `onNumberButtonClicked _ when loginIfSuccess succeeded _ verify calculateSumPinNumbers is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.LOGOUT)
-        whenever(pinModel.processedPinResult).thenReturn(true to PinState.LOGIN)
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.LOGOUT, true to PinState.LOGIN)
+        whenever(pinModel.getPin()).thenReturn("1234")
+        whenever(pinModel.isPinCorrect("1234")).thenReturn(true)
 
         presenter.onNumberButtonClicked(1)
 
@@ -369,51 +372,67 @@ class PinCodePresenterTest {
 
     @Test
     fun `onNumberButtonClicked _ when loginIfSuccess succeeded _ verify moveToLoggedInFragment is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.LOGOUT)
-        whenever(pinModel.processedPinResult).thenReturn(true to PinState.LOGIN)
-        whenever(pinModel.calculateSumPinNumbers()).thenReturn(2)
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.LOGOUT, true to PinState.LOGIN)
+        whenever(pinModel.getPin()).thenReturn("1234")
+        whenever(pinModel.isPinCorrect("1234")).thenReturn(true)
 
         presenter.onNumberButtonClicked(1)
 
-        verify(view, times(1)).moveToLoggedInFragment(2)
+        verify(view, times(1)).moveToLoggedInFragment(0)
     }
 
     @Test
-    fun `onNumberButtonClicked _ when pin is full and state is reset _ verify deletePinIfSuccess is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.RESET)
-        whenever(pinModel.processedPinResult).thenReturn(false to PinState.RESET)
+    fun `onNumberButtonClicked _ when loginIfSuccess failed _ verify showPopupMessaged is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.LOGOUT, false to PinState.LOGOUT)
+        whenever(pinModel.checkPinsEquality()).thenReturn(false)
 
         presenter.onNumberButtonClicked(1)
 
-        verify(pinModel, times(1)).deletePinIfSuccess()
+        verify(view, times(1)).showPopupMessage(R.string.popup_fail)
     }
 
     @Test
-    fun `onNumberButtonClicked _ when deletePinIfSuccess failed _ verify showPopupMessaged is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.RESET)
-        whenever(pinModel.processedPinResult).thenReturn(false to PinState.LOGOUT)
+    fun `onNumberButtonClicked _ when deletePinIfSuccess is called _ verify getPin is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.RESET, false to PinState.LOGOUT)
 
         presenter.onNumberButtonClicked(1)
 
-        verify(view, times(1)).showPopupMessage(R.string.popup_different)
+        verify(pinModel, times(1)).getPin()
     }
 
     @Test
-    fun `onNumberButtonClicked _ when deletePinIfSuccess succeeded _ verify showPopupMessaged is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.RESET)
-        whenever(pinModel.processedPinResult).thenReturn(true to PinState.CREATE)
+    fun `onNumberButtonClicked _ when deletePinIfSuccess pin is correct _ verify updateProcessedPinStatus is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.RESET, false to PinState.LOGOUT)
+        whenever(pinModel.getPin()).thenReturn("1234")
+        whenever(pinModel.isPinCorrect("1234")).thenReturn(true)
+
+        presenter.onNumberButtonClicked(1)
+
+        verify(pinModel, times(1)).updateProcessedPinStatus(true, PinState.CREATE)
+    }
+
+    @Test
+    fun `onNumberButtonClicked _ when deletePinIfSuccess pin isn't correct _ verify updateProcessedPinStatus is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.RESET, false to PinState.LOGOUT)
+        whenever(pinModel.getPin()).thenReturn("1234")
+        whenever(pinModel.isPinCorrect("1234")).thenReturn(false)
+
+        presenter.onNumberButtonClicked(1)
+
+        verify(pinModel, times(1)).updateProcessedPinStatus(false, PinState.LOGOUT)
+    }
+
+    @Test
+    fun `onNumberButtonClicked _ when deletePinIfSuccess succeeded _ verify showPopupMessage is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.RESET, true to PinState.CREATE)
+        whenever(pinModel.getPin()).thenReturn("1234")
+        whenever(pinModel.isPinCorrect("1234")).thenReturn(true)
 
         presenter.onNumberButtonClicked(1)
 
@@ -421,34 +440,20 @@ class PinCodePresenterTest {
     }
 
     @Test
-    fun `onNumberButtonClicked _ when deletePinIfSuccess succeeded _ verify updatePinState is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.RESET)
-        whenever(pinModel.processedPinResult).thenReturn(true to PinState.CREATE)
+    fun `onNumberButtonClicked _ when deletePinIfSuccess failed _ verify showPopupMessage is called`() {
+        setupPinFullness(isPinFull = true)
+        setupPinStateAndStatus(PinState.RESET, false to PinState.LOGOUT)
+        whenever(pinModel.getPin()).thenReturn("1234")
+        whenever(pinModel.isPinCorrect("1234")).thenReturn(false)
 
         presenter.onNumberButtonClicked(1)
 
-        verify(pinModel, times(1)).updatePinState(PinState.CREATE)
-    }
-
-    @Test
-    fun `onNumberButtonClicked _ when pin is full after addNumber _ verify resetPin is called`() {
-        whenever(pinModel.isPinFull)
-            .thenReturn(false)
-            .thenReturn(true)
-        whenever(pinModel.pinState).thenReturn(PinState.LOGIN)
-        whenever(pinModel.processedPinResult).thenReturn(false to PinState.LOGIN)
-
-        presenter.onNumberButtonClicked(1)
-
-        verify(pinModel, times(1)).resetPin()
+        verify(view, times(1)).showPopupMessage(R.string.popup_different)
     }
 
     @Test
     fun `onBackspaceButtonClicked _ when pin is not empty _ verify removeNumber is called`() {
-        whenever(pinModel.isPinNotEmpty).thenReturn(true)
+        setupPinNotEmptiness(isPinNotEmpty = true)
 
         presenter.onBackspaceButtonClicked()
 
@@ -457,8 +462,8 @@ class PinCodePresenterTest {
 
     @Test
     fun `onBackspaceButtonClicked _ when pin is not empty _ verify updatePinField is called`() {
-        whenever(pinModel.isPinNotEmpty).thenReturn(true)
-        whenever(pinModel.pinLength).thenReturn(3)
+        setupPinNotEmptiness(isPinNotEmpty = true)
+        setupPinLength(3)
 
         presenter.onBackspaceButtonClicked()
 
@@ -467,7 +472,7 @@ class PinCodePresenterTest {
 
     @Test
     fun `onBackspaceButtonClicked _ when pin is empty _ verify updateVisibilityBackspaceButton is called`() {
-        whenever(pinModel.isPinNotEmpty).thenReturn(false)
+        setupPinNotEmptiness(isPinNotEmpty = false)
         whenever(pinModel.isPinEmpty).thenReturn(true)
 
         presenter.onBackspaceButtonClicked()
@@ -491,5 +496,26 @@ class PinCodePresenterTest {
         presenter.onResetButtonClicked()
 
         verify(pinModel, times(1)).updatePinState(PinState.RESET)
+    }
+
+    private fun setupPinLength(length: Int) {
+        whenever(pinModel.pinLength).thenReturn(length)
+    }
+
+    private fun setupPinNotEmptiness(isPinNotEmpty: Boolean = false) {
+        whenever(pinModel.isPinNotEmpty).thenReturn(isPinNotEmpty)
+    }
+
+    private fun setupPinFullness(isPinFull: Boolean = false) {
+        whenever(pinModel.isPinFull).thenReturn(false, isPinFull)
+    }
+
+    private fun setupPinSimplicity(isPinSimple: Boolean = false) {
+        whenever(pinModel.isPinSimple).thenReturn(isPinSimple)
+    }
+
+    private fun setupPinStateAndStatus(pinState: PinState, pinStatus: Pair<Boolean, PinState>) {
+        whenever(pinModel.pinState).thenReturn(pinState)
+        whenever(pinModel.processedPinStatus).thenReturn(pinStatus)
     }
 }
