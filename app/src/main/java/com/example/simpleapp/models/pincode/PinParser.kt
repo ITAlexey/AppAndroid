@@ -1,13 +1,12 @@
 package com.example.simpleapp.models.pincode
 
 object PinParser {
-    private lateinit var pin: String
-    fun checkOnSimplicity(pin: String): Boolean {
-        PinParser.pin = pin
-        return isPinConsistsOfSameNumbers() || isPinConsistsOfNumbersIncreasedByOne() || isPinConsistsOfNumbersDecreasedByOne()
-    }
+    fun checkOnSimplicity(pin: String): Boolean =
+        isPinConsistsOfSameNumbers(pin)
+                || isPinConsistsOfNumbersIncreasedByOne(pin)
+                || isPinConsistsOfNumbersDecreasedByOne(pin)
 
-    private fun isPinConsistsOfNumbersDecreasedByOne(): Boolean {
+    private fun isPinConsistsOfNumbersDecreasedByOne(pin: String): Boolean {
         for (i in pin.lastIndex downTo 1) {
             if (pin[i].toInt() - pin[i - 1].toInt() != 1) {
                 return false
@@ -16,7 +15,7 @@ object PinParser {
         return true
     }
 
-    private fun isPinConsistsOfNumbersIncreasedByOne(): Boolean {
+    private fun isPinConsistsOfNumbersIncreasedByOne(pin: String): Boolean {
         for (i in 0 until pin.lastIndex) {
             if (pin[i].toInt() - pin[i + 1].toInt() != 1) {
                 return false
@@ -25,6 +24,6 @@ object PinParser {
         return true
     }
 
-    private fun isPinConsistsOfSameNumbers(): Boolean =
+    private fun isPinConsistsOfSameNumbers(pin: String): Boolean =
         pin.toSet().size == 1
 }
