@@ -15,10 +15,12 @@ class BaseApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
         EncryptionUtils.createKeysIfNotExists()
         val sharedPreferences = getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE)
         SharedPrefRepo.initialized(sharedPreferences)
         val sharedPrefRepo = SharedPrefRepo.getInstance()
+
         pinModel = PinModel(sharedPrefRepo)
         themeModel = ThemeModel(sharedPrefRepo)
     }

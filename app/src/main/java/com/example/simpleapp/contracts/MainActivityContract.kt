@@ -6,7 +6,7 @@ import com.example.simpleapp.models.themes.ThemeApp
 
 interface MainActivityContract {
     interface View: BaseView {
-        fun openSettingsDialog()
+        fun showAppThemesDialog()
 
         fun applyAppTheme(themeType: ThemeApp)
     }

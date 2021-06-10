@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     override fun onStart() {
         super.onStart()
+
         binding.imgBtnSettings.setOnClickListener { presenter.onSettingsButtonClicked() }
     }
 
@@ -41,12 +42,11 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         }
     }
 
-    override fun openSettingsDialog() {
-        val dialog = DialogAppThemesFragment.newInstance()
-        dialog.show(supportFragmentManager, "hello")
-    }
+    override fun showAppThemesDialog() =
+        DialogAppThemesFragment
+            .newInstance()
+            .show(supportFragmentManager, "hello")
 
-    override fun applyAppTheme(themeType: ThemeApp) {
+    override fun applyAppTheme(themeType: ThemeApp) =
         AppCompatDelegate.setDefaultNightMode(themeType.themeMode)
-    }
 }

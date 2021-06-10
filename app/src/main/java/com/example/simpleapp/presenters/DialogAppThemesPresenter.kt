@@ -14,9 +14,8 @@ class DialogAppThemesPresenter(
         themeModel.saveTheme(themeType)
     }
 
-    override fun onViewCreated() {
+    override fun onViewCreated() =
         updateButtons()
-    }
 
     private fun updateButtons() {
         when (themeModel.getSavedTheme()) {
@@ -25,5 +24,4 @@ class DialogAppThemesPresenter(
             else -> view.turnOnDefaultSystemButton()
         }
     }
-
 }

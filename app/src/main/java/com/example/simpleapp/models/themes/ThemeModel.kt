@@ -4,12 +4,8 @@ import com.example.simpleapp.models.SharedPrefRepo
 
 class ThemeModel(private val sharedPrefRepo: SharedPrefRepo) {
 
-    fun getSavedTheme(
-        key: String = KEY_APP_THEME,
-        defaultValue: Int = ThemeApp.SYSTEM.themeMode
-    ): ThemeApp {
-        val themeMode = sharedPrefRepo
-            .getIntByKey(key, defaultValue)
+    fun getSavedTheme(key: String = KEY_APP_THEME, defaultValue: Int = ThemeApp.SYSTEM.themeMode): ThemeApp {
+        val themeMode = sharedPrefRepo.getIntByKey(key, defaultValue)
         return ThemeApp.values().find {
             it.themeMode == themeMode
         } ?: ThemeApp.SYSTEM

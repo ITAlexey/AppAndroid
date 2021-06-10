@@ -67,7 +67,6 @@ class DialogAppThemesFragment : DialogFragment(), DialogAppThemeContract.View {
     }
 
     companion object {
-
         fun newInstance(): DialogAppThemesFragment =
             DialogAppThemesFragment()
     }

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Пин код</string>
-    <string name="setUpBtn">Установить\nпин код</string>
     <string name="resetBtn">Сбросить\nпин код</string>
 
     <string name="title_logout">Введите пин код</string>

@@ -29,6 +29,6 @@ class MainActivityPresenterTest {
     fun `onSettingsButtonClicked _ verify openSettingsDialog is called`() {
         presenter.onSettingsButtonClicked()
 
-        verify(view, times(1)).openSettingsDialog()
+        verify(view, times(1)).showAppThemesDialog()
     }
 }

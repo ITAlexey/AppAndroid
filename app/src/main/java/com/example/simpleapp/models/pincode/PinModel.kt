@@ -16,14 +16,6 @@ class PinModel(private val sharedPrefRepo: SharedPrefRepo) {
         get() = PinParser.checkOnSimplicity(temporaryPin)
         private set
 
-    init {
-        pinState = if (getPin().isNotEmpty()) {
-            PinState.LOGOUT
-        } else {
-            PinState.CREATE
-        }
-    }
-
     var isPinEmpty: Boolean = true
         get() = temporaryPin.isEmpty()
         private set
@@ -39,6 +31,14 @@ class PinModel(private val sharedPrefRepo: SharedPrefRepo) {
     var pinLength: Int = 0
         get() = temporaryPin.length
         private set
+
+    init {
+        pinState = if (getPin().isNotEmpty()) {
+            PinState.LOGOUT
+        } else {
+            PinState.CREATE
+        }
+    }
 
     fun updatePinState(newState: PinState) {
         pinState = newState

@@ -9,7 +9,7 @@ class MainActivityPresenter(
 ) : MainActivityContract.Presenter {
 
     override fun onSettingsButtonClicked() {
-        view.openSettingsDialog()
+        view.showAppThemesDialog()
     }
 
     override fun onViewCreated() {

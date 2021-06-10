@@ -11,9 +11,8 @@ class PinCodePresenter(
     private val pinModel: PinModel,
 ) : PinCodeFragmentContract.Presenter {
 
-    override fun onViewCreated() {
+    override fun onViewCreated() =
         processPinState()
-    }
 
     private fun processPinState() {
         val backspaceButtonVisibility = pinModel.isPinNotEmpty

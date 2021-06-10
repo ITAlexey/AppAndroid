@@ -19,7 +19,8 @@ object EncryptionUtils {
             cipher.init(Cipher.DECRYPT_MODE, privateKey)
             val encryptedData = Base64.decode(data, Base64.DEFAULT)
             String(cipher.doFinal(encryptedData))
-        } else ""
+        } else
+            EMPTY_LINE
     }
 
     fun encryptData(data: String): String {
@@ -29,13 +30,11 @@ object EncryptionUtils {
         return Base64.encodeToString(bytes, Base64.DEFAULT)
     }
 
-    private fun getPrivateKey(): Key? {
-        return keyStore.getKey(ALIAS, null)
-    }
+    private fun getPrivateKey(): Key? =
+        keyStore.getKey(ALIAS, null)
 
-    private fun getPublicKey(): PublicKey {
-        return keyStore.getCertificate(ALIAS).publicKey
-    }
+    private fun getPublicKey(): PublicKey =
+        keyStore.getCertificate(ALIAS).publicKey
 
     fun createKeysIfNotExists() {
         val alias = keyStore.aliases().toList()
@@ -57,4 +56,5 @@ object EncryptionUtils {
     private const val TRANSFORMATION = "RSA/ECB/OAEPwithSHA-1andMGF1Padding"
     private const val ANDROID_KEY_STORE = "AndroidKeyStore"
     private const val ALIAS = "com.example.simpleapp.alias"
+    private const val EMPTY_LINE = ""
 }
