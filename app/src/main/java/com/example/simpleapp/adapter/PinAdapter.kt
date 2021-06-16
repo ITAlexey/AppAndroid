@@ -2,15 +2,14 @@ package com.example.simpleapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.IntRange
+import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.simpleapp.R
 import com.example.simpleapp.databinding.ItemRvPinBinding
 
-class PinAdapter(
-    @IntRange(from = 0) private var currentPinLen: Int = 0
-) : RecyclerView.Adapter<PinAdapter.PinCodeHolder>() {
+class PinAdapter : RecyclerView.Adapter<PinAdapter.PinCodeHolder>() {
+    private var currentPinLen = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PinCodeHolder {
         val itemView = ItemRvPinBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -18,12 +17,13 @@ class PinAdapter(
     }
 
     override fun onBindViewHolder(holder: PinCodeHolder, position: Int) {
-        var color = if (position < currentPinLen) {
+        @ColorRes
+        val colorResId = if (position < currentPinLen) {
             R.color.turquoise
         } else {
             R.color.gray
         }
-        color = ContextCompat.getColor(holder.imgPinDot.context, color)
+        val color = ContextCompat.getColor(holder.imgPinDot.context, colorResId)
         holder.imgPinDot.setColorFilter(color)
     }
 
